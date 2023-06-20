@@ -1,12 +1,20 @@
 package system
 
+import (
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
+	"server/global"
+	"server/models/system"
+	"server/utils"
+)
+
 type UserService struct {
 }
 
-func (user *UserService) Login() {
-
-}
-
-func Register() {
-
+func (UserService *UserService) Login(u system.SysUser) (resultUser system.SysUser, err error) {
+	var user system.SysUser
+	if errors.Is(global.GRA_DB.Where("username = ? and password = ?", u.Username, utils.GetPasswordEncrypt(u.Password)).First(&user).Error, gorm.ErrRecordNotFound) {
+		return resultUser, errors.New("账号或密码错误")
+	}
+	return u, err
 }

@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
-	"server/utils"
+	"server/global"
 	"time"
 )
 
@@ -62,5 +62,5 @@ func initZap() {
 		zapcore.NewCore(getEncoder(), getLogWriter("error"), errorLevel),
 	)
 	logger := zap.New(tee, zap.AddCaller())
-	utils.Logger = logger.Sugar()
+	global.GRA_LOG = logger.Sugar()
 }

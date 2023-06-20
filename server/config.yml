@@ -4,3 +4,8 @@ database:
   host: "127.0.0.1"
   port: "5432"
   dbname: "gra"
+redis:
+  addr: "localhost:6379"
+  password: ""
+jwt:
+  sign: "test123123test"
