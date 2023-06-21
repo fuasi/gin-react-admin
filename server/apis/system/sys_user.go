@@ -43,6 +43,17 @@ func (u *UserApi) Login(c *gin.Context) {
 	response.SuccessWithData(c, token)
 }
 
-func (u *UserApi) GetToken(user system.SysUser) {
-
+func (u *UserApi) GetUserById(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindQuery(&user)
+	if err != nil {
+		response.ParamErrorWithMessage(c, err.Error())
+		return
+	}
+	getUser, err := userService.GetUser(user)
+	if err != nil {
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
+	response.SuccessWithData(c, getUser)
 }
