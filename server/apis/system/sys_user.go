@@ -50,10 +50,25 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	getUser, err := userService.GetUser(user)
+	getUser, err := userService.GetUserById(user)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
 	response.SuccessWithData(c, getUser)
+}
+
+func (u *UserApi) DeleteUserById(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindQuery(&user)
+	if err != nil {
+		response.ParamErrorWithMessage(c, err.Error())
+		return
+	}
+	id, err := userService.DeleteUserById(user)
+	if err != nil {
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
+	response.SuccessWithData(c, id)
 }

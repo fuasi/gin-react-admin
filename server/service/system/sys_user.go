@@ -19,9 +19,13 @@ func (UserService *UserService) Login(u system.SysUser) (resultUser system.SysUs
 	return u, err
 }
 
-func (UserService *UserService) GetUser(u system.SysUser) (resultUser system.SysUser, err error) {
+func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system.SysUser, err error) {
 	if errors.Is(global.GRA_DB.Where("id = ?", u.Id).First(&resultUser).Error, gorm.ErrRecordNotFound) {
 		return resultUser, errors.New("未找到用户")
 	}
+	return resultUser, err
+}
+func (UserService *UserService) DeleteUserById(u system.SysUser) (resultUser system.SysUser, err error) {
+	err = global.GRA_DB.Delete(u).Error
 	return resultUser, err
 }
