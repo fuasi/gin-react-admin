@@ -25,6 +25,11 @@ func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system
 	}
 	return resultUser, err
 }
+func (UserService *UserService) UpdateUserById(u system.SysUser) (resultUser system.SysUser, err error) {
+	err = global.GRA_DB.Updates(u).Error
+	return resultUser, err
+}
+
 func (UserService *UserService) DeleteUserById(u system.SysUser) (resultUser system.SysUser, err error) {
 	err = global.GRA_DB.Delete(u).Error
 	return resultUser, err

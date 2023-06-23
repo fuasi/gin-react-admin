@@ -58,6 +58,21 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 	response.SuccessWithData(c, getUser)
 }
 
+func (u *UserApi) UpdateUserById(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindQuery(&user)
+	if err != nil {
+		response.ParamErrorWithMessage(c, err.Error())
+		return
+	}
+	_, err = userService.UpdateUserById(user)
+	if err != nil {
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
+	response.SuccessWithMessage(c, "操作成功")
+}
+
 func (u *UserApi) DeleteUserById(c *gin.Context) {
 	var user system.SysUser
 	err := c.ShouldBindQuery(&user)
@@ -65,10 +80,10 @@ func (u *UserApi) DeleteUserById(c *gin.Context) {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	id, err := userService.DeleteUserById(user)
+	_, err = userService.DeleteUserById(user)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-	response.SuccessWithData(c, id)
+	response.SuccessWithMessage(c, "操作成功")
 }
