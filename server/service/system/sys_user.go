@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"server/global"
+	"server/models/common/request"
 	"server/models/system"
 	"server/utils"
 )
@@ -25,6 +26,7 @@ func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system
 	}
 	return resultUser, err
 }
+
 func (UserService *UserService) UpdateUserById(u system.SysUser) (resultUser system.SysUser, err error) {
 	err = global.GRA_DB.Updates(u).Error
 	return resultUser, err
@@ -33,4 +35,15 @@ func (UserService *UserService) UpdateUserById(u system.SysUser) (resultUser sys
 func (UserService *UserService) DeleteUserById(u system.SysUser) (resultUser system.SysUser, err error) {
 	err = global.GRA_DB.Delete(u).Error
 	return resultUser, err
+}
+
+func (UserService *UserService) GetUserList(info request.PageInfo) (resultUser system.SysUser[], total int64, err error) {
+	limit := info.PageSize
+	offset := (info.Page - 1) * info.PageSize
+	err = global.GRA_DB.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = global.GRA_DB.Limit(limit).Offset(offset).Find(&resultUser).Error
+	return resultUser, total, err
 }
