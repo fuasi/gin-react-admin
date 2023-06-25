@@ -7,6 +7,7 @@ import (
 	"server/models/common/response"
 	"server/models/system"
 	"server/models/system/request"
+	UserResponse "server/models/system/response"
 	"server/utils"
 )
 
@@ -96,13 +97,13 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	//list, i, err := userService.GetUserList(page)
-	if err != nil {
-		return
-	}
+	list, total, err := userService.GetUserList(page)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-	response.SuccessWithMessage(c, "操作成功")
+	response.SuccessWithData(c, UserResponse.GetUserListResponse{
+		Total: total,
+		List:  list,
+	})
 }
