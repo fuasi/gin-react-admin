@@ -2,8 +2,8 @@ package system
 
 import "server/service"
 
-type SystemApiGroup struct {
-	UserApi
+type SystemApi struct {
+	UserApi UserApi
 }
 
 var (

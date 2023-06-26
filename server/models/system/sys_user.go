@@ -16,5 +16,5 @@ type SysUserPrivate struct {
 }
 
 func (SysUser) TableName() string {
-	return "users"
+	return "gra_users"
 }

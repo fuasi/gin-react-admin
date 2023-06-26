@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"server/global"
 	CommonRequest "server/models/common/request"
@@ -16,7 +17,8 @@ type UserApi struct {
 
 func (u *UserApi) Login(c *gin.Context) {
 	var l = request.Login{}
-	err := c.ShouldBindJSON(l)
+	err := c.ShouldBindJSON(&l)
+	fmt.Println(l.Username)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
@@ -39,8 +41,9 @@ func (u *UserApi) Login(c *gin.Context) {
 	jwt := utils.NewJWT()
 	token, err := jwt.CreateToken(user)
 	if err != nil {
-		global.GRA_LOG.Error("token创建失败:", err.Error(), "login:", login)
+		global.GRA_LOG.Error("token创建失败:", err.Error(), "\tlogin:", login)
 		response.ErrorWithMessage(c, err.Error())
+		return
 	}
 	response.SuccessWithData(c, token)
 }

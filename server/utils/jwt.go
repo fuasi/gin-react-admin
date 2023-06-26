@@ -32,7 +32,7 @@ func (j *JWT) CreateToken(user system.SysUser) (string, error) {
 			Username: user.Username,
 			Avatar:   user.Avatar,
 		},
-	}).SignedString(global.GRA_CONFIG.JWT.Sign)
+	}).SignedString([]byte(global.GRA_CONFIG.JWT.Sign))
 	if err != nil {
 		return "", err
 	}

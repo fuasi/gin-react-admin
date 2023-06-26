@@ -1,4 +1,9 @@
 package apis
 
-type SystemRouterGroup struct {
+import "server/apis/system"
+
+type SystemApis struct {
+	SystemApis system.SystemApi
 }
+
+var SystemApisApp = new(SystemApis)
