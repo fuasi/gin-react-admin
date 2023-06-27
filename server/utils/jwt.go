@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"context"
 	"github.com/dgrijalva/jwt-go"
 	"server/global"
 	"server/models/system"
@@ -10,7 +9,7 @@ import (
 
 type Claims struct {
 	jwt.StandardClaims
-	system.SysUserPublic
+	SysUserPublic system.SysUserPublic
 }
 
 type JWT struct {
@@ -36,7 +35,10 @@ func (j *JWT) CreateToken(user system.SysUser) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	global.GRA_REDIS.Set(context.Background(), user.Username, token, 24*3*time.Hour)
+	err = RedisSetToken(user.Username, token)
+	if err != nil {
+		return "", err
+	}
 	return token, err
 }
 

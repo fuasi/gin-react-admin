@@ -1,7 +1,6 @@
 package system
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"server/global"
 	CommonRequest "server/models/common/request"
@@ -18,7 +17,6 @@ type UserApi struct {
 func (u *UserApi) Login(c *gin.Context) {
 	var l = request.Login{}
 	err := c.ShouldBindJSON(&l)
-	fmt.Println(l.Username)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
@@ -109,4 +107,8 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 		Total: total,
 		List:  list,
 	})
+}
+
+func (u *UserApi) CheckLogin(c *gin.Context) {
+	response.Success(c)
 }
