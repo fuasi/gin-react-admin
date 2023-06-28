@@ -1,17 +1,17 @@
-import Cookies from "js-cookie";
+import {cookies} from "next/headers";
 
 export const setToken = (token: string) => {
-    Cookies.set("TokenX", token)
+    cookies().set("TokenX", token)
 }
 
 export const getToken = (): string => {
-    const token = Cookies.get("TokenX")
-    if (token) {
-        return token
+    const token = cookies().get("TokenX")
+    if (token?.value) {
+        return token.value
     }
     return ""
 }
 
 export const deleteToken = () => {
-    Cookies.remove("TokenX")
+    cookies().set("TokenX", "")
 }

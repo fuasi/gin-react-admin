@@ -1,12 +1,13 @@
-const Home = () => {
+import LoginButton from "@/components/login/Button";
+
+
+const Login = async () => {
     return (
-        <div>
-            <div className={"m-auto w-96 h-56"}>
-                <span className={"text-blue-600 text-6xl"}>
-                    Hello Next.js
-                </span>
-            </div>
+        <div className={"m-auto w-10/12 text-6xl bg-blue-300 h-56 text-center"}>
+            this is Login Page
+            <LoginButton/>
         </div>
     )
 }
-export default Home
+
+export default Login
