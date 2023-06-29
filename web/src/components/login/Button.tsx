@@ -1,6 +1,7 @@
 'use client'
-import {Button} from 'antd'
 import {baseRequestInit, fetchRequest} from "@/apis";
+import {handleClientScriptLoad} from "next/script";
+import {Button} from "antd";
 
 const LoginFormComponent = () => {
     const handleClick = async () => {
@@ -12,9 +13,7 @@ const LoginFormComponent = () => {
     }
     return (
         <div>
-            <Button onClick={() => handleClick()} type="primary" danger>
-                Primary
-            </Button>
+            <Button onClick={() => handleClick()}>click me</Button>
         </div>
     )
 }

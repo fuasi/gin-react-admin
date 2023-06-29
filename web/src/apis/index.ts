@@ -1,4 +1,3 @@
-import userApi from "@/apis/user_api";
 import {getToken} from "@/utils/cookie";
 import {baseConfig} from "@/config";
 
@@ -27,4 +26,4 @@ export const baseRequestInit = (params: RequestInit): RequestInit => {
     }
 }
 
-export {userApi}
+// export {userApi}
