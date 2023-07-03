@@ -1,4 +1,6 @@
-export const baseConfig = {
-    BASE_URL: "http://127.0.0.1:5000/api",
-    TIME_OUT: 10000
+const GLOBAL_CONFIG = {
+    API_BASEURL: "/api",
+    API_TIMEOUT: 10000
 }
+
+export default GLOBAL_CONFIG
