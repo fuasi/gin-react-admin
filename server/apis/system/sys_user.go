@@ -39,7 +39,7 @@ func (u *UserApi) Login(c *gin.Context) {
 	jwt := utils.NewJWT()
 	token, err := jwt.CreateToken(user)
 	if err != nil {
-		global.GRA_LOG.Error("token创建失败:", err.Error(), "\tlogin:", login)
+		global.GRA_LOG.Error("token创建失败:", err.Error(), "login:", login)
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}

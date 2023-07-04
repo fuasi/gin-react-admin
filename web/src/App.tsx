@@ -1,16 +1,17 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import LoginLayout from "./views/loginLayout.tsx";
+import {HashRouter} from "react-router-dom";
+import AddRoutes from "./utils/router.tsx";
+
 
 const App = () => {
+
     return (
         <>
-            <BrowserRouter>
-                <Routes>
-                    <Route path={"/"} element={<LoginLayout/>}/>
-                </Routes>
-            </BrowserRouter>
+            <HashRouter>
+                <AddRoutes/>
+            </HashRouter>
         </>
     )
 }
 
 export default App
+// <Route path={"/dashboard"} element={<Dashboard/>}/>

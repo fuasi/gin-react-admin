@@ -1,26 +1,34 @@
 import {Button, Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import {useForm} from "antd/es/form/Form";
+import {baseApis} from "../../apis";
+import useMessage from "antd/es/message/useMessage";
+import GLOBAL_CONFIG from "../../config";
+import {setToken} from "../../utils/cookie.ts";
+import {useNavigate} from "react-router-dom";
 
 const LoginFormComponent = () => {
-    const [loginForm] = useForm()
-    const onFinish = () => {
-        console.log()
+    const [messageApi, contextHolder] = useMessage()
+    const navigate = useNavigate()
+    const onFinish = async (values: never) => {
+        const {code, data} = await baseApis.login(values)
+        if (code != GLOBAL_CONFIG.SUCCESS_STATUS) {
+            messageApi.error("请输入正确的信息")
+            return
+        }
+        setToken(data)
+        navigate("/dashboard")
     }
-    const onFinishFailed = () => {
-        console.log()
-    }
+
     return (
         <div className={"w-96 h-96"}>
+            {contextHolder}
             <div className={"text-black text-3xl font-bold text-center mb-12 mt-12"}>
                 系统登录
             </div>
             <Form
-                form={loginForm}
                 name="login-form"
                 style={{maxWidth: 600}}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
                 <Form.Item

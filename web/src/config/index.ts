@@ -1,6 +1,8 @@
 const GLOBAL_CONFIG = {
     API_BASEURL: "/api",
-    API_TIMEOUT: 10000
+    API_TIMEOUT: 10000,
+    SUCCESS_STATUS: 20000,
+    ERROR_STATUS: 50000
 }
 
 export default GLOBAL_CONFIG
