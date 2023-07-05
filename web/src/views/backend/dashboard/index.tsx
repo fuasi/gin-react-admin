@@ -6,7 +6,7 @@ const DashboardComponent = () => {
     return (
         <div>
             this is dashboard
-            <Button onClick={() => navigate("/user")}>
+            <Button onClick={() => navigate("/admin/user")}>
                 click me
             </Button>
         </div>

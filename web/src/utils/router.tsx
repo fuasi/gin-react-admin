@@ -1,56 +1,40 @@
-import {Route, useRoutes} from "react-router-dom";
+import {createElement, lazy, Suspense} from "react";
+import * as icons from "@ant-design/icons"
+import {RouteObject, useRoutes} from "react-router-dom";
 import LoginLayout from "../views/loginLayout.tsx";
-import BackendLayout from "../views/backend/backendLayout.tsx";
 import PrivateRoute from "../components/PrivateRouteComponent.tsx";
-import {ComponentType, lazy, LazyExoticComponent, useEffect} from "react";
+import BackendLayout from "../views/backend/backendLayout.tsx";
+import RouterLoadingComponent from "../components/RouterLoadingComponent.tsx";
 
-interface Route {
-    path: string
-    element?: LazyExoticComponent<ComponentType<JSX.Element>>
-    name: string
+export const LazyComponent = (url: string) => {
+    const Component = lazy(() => import(url))
+    return <Suspense fallback={<RouterLoadingComponent/>}>
+        <Component/>
+    </Suspense>
 }
 
-const getLazyComponent = (url: string) => {
-    return lazy(() => import(url))
+export const IconComponent = (props: { icon: string }) => {
+    const {icon} = props
+    const antIcon: { [key: string]: any } = icons
+    return createElement(antIcon[icon])
 }
 
-const InitRouteData: Route[] = [{
-    path: "/dashboard",
-    name: "../views/backend/dashboard",
-    element: getLazyComponent("../views/backend/dashboard"),
-}, {
-    path: "/user",
-    name: "../views/backend/user",
-    element: getLazyComponent("../views/backend/user")
-}]
 
-// const Routes: RouteObject[]
+const GenerateRouter = ({routers}: { routers: RouteObject[] | undefined }) => {
 
-const getRoutesComponent = () => {
-    for (const item of InitRouteData) {
-        if (item.element) {
-            // Routes.push({path: item.path, element: <item.element/>})
-        }
-    }
+    return useRoutes([{
+        path: "/login",
+        element: <LoginLayout/>
+    }, {
+        path: "/",
+        element: <PrivateRoute>
+            <BackendLayout/>
+        </PrivateRoute>,
+        children: routers
+    }, {
+        path: "*",
+        element: <RouterLoadingComponent/>
+    }])
 }
 
-const AddRoutes = () => {
-    useEffect(() => {
-        getRoutesComponent()
-    }, [])
-    return useRoutes([
-        {
-            path: "/login",
-            element: <LoginLayout/>,
-        },
-        {
-            path: "/",
-            element: <PrivateRoute>
-                <BackendLayout/>
-            </PrivateRoute>,
-            // children: Routes
-        }
-    ])
-}
-
-export default AddRoutes
+export default GenerateRouter

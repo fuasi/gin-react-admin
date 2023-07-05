@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@mantine/hooks':
+    specifier: ^6.0.16
+    version: registry.npmmirror.com/@mantine/hooks@6.0.16(react@18.2.0)
   '@types/js-cookie':
     specifier: ^3.0.3
     version: registry.npmmirror.com/@types/js-cookie@3.0.3
@@ -541,6 +544,17 @@ packages:
       '@jridgewell/resolve-uri': registry.npmmirror.com/@jridgewell/resolve-uri@3.1.0
       '@jridgewell/sourcemap-codec': registry.npmmirror.com/@jridgewell/sourcemap-codec@1.4.14
     dev: true
+
+  registry.npmmirror.com/@mantine/hooks@6.0.16(react@18.2.0):
+    resolution: {integrity: sha512-DnfMYSTSjYxbQJ80TzKHO5gRXGTIQKxBnRQVc+n4RANTwgWMiwEmxIwqRjbulfLzIhEvplskhqGgElunIAfw7g==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@mantine/hooks/-/hooks-6.0.16.tgz}
+    id: registry.npmmirror.com/@mantine/hooks/6.0.16
+    name: '@mantine/hooks'
+    version: 6.0.16
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: registry.npmmirror.com/react@18.2.0
+    dev: false
 
   registry.npmmirror.com/@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz}

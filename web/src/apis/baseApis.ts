@@ -5,6 +5,17 @@ interface LoginQuery {
     password: string
 }
 
+export interface RouterResponse {
+    id: number
+    name: string
+    icon: string
+    path: string
+    componentPath: string
+    parentId: number
+    routerOrder: number
+    children?: RouterResponse[]
+}
+
 const baseApis = {
     login: (query: LoginQuery): Promise<Response<string>> => {
         return apiRequest({
@@ -17,6 +28,12 @@ const baseApis = {
         return apiRequest({
             url: "/check",
             method: "POST",
+        })
+    },
+    getRouter: (): Promise<Response<RouterResponse[]>> => {
+        return apiRequest({
+            url: "/router",
+            method: "GET"
         })
     }
 
