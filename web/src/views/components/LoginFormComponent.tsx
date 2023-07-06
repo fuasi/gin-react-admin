@@ -5,17 +5,35 @@ import useMessage from "antd/es/message/useMessage";
 import GLOBAL_CONFIG from "../../config";
 import {setToken} from "../../utils/cookie.ts";
 import {useNavigate} from "react-router-dom";
+import {useContext, useEffect} from "react";
+import {RouterContext} from "../../App.tsx";
+import {HandleRouterInfo, HandleRouters} from "../../utils/router.tsx";
 
 const LoginFormComponent = () => {
+    const {setRouters, setRouterInfo} = useContext(RouterContext)
     const [messageApi, contextHolder] = useMessage()
     const navigate = useNavigate()
+    useEffect(() => {
+        baseApis.checkLogin().then(res => {
+            if (res.code === GLOBAL_CONFIG.SUCCESS_STATUS) {
+                handleGetRouter()
+                navigate("/dashboard")
+            }
+        })
+    })
+    const handleGetRouter = async () => {
+        const {data} = await baseApis.getRouter()
+        setRouters(HandleRouters({handleRouters: data}))
+        setRouterInfo(HandleRouterInfo({handleRouterInfo: data}))
+    }
     const onFinish = async (values: never) => {
         const {code, data} = await baseApis.login(values)
-        if (code != GLOBAL_CONFIG.SUCCESS_STATUS) {
+        if (code !== GLOBAL_CONFIG.SUCCESS_STATUS) {
             messageApi.error("请输入正确的信息")
             return
         }
         setToken(data)
+        await handleGetRouter()
         navigate("/dashboard")
     }
 

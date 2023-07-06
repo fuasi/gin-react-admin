@@ -1,68 +1,42 @@
 import {HashRouter, RouteObject} from "react-router-dom";
-import GenerateRouter, {LazyComponent} from "./utils/router.tsx";
+import GenerateRouter, {HandleRouterInfo, HandleRouters} from "./utils/router.tsx";
 import {createContext, useEffect, useState} from "react";
 import {baseApis} from "./apis";
-import {RouterResponse} from "./apis/baseApis.ts";
 import {MenuProps} from "antd";
+import {getToken} from "./utils/cookie.ts";
+import * as React from "react";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-export const RouterContext = createContext<MenuItem[] | undefined>([])
+export const RouterContext = createContext<{
+    routerInfo: MenuItem[] | undefined,
+    setRouters: React.Dispatch<React.SetStateAction<RouteObject[] | undefined>>,
+    setRouterInfo: React.Dispatch<React.SetStateAction<MenuItem[] | undefined>>
+}>({
+    routerInfo: [],
+    setRouters: value => {
+        return value
+    },
+    setRouterInfo: value => {
+        return value
+    }
+})
 const App = () => {
     const [routers, setRouters] = useState<RouteObject[]>()
     const [routerInfo, setRouterInfo] = useState<MenuItem[]>()
     useEffect(() => {
-        baseApis.getRouter().then(res => {
-            const {data} = res
-            setRouters(handleRouters({handleRouters: data}))
-            setRouterInfo(handleRouterInfo({handleRouterInfo: data}))
-        })
+        if (getToken()) {
+            baseApis.getRouter().then(res => {
+                const {data} = res
+                setRouters(HandleRouters({handleRouters: data}))
+                setRouterInfo(HandleRouterInfo({handleRouterInfo: data}))
+            })
+        }
     }, [])
 
-    const handleRouters = (props: { handleRouters: RouterResponse[] | undefined }) => {
-        const routersChildren: RouteObject[] = []
-        if (props.handleRouters) {
-            for (const handleRouter of props.handleRouters) {
-                const router: RouteObject = {}
-                router.element = LazyComponent(handleRouter.componentPath)
-                router.path = handleRouter.path
-                if (handleRouter.children) {
-                    router.children = handleRouters({handleRouters: handleRouter.children})
-                }
-                routersChildren.push(router)
-            }
-        }
-        return routersChildren
-    }
-
-    // function getItem(
-    //     label: string,
-    //     key?: React.Key | null,
-    //     icon?: React.ReactNode,
-    //     children?: MenuItem[],
-    //     type?: 'group',
-    // ): MenuItem {
-    //     return {key, icon, children, label, type,} as MenuItem;
-    // }
-
-    const handleRouterInfo = (props: { handleRouterInfo: RouterResponse[] }) => {
-        const routersChildren: MenuItem[] = []
-        if (props.handleRouterInfo) {
-            for (const handleRouter of props.handleRouterInfo) {
-                if (handleRouter.children) {
-                    // const router: MenuItem = getItem(handleRouter.name,
-                    //     handleRouter.path,
-                    //     IconComponent({icon: handleRouter.icon}),
-                    //     handleRouters({handleRouters: handleRouter.children}))
-                }
-                // routersChildren.push(router)
-            }
-        }
-        return routersChildren
-    }
 
     return (
-        <RouterContext.Provider value={routerInfo}>
+        <RouterContext.Provider value={{routerInfo, setRouters, setRouterInfo}}>
             <HashRouter>
                 <GenerateRouter routers={routers}/>
             </HashRouter>

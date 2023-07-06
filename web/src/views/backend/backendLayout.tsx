@@ -1,13 +1,15 @@
 import {Outlet} from "react-router-dom";
-import {Button, Layout, theme} from "antd";
+import {Breadcrumb, Button, Layout, Space, theme} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useState} from "react";
 import SideMenuComponent from "./components/SideMenuComponent.tsx";
+import {BreadcrumbItemType, BreadcrumbSeparatorType} from "antd/es/breadcrumb/Breadcrumb";
 
 const {Header, Content, Sider} = Layout;
 
 const BackendLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const [breadcrumb, setBreadcrumb] = useState<Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[] | undefined>([])
     const {
         token: {colorBgContainer},
     } = theme.useToken();
@@ -18,24 +20,29 @@ const BackendLayout = () => {
                 {/*<div className="demo-logo-vertical">*/}
                 {/*    logooo*/}
                 {/*</div>*/}
-                <SideMenuComponent/>
+                <SideMenuComponent setBreadcrumb={setBreadcrumb}/>
             </Sider>
             <Layout>
                 <Header style={{padding: 0, background: colorBgContainer}}>
-                    <Button
-                        type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '16px',
-                            width: 64,
-                            height: 64,
-                        }}
-                    />
+                    <Space size={33}>
+                        <Button
+                            type="text"
+                            icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: '16px',
+                                width: 64,
+                                height: 64,
+                            }}
+                        />
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </Space>
                 </Header>
                 <Content
                     style={{
-                        margin: '24px 16px',
+                        margin: '16px 16px',
                         padding: 24,
                         minHeight: 280,
                         background: colorBgContainer,
@@ -45,7 +52,8 @@ const BackendLayout = () => {
                 </Content>
             </Layout>
         </Layout>
-    );
+    )
+        ;
 }
 
 export default BackendLayout
