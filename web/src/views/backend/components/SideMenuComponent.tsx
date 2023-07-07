@@ -3,7 +3,6 @@ import {RouterContext} from "../../../App.tsx";
 import {useContext, useEffect, useMemo, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {BreadcrumbItemType, BreadcrumbSeparatorType} from "antd/es/breadcrumb/Breadcrumb";
-import * as React from "react";
 
 interface SideMenuComponentProps {
     setBreadcrumb: React.Dispatch<React.SetStateAction<Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[] | undefined>>
@@ -23,9 +22,11 @@ const SideMenuComponent = (props: SideMenuComponentProps) => {
     const {routerInfo} = useContext(RouterContext)
     const navigate = useNavigate()
     const [breadcrumbCache, setBreadcrumbCache] = useState<BreadcrumbCache>(new Map())
+    const [defaultSelectedKeys, setDefaultSelectedKeys] = useState("")
     useEffect(() => {
         initBreadcrumbCache()
-    }, [])
+        setDefaultSelectedKeys(location.pathname)
+    }, [location.key])
     const initBreadcrumbCacheChildren = (children: MenuItems[], cache: BreadcrumbCache) => {
         for (const router of children) {
             if (router.key) {
@@ -82,13 +83,12 @@ const SideMenuComponent = (props: SideMenuComponentProps) => {
         cacheOpenKeys.push(cachePath)
         return cacheOpenKeys
     }, [location.pathname])
-
     return (
         <Menu
             theme="dark"
             mode="inline"
             defaultOpenKeys={handleDefaultOpenKeys}
-            defaultSelectedKeys={[location.pathname]}
+            selectedKeys={[defaultSelectedKeys]}
             items={routerInfo}
             onClick={handleBreadcrumb}
             onSelect={handleSelect}

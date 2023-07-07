@@ -1,0 +1,15 @@
+.buttonStyle {
+  display         : flex;
+  flex-direction  : column;
+  justify-content : center;
+  align-items     : center;
+  text-align      : center;
+  width           : 144px;
+  height          : 96px;
+  cursor          : pointer;
+}
+
+.buttonStyle:hover {
+  box-shadow : 0 0 7px rgba(217, 217, 217, .55);
+  transition : all 200ms;
+}

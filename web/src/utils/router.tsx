@@ -14,7 +14,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 export const LazyComponent = (url: string) => {
     const Component = lazy(() => import(url))
     return <Suspense fallback={<RouterLoadingComponent/>}>
-        <Component/>
+                <Component/>
     </Suspense>
 }
 

@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin     : 0;
+  padding    : 0;
+  box-sizing : border-box;
+}
+
+@keyframes logo-spin {
+  from {
+    transform : rotate(0deg);
+  }
+  to {
+    transform : rotate(360deg);
+  }
+}
+
+.logo-animal {
+  animation   : logo-spin infinite 20s linear;
+  user-select : none;
+}
+
+#nprogress .bar {
+  background : rgb(59 130 246) !important;
+  height     : 3px !important;
+}
+
+span {
+  font-family : Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, å¾®è½¯é›…é»‘, Arial, sans-serif;
+}

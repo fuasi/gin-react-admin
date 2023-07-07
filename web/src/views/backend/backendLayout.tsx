@@ -1,11 +1,13 @@
-import {Outlet} from "react-router-dom";
+import {Outlet, useLocation} from "react-router-dom";
 import {Breadcrumb, Button, Layout, Space, theme} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {useState} from "react";
 import SideMenuComponent from "./components/SideMenuComponent.tsx";
 import {BreadcrumbItemType, BreadcrumbSeparatorType} from "antd/es/breadcrumb/Breadcrumb";
+import {CSSTransition, SwitchTransition} from "react-transition-group";
+import './BackendLayout.scss'
 
-const {Header, Content, Sider} = Layout;
+const {Header, Sider} = Layout;
 
 const BackendLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -13,7 +15,7 @@ const BackendLayout = () => {
     const {
         token: {colorBgContainer},
     } = theme.useToken();
-
+    const location = useLocation()
     return (
         <Layout className={"w-screen h-screen"}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -24,7 +26,7 @@ const BackendLayout = () => {
             </Sider>
             <Layout>
                 <Header style={{padding: 0, background: colorBgContainer}}>
-                    <Space size={33}>
+                    <Space size={12}>
                         <Button
                             type="text"
                             icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
@@ -36,20 +38,21 @@ const BackendLayout = () => {
                             }}
                         />
                         <Breadcrumb
+                            style={{fontSize: 18}}
                             items={breadcrumb}
                         />
                     </Space>
                 </Header>
-                <Content
-                    style={{
-                        margin: '16px 16px',
-                        padding: 24,
-                        minHeight: 280,
-                        background: colorBgContainer,
-                    }}
-                >
-                    <Outlet/>
-                </Content>
+                <SwitchTransition mode="out-in">
+                    <CSSTransition
+                        unmountOnExit={true}
+                        key={location.key}
+                        timeout={300} classNames="fade" nodeRef={null}>
+                        <div>
+                            <Outlet/>
+                        </div>
+                    </CSSTransition>
+                </SwitchTransition>
             </Layout>
         </Layout>
     )
