@@ -21,12 +21,16 @@ apiRequest.interceptors.request.use((config) => {
     const token = getToken()
     if (token)
         config.headers.setAuthorization(`Bearer ${ token }`)
-    NProgress.start()
+    // NProgress.start()
     return config
 })
-apiRequest.interceptors.response.use((config) => {
-    const { data } = config
-    NProgress.done()
+apiRequest.interceptors.response.use((response) => {
+    const { data } = response
+    const { code, msg } = data
+    if (code != GLOBAL_CONFIG.SUCCESS_STATUS) {
+        throw new Error(msg || "异常错误")
+    }
+    // NProgress.done()
     return data
 })
 

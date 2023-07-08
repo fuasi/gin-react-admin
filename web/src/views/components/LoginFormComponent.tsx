@@ -15,9 +15,8 @@ const LoginFormComponent = () => {
     const navigate = useNavigate()
     useEffect(() => {
         baseApis.checkLogin()
-            .then(res => {
-                if (res.code === GLOBAL_CONFIG.SUCCESS_STATUS) return handleGetRouter()
-            }).then(() => navigate('/dashboard')
+            .then(handleGetRouter)
+            .then(() => navigate('/dashboard')
         )
     })
     const handleGetRouter = async () => {
