@@ -1,5 +1,5 @@
-import nProgress from "nprogress";
+import { configure } from "nprogress";
 
-const NProgress = nProgress.configure({minimum: 1})
+const NProgress = configure({minimum: 1})
 
 export default NProgress

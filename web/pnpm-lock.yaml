@@ -3,7 +3,9 @@ lockfileVersion: 5.4
 specifiers:
   '@ant-design/icons': ^5.1.4
   '@mantine/hooks': ^6.0.16
+  '@tsconfig/node18': ^2.0.1
   '@types/js-cookie': ^3.0.3
+  '@types/node': ^18.16.17
   '@types/nprogress': ^0.2.0
   '@types/react': ^18.0.37
   '@types/react-dom': ^18.0.11
@@ -46,6 +48,8 @@ dependencies:
 
 devDependencies:
   '@ant-design/icons': 5.1.4_biqbaboplfbrettd7655fr4n2y
+  '@tsconfig/node18': 2.0.1
+  '@types/node': 18.16.19
   '@types/react': 18.2.14
   '@types/react-dom': 18.2.6
   '@typescript-eslint/eslint-plugin': 5.61.0_24v3duij7ab7rtbfz4qzw7dc5u
@@ -58,7 +62,7 @@ devDependencies:
   postcss: 8.4.25
   tailwindcss: 3.3.2
   typescript: 5.1.6
-  vite: 4.4.2_sass@1.63.6
+  vite: 4.4.2_s3dqxh4ls26dflp6mklu4tks4q
 
 packages:
 
@@ -673,12 +677,20 @@ packages:
       '@swc/core-win32-x64-msvc': 1.3.68
     dev: true
 
+  /@tsconfig/node18/2.0.1:
+    resolution: {integrity: sha512-UqdfvuJK0SArA2CxhKWwwAWfnVSXiYe63bVpMutc27vpngCntGUZQETO24pEJ46zU6XM+7SpqYoMgcO3bM11Ew==}
+    dev: true
+
   /@types/js-cookie/3.0.3:
     resolution: {integrity: sha512-Xe7IImK09HP1sv2M/aI+48a20VX+TdRJucfq4vfRVy6nWN8PYPOEnlMRSgxJAgYQIXJVL8dZ4/ilAM7dWNaOww==}
     dev: false
 
   /@types/json-schema/7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
+    dev: true
+
+  /@types/node/18.16.19:
+    resolution: {integrity: sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==}
     dev: true
 
   /@types/nprogress/0.2.0:
@@ -850,7 +862,7 @@ packages:
       vite: ^4
     dependencies:
       '@swc/core': 1.3.68
-      vite: 4.4.2_sass@1.63.6
+      vite: 4.4.2_s3dqxh4ls26dflp6mklu4tks4q
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: true
@@ -2798,7 +2810,7 @@ packages:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
     dev: true
 
-  /vite/4.4.2_sass@1.63.6:
+  /vite/4.4.2_s3dqxh4ls26dflp6mklu4tks4q:
     resolution: {integrity: sha512-zUcsJN+UvdSyHhYa277UHhiJ3iq4hUBwHavOpsNUGsTgjBeoBlK8eDt+iT09pBq0h9/knhG/SPrZiM7cGmg7NA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -2826,6 +2838,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 18.16.19
       esbuild: 0.18.11
       postcss: 8.4.25
       rollup: 3.26.2

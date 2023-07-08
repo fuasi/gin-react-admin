@@ -3,7 +3,7 @@ import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {baseApis} from "../../apis";
 import useMessage from "antd/es/message/useMessage";
 import GLOBAL_CONFIG from "../../config";
-import {setToken} from "../../utils/cookie.ts";
+import {setToken} from "../../utils/token.ts";
 import {useNavigate} from "react-router-dom";
 import {useContext, useEffect} from "react";
 import {RouterContext} from "../../App.tsx";

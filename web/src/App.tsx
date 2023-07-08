@@ -1,9 +1,9 @@
 import {HashRouter, RouteObject} from "react-router-dom";
-import GenerateRouter, {HandleRouterInfo, HandleRouters} from "./utils/router.tsx";
+import GenerateRouter, {HandleRouterInfo, HandleRouters} from "@/utils/router";
 import {createContext, useEffect, useState} from "react";
-import {baseApis} from "./apis";
+import {baseApis} from "@/apis";
 import {MenuProps} from "antd";
-import {getToken} from "./utils/cookie.ts";
+import {getToken} from "@/utils/token";
 import * as React from "react";
 
 type MenuItem = Required<MenuProps>['items'][number];

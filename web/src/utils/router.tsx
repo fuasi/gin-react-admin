@@ -1,11 +1,11 @@
 import {createElement, lazy, Suspense} from "react";
 import * as icons from "@ant-design/icons"
 import {RouteObject, useRoutes} from "react-router-dom";
-import LoginLayout from "../views/loginLayout.tsx";
-import PrivateRoute from "../components/PrivateRouteComponent.tsx";
-import BackendLayout from "../views/backend/backendLayout.tsx";
-import RouterLoadingComponent from "../components/RouterLoadingComponent.tsx";
-import {RouterResponse} from "../apis/baseApis.ts";
+import LoginLayout from "@/views/loginLayout";
+import PrivateRoute from "@/components/PrivateRouteComponent";
+import BackendLayout from "@/views/backend/backendLayout";
+import RouterLoadingComponent from "@/components/RouterLoadingComponent";
+import {RouterResponse} from "@/apis/baseApis.ts";
 import * as React from "react";
 import {MenuProps} from "antd";
 
