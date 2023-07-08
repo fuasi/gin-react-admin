@@ -1,10 +1,11 @@
-import {HashRouter, RouteObject} from "react-router-dom";
-import GenerateRouter, {HandleRouterInfo, HandleRouters} from "@/utils/router";
-import {createContext, useEffect, useState} from "react";
-import {baseApis} from "@/apis";
-import {MenuProps} from "antd";
-import {getToken} from "@/utils/token";
-import * as React from "react";
+import { HashRouter, RouteObject } from 'react-router-dom';
+import GenerateRouter, { HandleRouterInfo, HandleRouters } from '@/utils/router';
+import { createContext, useEffect, useState } from 'react';
+import { baseApis } from '@/apis';
+import { MenuProps } from 'antd';
+
+import * as React from 'react';
+import { tokenStore } from '@/store/localstrageStore'
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -22,23 +23,23 @@ export const RouterContext = createContext<{
     }
 })
 const App = () => {
-    const [routers, setRouters] = useState<RouteObject[]>()
-    const [routerInfo, setRouterInfo] = useState<MenuItem[]>()
+    const [ routers, setRouters ] = useState<RouteObject[]>()
+    const [ routerInfo, setRouterInfo ] = useState<MenuItem[]>()
     useEffect(() => {
-        if (getToken()) {
+        if (tokenStore.token) {
             baseApis.getRouter().then(res => {
-                const {data} = res
-                setRouters(HandleRouters({handleRouters: data}))
-                setRouterInfo(HandleRouterInfo({handleRouterInfo: data}))
+                const { data } = res
+                setRouters(HandleRouters({ handleRouters: data }))
+                setRouterInfo(HandleRouterInfo({ handleRouterInfo: data }))
             })
         }
     }, [])
 
 
     return (
-        <RouterContext.Provider value={{routerInfo, setRouters, setRouterInfo}}>
+        <RouterContext.Provider value={ { routerInfo, setRouters, setRouterInfo } }>
             <HashRouter>
-                <GenerateRouter routers={routers}/>
+                <GenerateRouter routers={ routers }/>
             </HashRouter>
         </RouterContext.Provider>
     )
