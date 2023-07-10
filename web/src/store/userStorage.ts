@@ -1,10 +1,11 @@
 import { observable } from 'mobx'
 
 const userStorage = observable({
-    id: '',
-    avatar: '',
-    name: ''
+    id : '',
+    avatar : '',
+    name : ''
 })
+
 
 export {
     userStorage

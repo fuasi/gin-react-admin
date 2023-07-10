@@ -1,47 +1,36 @@
 import { HashRouter, RouteObject } from 'react-router-dom';
 import GenerateRouter, { HandleRouterInfo, HandleRouters } from '@/utils/router';
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { baseApis } from '@/apis';
 import { MenuProps } from 'antd';
-
-import * as React from 'react';
 import { tokenStore } from '@/store/localstrageStore'
+import { routerStorage } from "@/store/routerStorage.ts";
+import { autorun } from "mobx";
 
-type MenuItem = Required<MenuProps>['items'][number];
+export type MenuItem = Required<MenuProps>['items'][number];
 
-export const RouterContext = createContext<{
-    routerInfo: MenuItem[] | undefined,
-    setRouters: React.Dispatch<React.SetStateAction<RouteObject[] | undefined>>,
-    setRouterInfo: React.Dispatch<React.SetStateAction<MenuItem[] | undefined>>
-}>({
-    routerInfo: [],
-    setRouters: value => {
-        return value
-    },
-    setRouterInfo: value => {
-        return value
-    }
-})
 const App = () => {
-    const [ routers, setRouters ] = useState<RouteObject[]>()
-    const [ routerInfo, setRouterInfo ] = useState<MenuItem[]>()
+    const [routers, setRouters] = useState<RouteObject[]>()
+
+    useEffect(() => autorun(() => {
+        if (routerStorage.routers.length && routerStorage.routerInfo) {
+            setRouters(routerStorage.routers)
+        }
+    }), [])
+
     useEffect(() => {
         if (tokenStore.token) {
             baseApis.getRouter().then(res => {
                 const { data } = res
-                setRouters(HandleRouters({ handleRouters: data }))
-                setRouterInfo(HandleRouterInfo({ handleRouterInfo: data }))
+                routerStorage.routers = HandleRouters({ handleRouters : data })
+                routerStorage.routerInfo = HandleRouterInfo({ handleRouterInfo : data })
             })
         }
     }, [])
-
-
     return (
-        <RouterContext.Provider value={ { routerInfo, setRouters, setRouterInfo } }>
-            <HashRouter>
-                <GenerateRouter routers={ routers }/>
-            </HashRouter>
-        </RouterContext.Provider>
+        <HashRouter>
+            <GenerateRouter routers={routers}/>
+        </HashRouter>
     )
 }
 

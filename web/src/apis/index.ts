@@ -2,7 +2,6 @@ import axios from 'axios';
 import GLOBAL_CONFIG from '@/config';
 import { getToken } from '@/utils/token.ts';
 import baseApis from './baseApis.ts';
-import NProgress from '@/utils/nprogress.ts';
 
 
 interface Response<T> {

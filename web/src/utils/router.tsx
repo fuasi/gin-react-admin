@@ -13,26 +13,26 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 export const LazyComponent = (url: string) => {
     const Component = lazy(() => import(url))
-    return <Suspense fallback={ <RouterLoadingComponent/> }>
+    return <Suspense fallback={<RouterLoadingComponent/>}>
         <Component/>
     </Suspense>
 }
 
-const IconComponent = (props: { icon: string }) => {
-    const { icon } = props
-    const antIcon: { [key: string]: any } = icons
+const IconComponent = (props: {icon: string}) => {
+    const {icon} = props
+    const antIcon: {[key: string]: any} = icons
     return createElement(antIcon[icon])
 }
 
-export const HandleRouters = (props: { handleRouters: RouterResponse[] | undefined }) => {
+export const HandleRouters = (props: {handleRouters: RouterResponse[] | undefined}) => {
     const routersChildren: RouteObject[] = []
-    if (props.handleRouters) {
-        for (const handleRouter of props.handleRouters) {
+    if ( props.handleRouters ) {
+        for ( const handleRouter of props.handleRouters ) {
             const router: RouteObject = {}
             router.element = LazyComponent(handleRouter.componentPath)
             router.path = handleRouter.path
-            if (handleRouter.children) {
-                router.children = HandleRouters({ handleRouters: handleRouter.children })
+            if ( handleRouter.children ) {
+                router.children = HandleRouters({handleRouters : handleRouter.children})
             }
             routersChildren.push(router)
         }
@@ -40,40 +40,39 @@ export const HandleRouters = (props: { handleRouters: RouterResponse[] | undefin
     return routersChildren
 }
 const getItem = (label: string, key?: React.Key | null, icon?: React.ReactNode, children?: MenuItem[], type?: 'group',): MenuItem => {
-    return { key, icon, children, label, type } as MenuItem;
+    return {key, icon, children, label, type} as MenuItem;
 }
-export const HandleRouterInfo = (props: { handleRouterInfo: RouterResponse[] }) => {
+export const HandleRouterInfo = (props: {handleRouterInfo: RouterResponse[]}) => {
     const routersChildren: MenuItem[] = []
-    if (props.handleRouterInfo) {
-        for (const handleRouter of props.handleRouterInfo) {
+    if ( props.handleRouterInfo ) {
+        for ( const handleRouter of props.handleRouterInfo ) {
             const router: MenuItem = getItem(handleRouter.name,
                 handleRouter.path,
-                IconComponent({ icon: handleRouter.icon }),
+                IconComponent({icon : handleRouter.icon}),
                 handleRouter.children ? HandleRouterInfo({
-                    handleRouterInfo: handleRouter.children,
+                    handleRouterInfo : handleRouter.children,
                 }) : undefined)
             routersChildren.push(router)
         }
     }
     return routersChildren
 }
-const GenerateRouter = ({ routers }: { routers: RouteObject[] | undefined }) => {
-
-    return useRoutes([ {
-        path: '/login',
-        element: <LoginLayout/>
+const GenerateRouter = ({routers}: {routers: RouteObject[] | undefined}) => {
+    return useRoutes([{
+        path : '/login',
+        element : <LoginLayout/>
     }, {
-        path: '/',
-        element: <PrivateRoute>
+        path : '/',
+        element : <PrivateRoute>
             <BackendLayout/>
         </PrivateRoute>,
-        children: routers
+        children : routers
     }, {
-        path: '*',
-        element: <PrivateRoute>
+        path : '*',
+        element : <PrivateRoute>
             <RouterLoadingComponent/>
         </PrivateRoute>
-    } ])
+    }])
 }
 
 export default GenerateRouter
