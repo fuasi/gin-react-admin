@@ -10,20 +10,17 @@ import { routerStorage } from '@/store/routerStorage'
 import { tokenStore } from '@/store/localstrageStore'
 
 const LoginFormComponent = () => {
-    const [ messageApi, contextHolder ] = useMessage()
+    const [messageApi, contextHolder] = useMessage()
     const navigate = useNavigate()
     useEffect(() => {
-        baseApis.checkLogin()
-            .then(handleGetRouter)
-            .then(() => navigate('/dashboard')
-        )
-    })
-    const handleGetRouter = async () => {
+        baseApis.checkLogin().then(handleGetRouter).then(() => navigate('/dashboard'))
+    }, [])
+    const handleGetRouter = async() => {
         const { data } = await baseApis.getRouter()
-        routerStorage.routers = HandleRouters({handleRouters : data})
-        routerStorage.routerInfo = HandleRouterInfo({handleRouterInfo : data})
+        routerStorage.routers = HandleRouters({ handleRouters : data })
+        routerStorage.routerInfo = HandleRouterInfo({ handleRouterInfo : data })
     }
-    const onFinish = async (values: never) => {
+    const onFinish = async(values: never) => {
         const { code, data } = await baseApis.login(values)
         if (code !== GLOBAL_CONFIG.SUCCESS_STATUS) {
             messageApi.error('请输入正确的信息')
@@ -35,32 +32,32 @@ const LoginFormComponent = () => {
     }
 
     return (
-        <div className={ 'w-96 h-96' }>
-            { contextHolder }
-            <div className={ 'text-black text-3xl font-bold text-center mb-12 mt-12' }>
+        <div className={'w-96 h-96'}>
+            {contextHolder}
+            <div className={'text-black text-3xl font-bold text-center mb-12 mt-12'}>
                 系统登录
             </div>
             <Form
                 name="login-form"
-                style={ { maxWidth: 600 } }
-                onFinish={ onFinish }
+                style={{ maxWidth : 600 }}
+                onFinish={onFinish}
                 autoComplete="off"
             >
                 <Form.Item
                     name="username"
-                    rules={ [ { required: true, message: 'Please enter the correct user name' } ] }
+                    rules={[{ required : true, message : 'Please enter the correct user name' }]}
                 >
-                    <Input className={ 'h-10' } placeholder={ '请输入账号' } prefix={ <UserOutlined/> }/>
+                    <Input className={'h-10'} placeholder={'请输入账号'} prefix={<UserOutlined/>}/>
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={ [ { required: true, message: 'Please enter the correct password' } ] }
+                    rules={[{ required : true, message : 'Please enter the correct password' }]}
                 >
-                    <Input.Password className={ 'h-10' } placeholder={ '请输入密码' } prefix={ <LockOutlined/> }/>
+                    <Input.Password className={'h-10'} placeholder={'请输入密码'} prefix={<LockOutlined/>}/>
                 </Form.Item>
-                <div className={ 'w-56 h-10 ml-auto mr-auto' }>
+                <div className={'w-56 h-10 ml-auto mr-auto'}>
                     <Form.Item>
-                        <Button className={ 'w-56 h-10' } type="primary" htmlType="submit">
+                        <Button className={'w-56 h-10'} type="primary" htmlType="submit">
                             登录
                         </Button>
                     </Form.Item>

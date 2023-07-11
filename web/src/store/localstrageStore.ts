@@ -14,12 +14,12 @@ const deleteToken = () => {
 }
 
 const tokenStore = observable({
-    token: getToken(),
+    token : getToken(),
 }, {})
 
 window.addEventListener('storage', e => {
     if (e.key == tokenKey) {
-        tokenStore.token = e.newValue
+        tokenStore.token = e.newValue || ""
     }
 })
 
