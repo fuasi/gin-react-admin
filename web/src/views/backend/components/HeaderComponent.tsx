@@ -31,6 +31,15 @@ interface HeaderComponentProps {
 
 const HeaderComponent = (props: HeaderComponentProps) => {
     const { collapsed, setCollapsed, breadcrumb, colorBgContainer } = props
+    const handleFullScreen = async() => {
+        if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                await document.exitFullscreen();
+            }
+        }
+    }
     return (
         <Header style={{ padding : 0, background : colorBgContainer }}>
             <div className={"flex flex-row justify-between items-center"}>
@@ -52,7 +61,7 @@ const HeaderComponent = (props: HeaderComponentProps) => {
                 </Space>
                 <div className={"flex justify-center items-center mr-10"}>
                     <ReloadOutlined className={"mr-6 cursor-pointer"} style={{ fontSize : "20px" }}/>
-                    <ExpandOutlined className={"mr-6 cursor-pointer"} style={{ fontSize : "20px" }}/>
+                    <ExpandOutlined onClick={handleFullScreen} className={"mr-6 cursor-pointer"} style={{ fontSize : "20px" }}/>
                     {/*<Avatar shape="square" size={48} icon={<UserOutlined/>}/>*/}
                     <Dropdown trigger={["hover", "click"]} menu={{ items }}>
                         <Avatar shape="square" size={48}
