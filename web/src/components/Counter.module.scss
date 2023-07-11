@@ -1,0 +1,15 @@
+@property --counterValue {
+  syntax        : '<integer>';
+  inherits      : false;
+  initial-value : 0;
+}
+
+.counter {
+  counter-reset : count var(--counterValue);
+}
+
+.counter::before {
+  content : counter(count);
+}
+
+
