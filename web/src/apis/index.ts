@@ -2,6 +2,7 @@ import axios from 'axios';
 import GLOBAL_CONFIG from '@/config';
 import baseApis from './baseApis.ts';
 import { tokenStore } from "@/store/localstrageStore.ts";
+import userApis from "@/apis/userApis.ts";
 
 
 interface Response<T> {
@@ -37,5 +38,5 @@ apiRequest.interceptors.response.use((response) => {
 })
 
 
-export { apiRequest, baseApis }
+export { apiRequest, baseApis, userApis }
 

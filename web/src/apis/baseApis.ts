@@ -17,23 +17,23 @@ export interface RouterResponse {
 }
 
 const baseApis = {
-    login: (query: LoginQuery): HTTPResponse<string> => {
+    login : (query: LoginQuery): HTTPResponse<string> => {
         return apiRequest({
-            url: '/login',
-            method: 'POST',
-            data: query
+            url : '/login',
+            method : 'POST',
+            data : query
         })
     },
-    checkLogin: (): HTTPResponse<string> => {
+    checkLogin : (): HTTPResponse<string> => {
         return apiRequest({
-            url: '/check',
-            method: 'POST',
+            url : '/check',
+            method : 'POST',
         })
     },
-    getRouter: (): HTTPResponse<RouterResponse[]> => {
+    getRouter : (): HTTPResponse<RouterResponse[]> => {
         return apiRequest({
-            url: '/router',
-            method: 'GET'
+            url : '/router',
+            method : 'GET'
         })
     }
 
