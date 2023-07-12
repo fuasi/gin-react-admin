@@ -55,7 +55,6 @@ const HeaderComponent = (props: HeaderComponentProps) => {
     return (
         <Header style={{ padding : 0, background : colorBgContainer }}>
             <div className={"flex flex-row justify-between items-center"}>
-
                 <Space size={12}>
                     <Button
                         type="text"
@@ -77,9 +76,8 @@ const HeaderComponent = (props: HeaderComponentProps) => {
                                     style={{ fontSize : "20px" }}/>
                     <ExpandOutlined onClick={handleFullScreen} className={"mr-6 cursor-pointer select-none"}
                                     style={{ fontSize : "20px" }}/>
-                    {/*<Avatar shape="square" size={48} icon={<UserOutlined/>}/>*/}
                     <Dropdown trigger={["hover", "click"]} menu={{ items }}>
-                        <Avatar shape="square" size={48}
+                        <Avatar shape="square" size={48} className={"select-none"}
                                 src={'https://tupian.qqw21.com/article/UploadPic/2020-7/202071222374427898.jpg'}
                                 icon={<UserOutlined/>}/>
                     </Dropdown>
