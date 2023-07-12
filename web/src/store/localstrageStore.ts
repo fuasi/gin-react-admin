@@ -14,7 +14,7 @@ const deleteToken = () => {
 }
 
 const tokenStore = observable({
-    token : getToken(),
+    token : getToken() || undefined,
 }, {})
 
 window.addEventListener('storage', e => {

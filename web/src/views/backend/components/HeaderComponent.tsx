@@ -1,4 +1,4 @@
-import { Avatar, Breadcrumb, Button, Dropdown, MenuProps, Space } from "antd";
+import { Avatar, Breadcrumb, Button, Dropdown, MenuProps,  Space } from "antd";
 import {
     ExpandOutlined,
     MenuFoldOutlined,
@@ -9,18 +9,9 @@ import {
 import { Header } from "antd/es/layout/layout";
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from "antd/es/breadcrumb/Breadcrumb";
 import React from "react";
+import { tokenStore } from "@/store/localstrageStore.ts";
+import { useNavigate } from "react-router-dom";
 
-const items: MenuProps['items'] = [
-    {
-        key : '1',
-        label : "个人中心",
-    },
-    {
-        key : '2',
-        danger : true,
-        label : '退出登录',
-    },
-];
 
 interface HeaderComponentProps {
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
@@ -40,6 +31,23 @@ const HeaderComponent = (props: HeaderComponentProps) => {
             }
         }
     }
+    const navigate = useNavigate()
+    const handleUserLogout = () => {
+        tokenStore.token = undefined
+        navigate("/login", { replace : true })
+    }
+    const items: MenuProps['items'] = [
+        {
+            key : '1',
+            label : "个人中心",
+        },
+        {
+            key : '2',
+            danger : true,
+            label : '退出登录',
+            onClick : () => handleUserLogout()
+        },
+    ];
     return (
         <Header style={{ padding : 0, background : colorBgContainer }}>
             <div className={"flex flex-row justify-between items-center"}>
@@ -61,7 +69,8 @@ const HeaderComponent = (props: HeaderComponentProps) => {
                 </Space>
                 <div className={"flex justify-center items-center mr-10"}>
                     <ReloadOutlined className={"mr-6 cursor-pointer"} style={{ fontSize : "20px" }}/>
-                    <ExpandOutlined onClick={handleFullScreen} className={"mr-6 cursor-pointer"} style={{ fontSize : "20px" }}/>
+                    <ExpandOutlined onClick={handleFullScreen} className={"mr-6 cursor-pointer select-none"}
+                                    style={{ fontSize : "20px" }}/>
                     {/*<Avatar shape="square" size={48} icon={<UserOutlined/>}/>*/}
                     <Dropdown trigger={["hover", "click"]} menu={{ items }}>
                         <Avatar shape="square" size={48}
