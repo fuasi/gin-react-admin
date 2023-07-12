@@ -1,4 +1,4 @@
-import { Avatar, Breadcrumb, Button, Dropdown, MenuProps,  Space } from "antd";
+import { Avatar, Breadcrumb, Button, Dropdown, MenuProps, Space } from "antd";
 import {
     ExpandOutlined,
     MenuFoldOutlined,
@@ -18,10 +18,11 @@ interface HeaderComponentProps {
     breadcrumb: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[] | undefined
     colorBgContainer: string
     collapsed: boolean
+    forceUpdate: () => void
 }
 
 const HeaderComponent = (props: HeaderComponentProps) => {
-    const { collapsed, setCollapsed, breadcrumb, colorBgContainer } = props
+    const { forceUpdate, collapsed, setCollapsed, breadcrumb, colorBgContainer } = props
     const handleFullScreen = async() => {
         if (!document.fullscreenElement) {
             await document.documentElement.requestFullscreen();
@@ -35,6 +36,9 @@ const HeaderComponent = (props: HeaderComponentProps) => {
     const handleUserLogout = () => {
         tokenStore.token = undefined
         navigate("/login", { replace : true })
+    }
+    const handleReload = () => {
+        forceUpdate()
     }
     const items: MenuProps['items'] = [
         {
@@ -51,6 +55,7 @@ const HeaderComponent = (props: HeaderComponentProps) => {
     return (
         <Header style={{ padding : 0, background : colorBgContainer }}>
             <div className={"flex flex-row justify-between items-center"}>
+
                 <Space size={12}>
                     <Button
                         type="text"
@@ -68,7 +73,8 @@ const HeaderComponent = (props: HeaderComponentProps) => {
                     />
                 </Space>
                 <div className={"flex justify-center items-center mr-10"}>
-                    <ReloadOutlined className={"mr-6 cursor-pointer"} style={{ fontSize : "20px" }}/>
+                    <ReloadOutlined onClick={handleReload} className={"mr-6 cursor-pointer"}
+                                    style={{ fontSize : "20px" }}/>
                     <ExpandOutlined onClick={handleFullScreen} className={"mr-6 cursor-pointer select-none"}
                                     style={{ fontSize : "20px" }}/>
                     {/*<Avatar shape="square" size={48} icon={<UserOutlined/>}/>*/}
