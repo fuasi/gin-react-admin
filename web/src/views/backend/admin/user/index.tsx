@@ -80,15 +80,6 @@ const UserComponent = () => {
 
     }
 
-    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
-
-    const rowSelection = {
-        selectedRowKeys,
-        onChange : onSelectChange,
-    };
-
     const handlePageInfo = (page: number, pageSize: number) => {
         setPageInfo({ page, pageSize })
     }
@@ -111,10 +102,8 @@ const UserComponent = () => {
                         }}
                         loading={loading}
                         bordered
-                        rowSelection={rowSelection}
                         columns={columns}
                         rowKey={"id"}
-
                         dataSource={data}/>
                 </ConfigProvider>
             </div>
