@@ -4,7 +4,7 @@ import { useState } from "react";
 import SideMenuComponent from "./components/SideMenuComponent.tsx";
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from "antd/es/breadcrumb/Breadcrumb";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import './BackendLayout.scss'
+import './backendLayout.scss'
 import HeaderComponent from "@/views/backend/components/HeaderComponent.tsx";
 import { useForceUpdate } from "@/hooks/useForceUpdate.ts";
 
