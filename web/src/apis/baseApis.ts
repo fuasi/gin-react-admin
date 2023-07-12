@@ -1,4 +1,4 @@
-import { apiRequest, HTTPResponse } from './index.ts';
+import { apiRequest } from './index.ts';
 
 interface LoginQuery {
     username: string
@@ -16,28 +16,24 @@ export interface RouterResponse {
     children?: RouterResponse[]
 }
 
-const baseApis = {
-    login : (query: LoginQuery): HTTPResponse<string> => {
-        return apiRequest({
-            url : '/login',
-            method : 'POST',
-            data : query
-        })
-    },
-    checkLogin : (): HTTPResponse<string> => {
-        return apiRequest({
-            url : '/check',
-            method : 'POST',
-        })
-    },
-    getRouter : (): HTTPResponse<RouterResponse[]> => {
-        return apiRequest({
-            url : '/router',
-            method : 'GET'
-        })
-    }
-
+export function login(query: LoginQuery) {
+    return apiRequest<string>({
+        url: '/login',
+        method: 'POST',
+        data: query
+    })
 }
 
-export default baseApis
+export function checkLogin() {
+    return apiRequest<string>({
+        url: '/check',
+        method: 'POST',
+    })
+}
 
+export function getRouter() {
+    return apiRequest<RouterResponse[]>({
+        url: '/router',
+        method: 'GET'
+    })
+}

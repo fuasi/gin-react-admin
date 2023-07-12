@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import GLOBAL_CONFIG from '@/config';
-import baseApis from './baseApis.ts';
-import { tokenStore } from "@/store/localstrageStore.ts";
-import userApis from "@/apis/userApis.ts";
+import * as baseApis from './baseApis.ts';
+import { tokenStore } from '@/store/localstrageStore.ts';
+import userApis from '@/apis/userApis.ts';
 
 
 interface Response<T> {
@@ -14,20 +14,20 @@ interface Response<T> {
 export type HTTPResponse<T> = Promise<Response<T>>
 
 
-const apiRequest = axios.create({
-    baseURL : GLOBAL_CONFIG.API_BASEURL,
-    timeout : GLOBAL_CONFIG.API_TIMEOUT
+const ins = axios.create({
+    baseURL: GLOBAL_CONFIG.API_BASEURL,
+    timeout: GLOBAL_CONFIG.API_TIMEOUT
 })
 
 
-apiRequest.interceptors.request.use((config) => {
+ins.interceptors.request.use((config) => {
     const token = tokenStore.token
     if (token)
-        config.headers.setAuthorization(`Bearer ${token}`)
+        config.headers.setAuthorization(`Bearer ${ token }`)
     // NProgress.start()
     return config
 })
-apiRequest.interceptors.response.use((response) => {
+ins.interceptors.response.use((response) => {
     const { data } = response
     const { code, msg } = data
     if (code != GLOBAL_CONFIG.SUCCESS_STATUS) {
@@ -36,6 +36,10 @@ apiRequest.interceptors.response.use((response) => {
     // NProgress.done()
     return data
 })
+
+const apiRequest = <T = any>(config: AxiosRequestConfig): HTTPResponse<T> => {
+    return ins(config)
+}
 
 
 export { apiRequest, baseApis, userApis }
