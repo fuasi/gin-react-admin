@@ -28,7 +28,7 @@ const BackendLayout = () => {
                 <SideMenuComponent setBreadcrumb={ setBreadcrumb }/>
             </Sider>
             <Layout>
-                <HeaderComponent forceUpdate={ incr } setCollapsed={ setCollapsed } breadcrumb={ breadcrumb }
+                <HeaderComponent handleFunc={ incr } setCollapsed={ setCollapsed } breadcrumb={ breadcrumb }
                                  colorBgContainer={ colorBgContainer }
                                  collapsed={ collapsed }/>
                 <SwitchTransition mode="out-in">
