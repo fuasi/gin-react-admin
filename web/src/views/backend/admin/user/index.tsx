@@ -12,7 +12,7 @@ import { useLoading } from '@/hooks/useLoading'
 const UserComponent = () => {
     const [ selectedRowKeys, setSelectedRowKeys ] = useState<React.Key[]>([]);
     const [ pageInfo, setPageInfo ] = useState<PageInfo>({ pageSize: 10, page: 1 })
-    const { loading, withLoading } = useLoading()
+    const { loading, withLoading } = useLoading(true)
     const [ data, setDate ] = useState<User[]>([])
     useEffect(() => {
         withLoading(() => {
