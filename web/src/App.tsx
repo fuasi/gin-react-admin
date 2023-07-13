@@ -1,7 +1,7 @@
 import { HashRouter, RouteObject } from 'react-router-dom';
 import GenerateRouter, { HandleRouterInfo, HandleRouters } from '@/utils/router';
 import { useEffect, useState } from 'react';
-import { baseApis } from '@/apis';
+import { getRouter } from '@/apis/baseApis.ts';
 import { MenuProps } from 'antd';
 import { tokenStore } from '@/store/localstrageStore'
 import { routerStorage } from "@/store/routerStorage.ts";
@@ -20,7 +20,7 @@ const App = () => {
 
     useEffect(() => {
         if (tokenStore.token) {
-            baseApis.getRouter().then(res => {
+            getRouter().then(res => {
                 const { data } = res
                 routerStorage.routers = HandleRouters({ handleRouters : data })
                 routerStorage.routerInfo = HandleRouterInfo({ handleRouterInfo : data })

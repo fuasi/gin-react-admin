@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import GLOBAL_CONFIG from '@/config';
-import * as baseApis from './baseApis.ts';
 import { tokenStore } from '@/store/localstrageStore.ts';
-import userApis from '@/apis/userApis.ts';
 
 
 interface Response<T> {
@@ -15,15 +13,15 @@ export type HTTPResponse<T> = Promise<Response<T>>
 
 
 const ins = axios.create({
-    baseURL: GLOBAL_CONFIG.API_BASEURL,
-    timeout: GLOBAL_CONFIG.API_TIMEOUT
+    baseURL : GLOBAL_CONFIG.API_BASEURL,
+    timeout : GLOBAL_CONFIG.API_TIMEOUT
 })
 
 
 ins.interceptors.request.use((config) => {
     const token = tokenStore.token
     if (token)
-        config.headers.setAuthorization(`Bearer ${ token }`)
+        config.headers.setAuthorization(`Bearer ${token}`)
     // NProgress.start()
     return config
 })
@@ -42,5 +40,5 @@ const apiRequest = <T = any>(config: AxiosRequestConfig): HTTPResponse<T> => {
 }
 
 
-export { apiRequest, baseApis, userApis }
+export { apiRequest }
 
