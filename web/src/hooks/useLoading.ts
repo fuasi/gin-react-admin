@@ -1,8 +1,7 @@
 import { useState } from 'react'
 
-// fix nm
-export const useLoading = (initLoading = false) => {
-    const [ loading, setLoading ] = useState(initLoading)
+export const useLoading = () => {
+    const [ loading, setLoading ] = useState(false)
     const withLoading = async (func: () => void) => {
         setLoading(true)
         try {
