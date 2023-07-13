@@ -50,7 +50,7 @@ const HeaderComponent = (props: HeaderComponentProps) => {
             key: '2',
             danger: true,
             label: '退出登录',
-            onClick: () => handleUserLogout()
+            onClick: handleUserLogout
         },
     ];
     return (

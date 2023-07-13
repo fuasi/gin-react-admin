@@ -21,22 +21,30 @@ const BackendLayout = () => {
 
     return (
         <Layout className={ 'w-screen h-screen' }>
-            <Sider trigger={ null } collapsible collapsed={ collapsed }>
+            <Sider trigger={ null }
+                   collapsible
+                   collapsed={ collapsed }
+            >
                 {/*<div className="demo-logo-vertical">*/ }
                 {/*    logooo*/ }
                 {/*</div>*/ }
                 <SideMenuComponent setBreadcrumb={ setBreadcrumb }/>
             </Sider>
             <Layout>
-                <HeaderComponent handleFunc={ incr } setCollapsed={ setCollapsed } breadcrumb={ breadcrumb }
+                <HeaderComponent handleFunc={ incr }
+                                 setCollapsed={ setCollapsed }
+                                 breadcrumb={ breadcrumb }
                                  colorBgContainer={ colorBgContainer }
                                  collapsed={ collapsed }/>
                 <SwitchTransition mode="out-in">
                     <CSSTransition
                         unmountOnExit={ true }
                         key={ location.key }
-                        timeout={ 300 } classNames="fade" nodeRef={ null }>
-                        <div key={ key } className={ 'overflow-auto' }>
+                        timeout={ 300 }
+                        classNames="fade"
+                        nodeRef={ null }>
+                        <div key={ key }
+                             className={ 'overflow-auto' }>
                             <Outlet/>
                         </div>
                     </CSSTransition>
