@@ -63,7 +63,7 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 
 func (u *UserApi) UpdateUserById(c *gin.Context) {
 	var user system.SysUser
-	err := c.ShouldBindQuery(&user)
+	err := c.ShouldBind(&user)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
@@ -93,7 +93,7 @@ func (u *UserApi) DeleteUserById(c *gin.Context) {
 
 func (u *UserApi) GetUserList(c *gin.Context) {
 	var page CommonRequest.PageInfo
-	err := c.ShouldBindUri(page)
+	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return

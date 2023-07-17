@@ -1,10 +1,12 @@
 package system
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"server/global"
 	"server/models/common/response"
 	"server/models/system"
+	"time"
 )
 
 type BaseApi struct {
@@ -31,4 +33,19 @@ func (b *BaseApi) GetRouter(c *gin.Context) {
 	}
 	//-------- 返回组装路由后返回给前端 --------
 	response.SuccessWithData(c, routerTree)
+}
+
+func (b *BaseApi) UploadAvatar(c *gin.Context) {
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		response.ErrorWithMessage(c, "头像上传失败:"+err.Error())
+		return
+	}
+	var fileName = time.Now().Unix()
+	err = c.SaveUploadedFile(file, fmt.Sprintf("%s%d.png", global.GRA_CONFIG.Upload.Path, fileName))
+	if err != nil {
+		response.ErrorWithMessage(c, "头像上传失败:"+err.Error())
+		return
+	}
+	response.Success(c)
 }

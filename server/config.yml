@@ -9,3 +9,5 @@ redis:
   password: ""
 jwt:
   sign: "test123123test"
+upload:
+  path: "D:\\static\\images\\"

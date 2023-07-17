@@ -14,5 +14,6 @@ func (u *BaseRouter) InitBaseRouter(Router *gin.RouterGroup) {
 	baseApi := apis.SystemApisApp.SystemApis.BaseApi
 	{
 		baseRouter.GET("/router", baseApi.GetRouter)
+		baseRouter.POST("/avatar", baseApi.UploadAvatar)
 	}
 }

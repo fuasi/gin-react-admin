@@ -17,9 +17,9 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userApi := apis.SystemApisApp.SystemApis.UserApi
 	{
 		userRouter.POST("/check", apis.SystemApisApp.SystemApis.UserApi.CheckLogin)
-		userRouter.GET("/users", userApi.GetUserList)
-		userRouter.GET("/user/{id}", userApi.GetUserById)
-		userRouter.PATCH("/user/{id}", userApi.UpdateUserById)
-		userRouter.DELETE("/user/{id}", userApi.DeleteUserById)
+		userRouter.POST("/users", userApi.GetUserList)
+		userRouter.GET("/user/:id", userApi.GetUserById)
+		userRouter.PATCH("/user", userApi.UpdateUserById)
+		userRouter.DELETE("/user/:id", userApi.DeleteUserById)
 	}
 }

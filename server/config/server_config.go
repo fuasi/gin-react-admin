@@ -4,4 +4,5 @@ type ServerConfig struct {
 	Redis    Redis
 	Database Database
 	JWT      JWT
+	Upload   Upload
 }

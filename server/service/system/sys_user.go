@@ -45,7 +45,7 @@ func (UserService *UserService) DeleteUserById(u system.SysUser) (resultUser sys
 func (UserService *UserService) GetUserList(info request.PageInfo) (resultUser []system.SysUserPublic, total int64, err error) {
 	limit := info.PageSize
 	offset := (info.Page - 1) * info.PageSize
-	err = global.GRA_DB.Count(&total).Error
+	err = global.GRA_DB.Model(resultUser).Count(&total).Error
 	if err != nil {
 		return
 	}
