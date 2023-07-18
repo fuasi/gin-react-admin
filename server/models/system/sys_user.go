@@ -13,7 +13,7 @@ type SysUserPublic struct {
 	Avatar   string `json:"avatar,omitempty"`
 	Nickname string `json:"nickname,omitempty"`
 	Phone    string `json:"phone,omitempty"`
-	Enable   string
+	Enable   bool   `json:"enable,omitempty"`
 	common.BaseModel
 }
 
