@@ -1,9 +1,9 @@
-import { Avatar, Button, ConfigProvider, Form, Space, Switch, Table } from 'antd';
+import { Avatar, Button, ConfigProvider, message, Space, Switch, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import Styles from './user.module.scss'
 import zhCN from 'antd/es/locale/zh_CN';
-import { getUsers, PageInfo, User } from '@/apis/userApis.ts';
+import { getUsers, PageInfo, updateUserInfo, User } from '@/apis/userApis.ts';
 import { DeleteOutlined, EditOutlined, KeyOutlined } from '@ant-design/icons';
 import { useLoading } from '@/hooks/useLoading'
 import UserModelComponent from "@/views/backend/admin/user/components/UserModelComponent.tsx";
@@ -15,16 +15,17 @@ const UserComponent = () => {
     const [data, setData] = useState<User[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [updateUser, setUpdateUser] = useState<User>()
+    const [messageApi, contextHolder] = message.useMessage()
+    const loadUserData = async() => {
+        await withLoading(async() => {
+            const { data } = await getUsers(pageInfo)
+            setData(data.list)
+        })
+    }
 
     useEffect(() => {
-        withLoading(() => {
-            getUsers(pageInfo).then(res => {
-                const { data } = res
-                console.log(data)
-                setData(data.list)
-            })
-        })
-    }, [isModalOpen, pageInfo])
+        loadUserData()
+    }, [pageInfo])
     const columns: ColumnsType<User> = [
         {
             title : '头像',
@@ -59,8 +60,9 @@ const UserComponent = () => {
             title : '启用',
             dataIndex : 'enable',
             width : 64,
-            render : (enable: boolean) => {
-                return (<Switch defaultChecked={enable}/>)
+            render : (_, record) => {
+                return (<Switch onChange={(checked) => handleIsUserEnable(checked, record.id)}
+                                defaultChecked={record.enable}/>)
             }
         },
         {
@@ -87,18 +89,26 @@ const UserComponent = () => {
 
     }
 
+    const handleIsUserEnable = async(enable: boolean, id: number) => {
+        await updateUserInfo({
+            id, enable
+        })
+        messageApi.success(enable ? "已启用" : "已禁用")
+    }
     const handlePageInfo = (page: number, pageSize: number) => {
         setPageInfo({ page, pageSize })
     }
 
     return (
         <div>
+            {contextHolder}
             <div className={Styles.userButtonContainer}>
                 <Button type="primary">
                     新增用户
                 </Button>
             </div>
-            <UserModelComponent switchModal={() => setIsModalOpen(!isModalOpen)} isModalOpen={isModalOpen}
+            <UserModelComponent loadData={loadUserData} switchModal={() => setIsModalOpen(!isModalOpen)}
+                                isModalOpen={isModalOpen}
                                 updateUser={updateUser}/>
             <div className={Styles.userTableContainer}>
                 <ConfigProvider locale={zhCN}>

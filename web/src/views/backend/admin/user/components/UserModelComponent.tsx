@@ -10,10 +10,11 @@ interface UserModelComponentProps {
     switchModal: () => void
     isModalOpen: boolean
     updateUser: User | undefined
+    loadData: () => void
 }
 
 const UserModelComponent = (props: UserModelComponentProps) => {
-    const { updateUser, switchModal, isModalOpen } = props
+    const { loadData, updateUser, switchModal, isModalOpen } = props
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm<User | undefined>()
     const [messageApi, contextHolder] = message.useMessage()
@@ -38,6 +39,7 @@ const UserModelComponent = (props: UserModelComponentProps) => {
             }
         }
         form.resetFields()
+        loadData()
         switchModal()
         setLoading(false)
     }

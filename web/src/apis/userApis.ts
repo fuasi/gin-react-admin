@@ -12,13 +12,13 @@ export interface GetUsers {
 
 export interface User {
     id: number
-    username: string
-    nickname: string
-    avatar: string
-    phone: string
-    enable: boolean
-    createdAt: string
-    updatedAt: string
+    username?: string
+    nickname?: string
+    avatar?: string
+    phone?: string
+    enable?: boolean
+    createdAt?: string
+    updatedAt?: string
 }
 
 export function getUsers(query: PageInfo) {
