@@ -1,5 +1,10 @@
 import { apiRequest } from './index.ts';
 
+export interface PageInfo {
+    pageSize: number
+    page: number
+}
+
 interface LoginQuery {
     username: string
     password: string
@@ -18,22 +23,22 @@ export interface RouterResponse {
 
 export function login(query: LoginQuery) {
     return apiRequest<string>({
-        url: '/login',
-        method: 'POST',
-        data: query
+        url : '/login',
+        method : 'POST',
+        data : query
     })
 }
 
 export function checkLogin() {
     return apiRequest<string>({
-        url: '/check',
-        method: 'POST',
+        url : '/check',
+        method : 'POST',
     })
 }
 
 export function getRouter() {
     return apiRequest<RouterResponse[]>({
-        url: '/router',
-        method: 'GET'
+        url : '/router',
+        method : 'GET'
     })
 }

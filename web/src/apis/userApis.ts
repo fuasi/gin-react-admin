@@ -1,9 +1,5 @@
 import { apiRequest } from "@/apis/index.ts";
-
-export interface PageInfo {
-    pageSize: number
-    page: number
-}
+import { PageInfo } from "@/apis/baseApis.ts";
 
 export interface GetUsers {
     list: User[]
