@@ -24,6 +24,8 @@ const App = () => {
                 const { data } = res
                 routerStorage.routers = HandleRouters({ handleRouters : data })
                 routerStorage.routerInfo = HandleRouterInfo({ handleRouterInfo : data })
+            }).catch(() => {
+                location.hash = "/login"
             })
         }
     }, [])
