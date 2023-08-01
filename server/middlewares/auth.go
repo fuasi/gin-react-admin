@@ -20,6 +20,8 @@ func AuthMiddleware(c *gin.Context) {
 	token, jwtPackaging, err := jwt.ParseToken(Authorization[1])
 	if err != nil {
 		global.GRA_LOG.Error("token:", err.Error())
+		response.AuthorizationErrorWithMessage(c, "令牌过期,请重新登录!")
+		c.Abort()
 		return
 	}
 	if header == "" {
