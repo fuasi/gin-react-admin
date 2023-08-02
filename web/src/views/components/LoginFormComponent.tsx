@@ -1,16 +1,16 @@
 import { Button, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { checkLogin, getRouter, login } from '@/apis/baseApis.ts';
-import useMessage from 'antd/es/message/useMessage';
-import GLOBAL_CONFIG from '@/config';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { HandleRouterInfo, HandleRouters } from '@/utils/router.tsx';
 import { routerStorage } from '@/store/routerStorage'
 import { tokenStore } from '@/store/localstrageStore'
+import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.ts";
+import { GLOBAL_LOGIN_TEXT } from "@/config";
 
 const LoginFormComponent = () => {
-    const [messageApi, contextHolder] = useMessage()
+    const [buttonLoading, setButtonLoading] = useState(false)
     const navigate = useNavigate()
     useEffect(() => {
         checkLogin().then(handleGetRouter).then(() => navigate('/dashboard'))
@@ -21,21 +21,25 @@ const LoginFormComponent = () => {
         routerStorage.routerInfo = HandleRouterInfo({ handleRouterInfo : data })
     }
     const onFinish = async(values: never) => {
-        const { code, data } = await login(values)
-        if (code !== GLOBAL_CONFIG.SUCCESS_STATUS) {
-            messageApi.error('请输入正确的信息')
-            return
+        try {
+            setButtonLoading(true)
+            const { data } = await login(values)
+            tokenStore.token = data
+            await handleGetRouter()
+            notificationLoginSuccess(GLOBAL_LOGIN_TEXT.LOGIN_SUCCESS)
+            navigate('/dashboard')
+        } catch (e) {
+            notificationLoginFail(GLOBAL_LOGIN_TEXT.LOGIN_FAIL)
+        } finally {
+            setButtonLoading(false)
         }
-        tokenStore.token = data
-        await handleGetRouter()
-        navigate('/dashboard')
+
     }
 
     return (
         <div className={'w-96 h-96'}>
-            {contextHolder}
             <div className={'text-black text-3xl font-bold text-center mb-12 mt-12'}>
-                系统登录
+                {GLOBAL_LOGIN_TEXT.LOGIN_TITLE}
             </div>
             <Form
                 name="login-form"
@@ -57,8 +61,8 @@ const LoginFormComponent = () => {
                 </Form.Item>
                 <div className={'w-56 h-10 ml-auto mr-auto'}>
                     <Form.Item>
-                        <Button className={'w-56 h-10'} type="primary" htmlType="submit">
-                            登录
+                        <Button loading={buttonLoading} className={'w-56 h-10'} type="primary" htmlType="submit">
+                            {GLOBAL_LOGIN_TEXT.LOGIN_BUTTON_TEXT}
                         </Button>
                     </Form.Item>
                 </div>
