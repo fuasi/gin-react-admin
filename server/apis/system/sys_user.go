@@ -48,7 +48,7 @@ func (u *UserApi) Login(c *gin.Context) {
 
 func (u *UserApi) GetUserById(c *gin.Context) {
 	var user system.SysUser
-	err := c.ShouldBindQuery(&user)
+	err := c.ShouldBindUri(&user)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return

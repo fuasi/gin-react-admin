@@ -8,7 +8,7 @@ type SysUser struct {
 }
 
 type SysUserPublic struct {
-	Id       uint   `json:"id,omitempty"`
+	Id       uint   `json:"id,omitempty" uri:"id"`
 	Username string `json:"username,omitempty"`
 	Avatar   string `json:"avatar,omitempty"`
 	Nickname string `json:"nickname,omitempty"`
