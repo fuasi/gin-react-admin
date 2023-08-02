@@ -66,16 +66,12 @@ const HeaderComponent = (props: HeaderComponentProps) => {
                             height : 64,
                         }}
                     />
-                    <Breadcrumb
-                        style={{ fontSize : 18 }}
-                        items={breadcrumb}
+                    <Breadcrumb className={"text-[15px]"} items={breadcrumb}
                     />
                 </Space>
                 <div className={'flex justify-center items-center mr-10'}>
-                    <ReloadOutlined onClick={handleReload} className={'mr-6 cursor-pointer'}
-                                    style={{ fontSize : '20px' }}/>
-                    <ExpandOutlined onClick={handleFullScreen} className={'mr-6 cursor-pointer select-none'}
-                                    style={{ fontSize : '20px' }}/>
+                    <ReloadOutlined onClick={handleReload} className={'text-[20px] mr-6 cursor-pointer'}/>
+                    <ExpandOutlined onClick={handleFullScreen} className={'text-[20px] mr-6 cursor-pointer select-none'}/>
                     <Dropdown trigger={['hover', 'click']} menu={{ items }}>
                         <Avatar shape="square" size={48} className={'select-none'}
                                 src={'https://tupian.qqw21.com/article/UploadPic/2020-7/202071222374427898.jpg'}
