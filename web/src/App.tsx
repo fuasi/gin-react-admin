@@ -2,19 +2,25 @@ import { HashRouter, RouteObject } from 'react-router-dom';
 import GenerateRouter, { HandleRouterInfo, HandleRouters } from '@/utils/router';
 import { useEffect, useState } from 'react';
 import { getRouter } from '@/apis/baseApis.ts';
-import { MenuProps } from 'antd';
+import { MenuProps, notification } from 'antd';
 import { tokenStore } from '@/store/localstrageStore'
 import { routerStorage } from "@/store/routerStorage.ts";
 import { autorun } from "mobx";
+import { notificationStorage } from "@/store/notificationStorage.ts";
 
 export type MenuItem = Required<MenuProps>['items'][number];
 
 const App = () => {
     const [routers, setRouters] = useState<RouteObject[]>()
-
+    const [api, contextHolder] = notification.useNotification()
     useEffect(() => autorun(() => {
         if (routerStorage.routers.length && routerStorage.routerInfo) {
             setRouters(routerStorage.routers)
+        }
+        if (notificationStorage.type === "active") {
+            const { type, message, description } = notificationStorage.globalNotification
+            api.open({ type, message, description })
+            notificationStorage.type = "sleep"
         }
     }), [])
 
@@ -30,9 +36,12 @@ const App = () => {
         }
     }, [])
     return (
-        <HashRouter>
-            <GenerateRouter routers={routers}/>
-        </HashRouter>
+        <div>
+            {contextHolder}
+            <HashRouter>
+                <GenerateRouter routers={routers}/>
+            </HashRouter>
+        </div>
     )
 }
 
