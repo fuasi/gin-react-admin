@@ -33,6 +33,13 @@ export function updateUserInfo(query: User) {
     })
 }
 
+export function getUserById(query: number) {
+    return apiRequest<User>({
+        url : `/user/${query}`,
+        method : "GET"
+    })
+}
+
 export function uploadAvatar() {
     return apiRequest<string>({
         url : "/avatar",
