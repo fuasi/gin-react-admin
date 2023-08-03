@@ -12,14 +12,14 @@ export type MenuItem = Required<MenuProps>['items'][number];
 
 const App = () => {
     const [routers, setRouters] = useState<RouteObject[]>()
-    const [api, contextHolder] = notification.useNotification()
+    const [api, contextHolder] = notification.useNotification({ maxCount : 3, top : 64 })
     useEffect(() => autorun(() => {
         if (routerStorage.routers.length && routerStorage.routerInfo) {
             setRouters(routerStorage.routers)
         }
         if (notificationStorage.type === "active") {
-            const { type, message, description } = notificationStorage.globalNotification
-            api.open({ type, message, description })
+            const { type, message, description, duration } = notificationStorage.globalNotification
+            api.open({ type, message, description, duration })
             notificationStorage.type = "sleep"
         }
     }), [])
@@ -37,9 +37,9 @@ const App = () => {
     }, [])
     return (
         <div>
-            {contextHolder}
+            { contextHolder }
             <HashRouter>
-                <GenerateRouter routers={routers}/>
+                <GenerateRouter routers={ routers }/>
             </HashRouter>
         </div>
     )
