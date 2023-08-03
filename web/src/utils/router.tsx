@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { createElement, lazy, Suspense } from 'react';
 import * as icons from '@ant-design/icons'
 import { RouteObject, useRoutes } from 'react-router-dom';
@@ -6,33 +7,49 @@ import PrivateRoute from '@/components/PrivateRouteComponent';
 import BackendLayout from '@/views/backend/backendLayout';
 import RouterLoadingComponent from '@/components/RouterLoadingComponent';
 import { RouterResponse } from '@/apis/baseApis.ts';
-import * as React from 'react';
 import { MenuProps } from 'antd';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 export const LazyComponent = (url: string) => {
     const Component = lazy(() => import(url))
-    return <Suspense fallback={<RouterLoadingComponent/>}>
+    return <Suspense fallback={ <RouterLoadingComponent/> }>
         <Component/>
     </Suspense>
 }
 
-const IconComponent = (props: {icon: string}) => {
-    const {icon} = props
-    const antIcon: {[key: string]: any} = icons
+const IconComponent = (props: { icon: string }) => {
+    const { icon } = props
+    const antIcon: { [key: string]: any } = icons
     return createElement(antIcon[icon])
 }
+//生成路由树
+export const RouterTree = (props: RouterResponse[]) => {
+    const routerMap = new Map<number, RouterResponse[]>()
+    props.forEach(value => {
+        const routers = routerMap.get(value.parentId)
+        routers ? routerMap.set(value.parentId, [...routers, value]) : routerMap.set(value.parentId, [value])
+    })
+    const routerTree: RouterResponse[] = []
+    props.forEach(value => {
+        value.children = routerMap.get(value.id)
+        if (value.parentId === -1) {
+            routerTree.push(value)
+        }
+    })
+    return routerTree
+}
 
-export const HandleRouters = (props: {handleRouters: RouterResponse[] | undefined}) => {
+// 处理路由树
+export const HandleRouters = (props: { handleRouters: RouterResponse[] | undefined }) => {
     const routersChildren: RouteObject[] = []
-    if ( props.handleRouters ) {
-        for ( const handleRouter of props.handleRouters ) {
+    if (props.handleRouters) {
+        for (const handleRouter of props.handleRouters) {
             const router: RouteObject = {}
             router.element = LazyComponent(handleRouter.componentPath)
             router.path = handleRouter.path
-            if ( handleRouter.children ) {
-                router.children = HandleRouters({handleRouters : handleRouter.children})
+            if (handleRouter.children) {
+                router.children = HandleRouters({ handleRouters : handleRouter.children })
             }
             routersChildren.push(router)
         }
@@ -40,15 +57,16 @@ export const HandleRouters = (props: {handleRouters: RouterResponse[] | undefine
     return routersChildren
 }
 const getItem = (label: string, key?: React.Key | null, icon?: React.ReactNode, children?: MenuItem[], type?: 'group',): MenuItem => {
-    return {key, icon, children, label, type} as MenuItem;
+    return { key, icon, children, label, type } as MenuItem;
 }
-export const HandleRouterInfo = (props: {handleRouterInfo: RouterResponse[]}) => {
+// 组装菜单
+export const HandleRouterInfo = (props: { handleRouterInfo: RouterResponse[] }) => {
     const routersChildren: MenuItem[] = []
-    if ( props.handleRouterInfo ) {
-        for ( const handleRouter of props.handleRouterInfo ) {
+    if (props.handleRouterInfo) {
+        for (const handleRouter of props.handleRouterInfo) {
             const router: MenuItem = getItem(handleRouter.name,
                 handleRouter.path,
-                IconComponent({icon : handleRouter.icon}),
+                IconComponent({ icon : handleRouter.icon }),
                 handleRouter.children ? HandleRouterInfo({
                     handleRouterInfo : handleRouter.children,
                 }) : undefined)
@@ -57,7 +75,7 @@ export const HandleRouterInfo = (props: {handleRouterInfo: RouterResponse[]}) =>
     }
     return routersChildren
 }
-const GenerateRouter = ({routers}: {routers: RouteObject[] | undefined}) => {
+const GenerateRouter = ({ routers }: { routers: RouteObject[] | undefined }) => {
     return useRoutes([{
         path : '/login',
         element : <LoginLayout/>
