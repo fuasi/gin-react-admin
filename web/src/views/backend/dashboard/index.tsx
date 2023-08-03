@@ -5,7 +5,7 @@ import EchartsComponent from "@/views/backend/dashboard/components/EchartsCompon
 
 const DashboardComponent = () => {
     return (
-        <div className={Styles.dashboardComponentContainer}>
+        <div className={ Styles.dashboardComponentContainer }>
             <TitleCardComponent/>
             <QuickEntryComponent/>
             <EchartsComponent/>
