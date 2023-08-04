@@ -32,14 +32,20 @@ func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system
 	return resultUser, err
 }
 
-func (UserService *UserService) UpdateUserById(u system.SysUser) (resultUser system.SysUser, err error) {
-	err = global.GRA_DB.Updates(u).Error
-	return resultUser, err
+func (UserService *UserService) UpdateUserById(u system.SysUser) error {
+	return global.GRA_DB.Model(&system.SysUser{}).Select("avatar", "nickname", "phone", "enable").
+		Where("id = ?", u.Id).
+		Updates(map[string]interface{}{
+			"avatar":   u.Avatar,
+			"nickname": u.Nickname,
+			"phone":    u.Phone,
+			"enable":   u.Enable,
+		}).Error
 }
 
-func (UserService *UserService) DeleteUserById(u system.SysUser) (resultUser system.SysUser, err error) {
-	err = global.GRA_DB.Delete(u).Error
-	return resultUser, err
+func (UserService *UserService) DeleteUserById(u system.SysUser) error {
+	return global.GRA_DB.Delete(u).Error
+
 }
 
 func (UserService *UserService) GetUserList(info request.PageInfo) (resultUser []system.SysUserPublic, total int64, err error) {
@@ -49,6 +55,6 @@ func (UserService *UserService) GetUserList(info request.PageInfo) (resultUser [
 	if err != nil {
 		return
 	}
-	err = global.GRA_DB.Limit(limit).Offset(offset).Find(&resultUser).Error
+	err = global.GRA_DB.Limit(limit).Offset(offset).Find(&resultUser).Order("id desc").Error
 	return resultUser, total, err
 }

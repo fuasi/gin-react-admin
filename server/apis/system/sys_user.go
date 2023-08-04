@@ -68,7 +68,7 @@ func (u *UserApi) UpdateUserById(c *gin.Context) {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	_, err = userService.UpdateUserById(user)
+	err = userService.UpdateUserById(user)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
@@ -83,7 +83,7 @@ func (u *UserApi) DeleteUserById(c *gin.Context) {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	_, err = userService.DeleteUserById(user)
+	err = userService.DeleteUserById(user)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
