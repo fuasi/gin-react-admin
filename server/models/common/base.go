@@ -3,6 +3,6 @@ package common
 import "time"
 
 type BaseModel struct {
-	CreatedAt time.Time `json:"createdAt,omitempty" gorm:"autoUpdateTime:milli"`
-	UpdatedAt time.Time `json:"updatedAt,omitempty" gorm:"autoCreateTime"`
+	CreatedAt time.Time `json:"createdAt,omitempty" gorm:"autoCreateTime"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty" gorm:"autoUpdateTime:milli"`
 }
