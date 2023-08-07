@@ -1,5 +1,6 @@
 package config
 
 type Upload struct {
-	Path string
+	Path         string
+	GetImagePath string
 }

@@ -10,4 +10,8 @@ redis:
 jwt:
   sign: "test123123test"
 upload:
-  path: "D:\\static\\images\\"
+  path: "D:\\static\\images"
+  getImagePath: "/static/images"
+user:
+  createUserPassword: "123456"
+  resetPassword: "123456"
