@@ -26,7 +26,7 @@ func (UserService *UserService) Login(u system.SysUser) (resultUser system.SysUs
 }
 
 func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system.SysUser, err error) {
-	if errors.Is(global.GRA_DB.Where("id = ?", u.Id).First(&resultUser).Error, gorm.ErrRecordNotFound) {
+	if errors.Is(global.GRA_DB.Where("id = ?", u.Id).First(&resultUser.SysUserPublic).Error, gorm.ErrRecordNotFound) {
 		return resultUser, errors.New("未找到用户")
 	}
 	return resultUser, err
@@ -55,6 +55,15 @@ func (UserService *UserService) GetUserList(info request.PageInfo) (resultUser [
 	if err != nil {
 		return
 	}
-	err = global.GRA_DB.Limit(limit).Offset(offset).Find(&resultUser).Order("id desc").Error
+	err = global.GRA_DB.Order("id").Limit(limit).Offset(offset).Find(&resultUser).Error
 	return resultUser, total, err
+}
+
+func (UserService *UserService) InsertUser(u system.SysUser) error {
+	u.Password = utils.GetPasswordEncrypt(global.GRA_CONFIG.User.CreateUserPassword)
+	return global.GRA_DB.Create(&u).Error
+}
+
+func (UserService *UserService) ResetUserPassword(u system.SysUser) error {
+	return global.GRA_DB.Where("id = ?", u.Id).UpdateColumn("password", utils.GetPasswordEncrypt(global.GRA_CONFIG.User.ResetPassword)).Error
 }
