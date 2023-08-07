@@ -58,7 +58,7 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-	response.SuccessWithData(c, getUser)
+	response.SuccessWithData(c, getUser.SysUserPublic)
 }
 
 func (u *UserApi) UpdateUserById(c *gin.Context) {
@@ -78,7 +78,7 @@ func (u *UserApi) UpdateUserById(c *gin.Context) {
 
 func (u *UserApi) DeleteUserById(c *gin.Context) {
 	var user system.SysUser
-	err := c.ShouldBindQuery(&user)
+	err := c.ShouldBindUri(&user)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
@@ -110,5 +110,19 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 }
 
 func (u *UserApi) CheckLogin(c *gin.Context) {
+	response.Success(c)
+}
+func (u *UserApi) InsertUser(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBind(&user)
+	if err != nil {
+		response.ParamErrorWithMessage(c, err.Error())
+		return
+	}
+	err = userService.InsertUser(user)
+	if err != nil {
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
 	response.Success(c)
 }
