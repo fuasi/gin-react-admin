@@ -64,6 +64,6 @@ func (UserService *UserService) InsertUser(u system.SysUser) error {
 	return global.GRA_DB.Create(&u).Error
 }
 
-func (UserService *UserService) ResetUserPassword(u system.SysUser) error {
-	return global.GRA_DB.Where("id = ?", u.Id).UpdateColumn("password", utils.GetPasswordEncrypt(global.GRA_CONFIG.User.ResetPassword)).Error
+func (UserService *UserService) ResetUserPassword(u system.SysUser) (defaultPassword string, err error) {
+	return global.GRA_CONFIG.User.ResetPassword, global.GRA_DB.Model(&u).Where("id = ?", u.Id).UpdateColumn("password", utils.GetPasswordEncrypt(global.GRA_CONFIG.User.ResetPassword)).Error
 }
