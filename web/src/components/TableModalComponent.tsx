@@ -1,11 +1,11 @@
-import {Form, Input, Modal} from "antd";
-import {useEffect, useState} from "react";
-import {HTTPResponse} from "@/apis";
-import {GLOBAL_TABLE_TEXT} from "@/config";
-import {InputAndColumns} from "@/hooks/useTable.tsx";
-import {useLoading} from "@/hooks/useLoading.ts";
+import { Form, Input, Modal } from "antd";
+import { useEffect, useState } from "react";
+import { HTTPResponse } from "@/apis";
+import { GLOBAL_TABLE_TEXT } from "@/config";
+import { InputAndColumns } from "@/hooks/useTable.tsx";
+import { useLoading } from "@/hooks/useLoading.ts";
 import SwitchComponent from "@/components/SwitchComponent.tsx";
-import {useSystemActiveNotification} from "@/hooks/useSystemActiveNotification.ts";
+import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 
 interface ModalComponentProps<T> {
   closeModal : () => void
@@ -103,7 +103,7 @@ const TableModalComponent = <T extends object>(props : ModalComponentProps<T>) =
               { value.loadingInputRender ? value.loadingInputRender(loading, upload.avatarURL, handleSetUpload, needUpdateData) : value.InputType === "Switch" ?
                 <SwitchComponent<T> handleSwitchChange={ handleSwitchChange } needUpdateData={ needUpdateData }
                                     isUpdate={ isUpdate } dataIndex={ value.dataIndex }/> :
-                <Input onChange={ () => console.log(form) }/> }
+                <Input/> }
             </Form.Item>
           )
         }) }
