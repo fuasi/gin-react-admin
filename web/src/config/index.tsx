@@ -29,9 +29,35 @@ const systemText = {
   },
   SYSTEM_TEXT : {
     ACTIVE_RELOAD_SUCCESS : "刷新",
-    ACTIVE_FAIL_ALERT : (active : string, err : string) => <>{ active }操作失败,<span
-      className={ "text-red-400" }>原因:{ err }</span>,用户如若无法解决请联系开发者！</>,
-    ACTIVE_SUCCESS_ALERT : (active : string) => <><span className={ "text-red-400" }>{ active }</span>成功！</>
+    ACTIVE_SUCCESS : "成功！",
+    ACTIVE_FAIL : "操作失败,",
+    ACTIVE_REASON : "原因:",
+    ACTIVE_HELP : ",用户如若无法解决请联系开发者！",
+    ACTIVE_IS_CONTINUE : "确定进行",
+    ACTIVE_ASK : "操作吗?",
+    ACTIVE : "操作",
+    ACTIVE_DANGER_ALERT : "危险警告",
+    ACTIVE_SURE : "确定",
+    ACTIVE_CANCEL : "取消",
+    ACTIVE_FAIL_ALERT : (active : string, err : string) => <>{ active }{ GLOBAL_SYSTEM_TEXT.ACTIVE_FAIL }<span
+      className={ "text-red-400" }>{ GLOBAL_SYSTEM_TEXT.ACTIVE_REASON }{ err }</span>{ GLOBAL_SYSTEM_TEXT.ACTIVE_HELP }</>,
+    ACTIVE_SUCCESS_ALERT : (active : string) => <><span
+      className={ "text-red-400" }>{ active }</span>{ GLOBAL_SYSTEM_TEXT.ACTIVE }{ GLOBAL_SYSTEM_TEXT.ACTIVE_SUCCESS }</>,
+    ACTIVE_RECONFIRM_DESC : (active : string) => <>
+      <div>
+        { GLOBAL_SYSTEM_TEXT.ACTIVE_IS_CONTINUE }
+        <span className={ "text-red-400" }>{ active }</span>
+        { GLOBAL_SYSTEM_TEXT.ACTIVE_ASK }
+      </div>
+    </>,
+    ACTIVE_DANGER_TITLE : () => <span className={ "text-red-400" }>{ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_ALERT }</span>,
+    ACTIVE_RESETPASSWORD_PREFIX : "重置后的密码为:",
+    ACTIVE_RESETPASSWORD_SUFFIX : ",请牢记密码,登录该账户后密码可进行更改！",
+    ACTIVE_RESETPASSWORD_ALERT : (password : string) =>
+      <>{ GLOBAL_SYSTEM_TEXT.ACTIVE_RESETPASSWORD_PREFIX }
+        <span className={ "text-red-400" }>{ password }</span>
+        { GLOBAL_SYSTEM_TEXT.ACTIVE_RESETPASSWORD_SUFFIX }
+      </>
   }
 
 
