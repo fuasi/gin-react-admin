@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { HandleRouterInfo, HandleRouters } from '@/utils/router.tsx';
 import { routerStorage } from '@/store/routerStorage'
 import { tokenStore } from '@/store/localstrageStore'
-import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.ts";
+import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.tsx";
 import { GLOBAL_LOGIN_TEXT } from "@/config";
 
 const LoginFormComponent = () => {
