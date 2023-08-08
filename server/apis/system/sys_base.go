@@ -41,11 +41,11 @@ func (b *BaseApi) UploadAvatar(c *gin.Context) {
 		response.ErrorWithMessage(c, "头像上传失败:"+err.Error())
 		return
 	}
-	var fileName = time.Now().Unix()
-	err = c.SaveUploadedFile(file, fmt.Sprintf("%s%d.png", global.GRA_CONFIG.Upload.Path, fileName))
+	var fileName = fmt.Sprintf("/%d.png", time.Now().Unix())
+	err = c.SaveUploadedFile(file, fmt.Sprintf("%s%s", global.GRA_CONFIG.Upload.Path, fileName))
 	if err != nil {
 		response.ErrorWithMessage(c, "头像上传失败:"+err.Error())
 		return
 	}
-	response.Success(c)
+	response.SuccessWithData(c, fmt.Sprintf("%s%s", global.GRA_CONFIG.Upload.GetImagePath, fileName))
 }

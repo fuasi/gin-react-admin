@@ -5,4 +5,5 @@ type ServerConfig struct {
 	Database Database
 	JWT      JWT
 	Upload   Upload
+	User     UserConfig
 }
