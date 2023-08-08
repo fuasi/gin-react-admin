@@ -1,65 +1,72 @@
-import { apiRequest } from "@/apis/index.ts";
-import { PageInfo } from "@/apis/baseApis.ts";
+import {apiRequest} from "@/apis/index.ts";
+import {PageInfo} from "@/apis/baseApis.ts";
 
 export interface GetUsers {
-  list : User[]
-  total : number
+    list: User[]
+    total: number
 }
 
 export interface User {
-  id : number
-  username? : string
-  nickname? : string
-  avatar? : string
-  phone? : string
-  enable? : boolean
-  createdAt? : string
-  updatedAt? : string
+    id: number
+    username?: string
+    nickname?: string
+    avatar?: string
+    phone?: string
+    enable?: boolean
+    createdAt?: string
+    updatedAt?: string
 }
 
-export function getUsers(query : PageInfo) {
-  return apiRequest<GetUsers>({
-    url : "/users",
-    method : "POST",
-    data : query
-  })
+export function getUsers(query: PageInfo) {
+    return apiRequest<GetUsers>({
+        url: "/users",
+        method: "POST",
+        data: query
+    })
 }
 
-export function updateUserInfo(user : User) {
-  return apiRequest<string>({
-    url : `/user`,
-    method : "PATCH",
-    data : user
-  })
+export function updateUserInfo(user: User) {
+    return apiRequest<string>({
+        url: `/user`,
+        method: "PATCH",
+        data: user
+    })
 }
 
-export function getUserById(query : number) {
-  return apiRequest<User>({
-    url : `/user/${ query }`,
-    method : "GET"
-  })
+export function getUserById(query: number) {
+    return apiRequest<User>({
+        url: `/user/${query}`,
+        method: "GET"
+    })
 }
 
-export function uploadAvatar(form : FormData) {
-  return apiRequest<string>({
-    url : "/avatar",
-    method : "POST",
-    data : form
-  })
+export function uploadAvatar(form: FormData) {
+    return apiRequest<string>({
+        url: "/avatar",
+        method: "POST",
+        data: form
+    })
 }
 
-export function deleteUser(id : number) {
-  return apiRequest<string>({
-    url : `/user/${ id }`,
-    method : "DELETE"
-  })
+export function deleteUser(id: number) {
+    return apiRequest<string>({
+        url: `/user/${id}`,
+        method: "DELETE"
+    })
 }
 
-export function insertUser(user : User) {
-  return apiRequest<string>({
-    url : `/user`,
-    method : "PUT",
-    data : user
-  })
+export function insertUser(user: User) {
+    return apiRequest<string>({
+        url: "/user",
+        method: "PUT",
+        data: user
+    })
+}
+
+export function resetUserPassword(id: number) {
+    return apiRequest<string>({
+        url: `/user/${id}`,
+        method: "PATCH",
+    })
 }
 
