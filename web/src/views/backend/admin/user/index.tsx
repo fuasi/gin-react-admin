@@ -1,131 +1,133 @@
-import { Avatar, Button, ConfigProvider, message, Space, Switch, Table } from 'antd';
-import { useEffect, useState } from 'react';
-import { ColumnsType } from 'antd/es/table';
-import Styles from './user.module.scss'
-import zhCN from 'antd/es/locale/zh_CN';
-import { getUsers, PageInfo, updateUserInfo, User } from '@/apis/userApis.ts';
-import { DeleteOutlined, EditOutlined, KeyOutlined } from '@ant-design/icons';
-import { useLoading } from '@/hooks/useLoading'
-import UserModelComponent from "@/views/backend/admin/user/components/UserModelComponent.tsx";
+import {Image, message, Switch} from 'antd';
+import {useState} from 'react';
+import {
+    deleteUser,
+    getUserById,
+    getUsers, insertUser,
+    resetUserPassword,
+    updateUserInfo,
+    uploadAvatar,
+    User
+} from '@/apis/userApis.ts';
+import {useLoading} from '@/hooks/useLoading'
+import {PageInfo} from "@/apis/baseApis.ts";
+import {InputAndColumns, useTable} from "@/hooks/useTable.tsx";
+import UploadComponent from "@/components/UploadComponent.tsx";
 
-
+type AvatarUploadProps = { upload: { file: File, avatarURL: string } }
 const UserComponent = () => {
-    const [pageInfo, setPageInfo] = useState<PageInfo>({ pageSize : 10, page : 1 })
-    const { loading, withLoading } = useLoading()
+    const {loading, withLoading} = useLoading()
     const [data, setData] = useState<User[]>([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [updateUser, setUpdateUser] = useState<User>()
     const [messageApi, contextHolder] = message.useMessage()
-    const loadUserData = async() => {
-        await withLoading(async() => {
-            const { data } = await getUsers(pageInfo)
+    const handleFindUsers = async (page: PageInfo) => {
+        await withLoading(async () => {
+            const {data} = await getUsers(page)
             setData(data.list)
         })
     }
-
-    useEffect(() => {
-        loadUserData()
-    }, [pageInfo])
-    const columns: ColumnsType<User> = [
+    const columns: InputAndColumns<User>[] = [
         {
-            title : '头像',
-            dataIndex : 'avatar',
-            render : (avatar: string) => {
-                return <Avatar size={64} shape={'square'} src={avatar}/>
+            title: '头像',
+            dataIndex: 'avatar',
+            render: (avatar: string) => {
+                return <Image src={avatar} width={72} preview={{maskClassName: "rounded-2xl"}}
+                              className={"rounded-2xl"}/>
             },
-            width : 64
+            width: 64,
+            loadingInputRender: (loading, avatarURL, setUpload, data) => <UploadComponent
+                avatarURL={avatarURL}
+                image={data?.avatar} setUpload={setUpload}
+                loading={loading}/>
         },
         {
-            title : 'ID',
-            dataIndex : 'id',
-            width : 24
+            title: 'ID',
+            dataIndex: 'id',
+            width: 24,
+            required: true,
+            isShow: true
         },
         {
-            title : '用户名',
-            dataIndex : 'username',
-            width : 128
+            title: '用户名',
+            dataIndex: 'username',
+            width: 128,
+            required: true
+        },
+        {
+            title: '昵称',
+            dataIndex: 'nickname',
+            width: 128,
+            required: true
+        },
+        {
+            title: '手机号',
+            dataIndex: 'phone',
+            width: 128,
+            required: true
+        },
+        {
+            title: '启用',
+            dataIndex: 'enable',
+            width: 64,
+            render: (_, record, index) => {
+                return (<Switch onChange={(checked) => handleIsUserEnable(checked, index, record)}
+                                checked={record.enable}/>)
+            },
+            InputType: "Switch",
+            required: true
+        },
+    ]
 
-        },
-        {
-            title : '昵称',
-            dataIndex : 'nickname',
-            width : 128
-        },
-        {
-            title : '手机号',
-            dataIndex : 'phone',
-            width : 128
-        },
-        {
-            title : '启用',
-            dataIndex : 'enable',
-            width : 64,
-            render : (_, record) => {
-                return (<Switch onChange={(checked) => handleIsUserEnable(checked, record.id)}
-                                defaultChecked={record.enable}/>)
-            }
-        },
-        {
-            title : '操作',
-            key : 'action',
-            width : 256,
-            render : (_, record) => (<Space size="middle">
-                <a onClick={() => handleOpenUpdateModal(record)}><EditOutlined className={'mr-2'}/>编辑</a>
-
-                <a onClick={() => handleDeleteUser(record.id)}><DeleteOutlined className={'mr-2'}/>删除</a>
-
-                <a onClick={() => handleResetPassword(record.id)}><KeyOutlined className={'mr-2'}/>重置密码</a>
-            </Space>)
-        },
-    ];
-    const handleOpenUpdateModal = (user: User) => {
-        setUpdateUser(user)
-        setIsModalOpen(true)
+    const handleAvatarUpload = async (file: File) => {
+        const form = new FormData()
+        form.append("avatar", file)
+        const {data} = await uploadAvatar(form)
+        return data
     }
-    const handleDeleteUser = (id: number) => {
-
+    const handleUpdate = async (user: User, params: AvatarUploadProps) => {
+        const {file} = params.upload
+        let fileName = user.avatar
+        if (file) fileName = await handleAvatarUpload(file)
+        await updateUserInfo({...user, avatar: fileName})
     }
-    const handleResetPassword = (id: number) => {
-
+    const handleDeleteUser = async (user: User) => {
+        await deleteUser(user.id)
     }
-
-    const handleIsUserEnable = async(enable: boolean, id: number) => {
-        await updateUserInfo({
-            id, enable
-        })
+    const handleResetPassword = async (user: User) => {
+        await resetUserPassword(user.id)
+    }
+    const handleInsertUser = async (user: User, params: AvatarUploadProps) => {
+        const {file} = params.upload
+        let fileName = user.avatar
+        if (file) fileName = await handleAvatarUpload(file)
+        await insertUser({...user, avatar: fileName})
+    }
+    const getUpdateUserById = (user: User) => {
+        return getUserById(user.id)
+    }
+    const handleIsUserEnable = async (enable: boolean, index: number, record: User) => {
+        record.enable = enable
+        const newDataList = [...data]
+        newDataList.splice(index, 1, record)
+        setData(newDataList)
+        await updateUserInfo(record)
         messageApi.success(enable ? "已启用" : "已禁用")
     }
-    const handlePageInfo = (page: number, pageSize: number) => {
-        setPageInfo({ page, pageSize })
-    }
+
+    const {TableComponent} = useTable<User>({
+        handleFindData: handleFindUsers,
+        getUpdateData: getUpdateUserById,
+        tableProps: {loading: loading, columns: columns, dataSource: data},
+        columns: columns,
+        handleUpdateData: handleUpdate,
+        handleUserResetPassword: handleResetPassword,
+        handleInsertData: handleInsertUser,
+        handleDeleteData: handleDeleteUser
+    })
 
     return (
         <div>
             {contextHolder}
-            <div className={Styles.userButtonContainer}>
-                <Button type="primary">
-                    新增用户
-                </Button>
-            </div>
-            <UserModelComponent loadData={loadUserData} switchModal={() => setIsModalOpen(!isModalOpen)}
-                                isModalOpen={isModalOpen}
-                                updateUser={updateUser}/>
-            <div className={Styles.userTableContainer}>
-                <ConfigProvider locale={zhCN}>
-                    <Table
-                        pagination={{
-                            position : ['bottomCenter'],
-                            pageSize : pageInfo.pageSize,
-                            onChange : handlePageInfo,
-                            showQuickJumper : true
-                        }}
-                        loading={loading}
-                        bordered
-                        columns={columns}
-                        rowKey={'id'}
-                        dataSource={data}/>
-                </ConfigProvider>
-            </div>
+            {TableComponent}
         </div>
     )
 }
