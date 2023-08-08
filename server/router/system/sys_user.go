@@ -22,5 +22,6 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.PATCH("/user", userApi.UpdateUserById)
 		userRouter.DELETE("/user/:id", userApi.DeleteUserById)
 		userRouter.PUT("/user", userApi.InsertUser)
+		userRouter.PATCH("/user/:id", userApi.ResetUserPassword)
 	}
 }

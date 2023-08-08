@@ -126,3 +126,18 @@ func (u *UserApi) InsertUser(c *gin.Context) {
 	}
 	response.Success(c)
 }
+
+func (u *UserApi) ResetUserPassword(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindUri(user)
+	if err != nil {
+		response.ParamErrorWithMessage(c, err.Error())
+		return
+	}
+	err = userService.ResetUserPassword(user)
+	if err != nil {
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
+	response.Success(c)
+}
