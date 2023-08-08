@@ -4,7 +4,7 @@ import { Header } from 'antd/es/layout/layout';
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 import { tokenStore } from '@/store/localstrageStore.ts';
 import { useNavigate } from 'react-router-dom';
-import { notificationActiveSuccess, notificationLogout } from "@/utils/notification.ts";
+import { notificationActiveSuccess, notificationLogout } from "@/utils/notification.tsx";
 import { GLOBAL_LOGIN_TEXT, GLOBAL_SYSTEM_TEXT } from "@/config";
 
 
