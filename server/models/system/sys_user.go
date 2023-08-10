@@ -1,6 +1,8 @@
 package system
 
-import "server/models/common"
+import (
+	"server/models/common"
+)
 
 type SysUser struct {
 	SysUserPublic
@@ -13,7 +15,7 @@ type SysUserPublic struct {
 	Avatar   string `json:"avatar,omitempty"`
 	Nickname string `json:"nickname,omitempty"`
 	Phone    string `json:"phone,omitempty"`
-	Enable   bool   `json:"enable,omitempty"`
+	Enable   int    `json:"enable,omitempty"`
 	common.BaseModel
 }
 

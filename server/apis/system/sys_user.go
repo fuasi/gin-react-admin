@@ -1,9 +1,9 @@
 package system
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"server/global"
-	CommonRequest "server/models/common/request"
 	"server/models/common/response"
 	"server/models/system"
 	"server/models/system/request"
@@ -43,7 +43,10 @@ func (u *UserApi) Login(c *gin.Context) {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-	response.SuccessWithData(c, token)
+	response.SuccessWithData(c, gin.H{
+		"token": token,
+		"user":  login.SysUserPublic,
+	})
 }
 
 func (u *UserApi) GetUserById(c *gin.Context) {
@@ -55,6 +58,7 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 	}
 	getUser, err := userService.GetUserById(user)
 	if err != nil {
+		global.GRA_LOG.Error(" 根据ID获取用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
@@ -70,6 +74,7 @@ func (u *UserApi) UpdateUserById(c *gin.Context) {
 	}
 	err = userService.UpdateUserById(user)
 	if err != nil {
+		global.GRA_LOG.Error(" 根据ID修改用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
@@ -77,14 +82,15 @@ func (u *UserApi) UpdateUserById(c *gin.Context) {
 }
 
 func (u *UserApi) DeleteUserById(c *gin.Context) {
-	var user system.SysUser
-	err := c.ShouldBindUri(&user)
+	var ids []uint
+	err := c.ShouldBind(&ids)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = userService.DeleteUserById(user)
+	err = userService.DeleteUserByIds(ids)
 	if err != nil {
+		global.GRA_LOG.Error(" 根据ID删除用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
@@ -92,7 +98,7 @@ func (u *UserApi) DeleteUserById(c *gin.Context) {
 }
 
 func (u *UserApi) GetUserList(c *gin.Context) {
-	var page CommonRequest.PageInfo
+	var page request.SearchUser
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
@@ -100,9 +106,11 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 	}
 	list, total, err := userService.GetUserList(page)
 	if err != nil {
+		global.GRA_LOG.Error(" 获取用户列表失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
+
 	response.SuccessWithData(c, UserResponse.GetUserListResponse{
 		Total: total,
 		List:  list,
@@ -121,6 +129,7 @@ func (u *UserApi) InsertUser(c *gin.Context) {
 	}
 	err = userService.InsertUser(user)
 	if err != nil {
+		global.GRA_LOG.Error(" 添加用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
@@ -135,6 +144,12 @@ func (u *UserApi) ResetUserPassword(c *gin.Context) {
 	}
 	var password, err = userService.ResetUserPassword(user)
 	if err != nil {
+		marshal, err := json.Marshal(user)
+		if err != nil {
+			global.GRA_LOG.Error("重置密码失败:", err.Error())
+			return
+		}
+		global.GRA_LOG.Error("重置密码失败:", err.Error(), "data:\t", string(marshal))
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
