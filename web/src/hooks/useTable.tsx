@@ -1,10 +1,29 @@
 import zhCN from "antd/es/locale/zh_CN";
-import { Button, ConfigProvider, Input, Popconfirm, Space, Table, TableProps } from "antd";
+import {
+  Badge,
+  Button,
+  ConfigProvider,
+  Form,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  TableProps
+} from "antd";
 import { PageInfo } from "@/apis/baseApis.ts";
 import { useEffect, useState } from "react";
 import TableModalComponent from "@/components/TableModalComponent.tsx";
 import { ColumnGroupType, ColumnType } from "antd/es/table";
-import { DeleteOutlined, EditOutlined, KeyOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  KeyOutlined,
+  MinusOutlined,
+  PlusOutlined, ReloadOutlined,
+  SearchOutlined
+} from "@ant-design/icons";
 import Styles from "@/views/backend/admin/user/user.module.scss";
 import { HTTPResponse } from "@/apis";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT } from "@/config";
@@ -12,11 +31,11 @@ import { notificationActiveFail, notificationActiveSuccess } from "@/utils/notif
 
 interface TableHookProps<T> {
   tableProps : Pick<TableProps<T>, keyof TableProps<T>>;
-  handleFindData : (page : PageInfo) => void;
+  handleFindData : (page : PageInfo & T) => void;
   getUpdateData : (record : T) => HTTPResponse<T>;
   handleUpdateData : (record : T, args : any) => Promise<void>;
   handleInsertData : (record : T, args : any) => void;
-  handleDeleteData : (record : T) => void;
+  handleDeleteData : (ids : number[], record? : T) => void;
   columns : InputAndColumns<T>[];
   handleUserResetPassword? : (record : T) => void;
 }
@@ -35,7 +54,13 @@ export type InputAndColumns<T> =
   dataIndex : string,
   inputType? : InputType,
   required? : boolean,
-  isShow? : boolean
+  isShow? : boolean,
+  isSearch? : boolean,
+  searchIsOption? : {
+    label : string,
+    value : string | number
+  }[],
+  isNumber? : boolean
 }
 
 
@@ -50,14 +75,15 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
     handleUserResetPassword,
     columns
   } = props
-  const [page, setPage] = useState<PageInfo>({ page : 1, pageSize : 10 })
+  const [pageInfo, setPageInfo] = useState<PageInfo>({ page : 1, pageSize : 10 })
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [modalTitle, setModalTitle] = useState(GLOBAL_TABLE_TEXT.INSERT_TEXT)
   const [selectData, setSelectData] = useState<T>()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
+  const [form] = Form.useForm()
+  const { page, pageSize } = pageInfo
   const handleChangePage = (page : number, pageSize : number) => {
-    setPage({ page, pageSize })
+    setPageInfo({ page, pageSize })
   }
 
   const handleCloseModal = () => {
@@ -73,13 +99,20 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
     setSelectData(record)
     setModalIsOpen(true)
   }
+
   const handleGetUpdateData = async (record : T) => {
     return await getUpdateData(record)
   }
-  const handleDelete = async (record : T) => {
+  const handleDelete = async (record? : T) => {
     try {
-      await handleDeleteData(record)
-      handleFindData(page)
+      if (record) {
+        await handleDeleteData([], record)
+      } else {
+        await handleDeleteData(selectedRowKeys as number[])
+      }
+      handleFindData({
+        page, pageSize, ...form.getFieldsValue(true)
+      })
       notificationActiveSuccess(GLOBAL_TABLE_TEXT.DELETE_TEXT)
     } catch (e) {
       notificationActiveFail(GLOBAL_TABLE_TEXT.DELETE_TEXT, e?.toString() as string)
@@ -87,11 +120,10 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
   }
 
   useEffect(() => {
-    handleFindData(page)
-  }, [page])
+    handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
+  }, [pageInfo])
 
   const onSelectChange = (newSelectedRowKeys : React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -99,32 +131,72 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
     selectedRowKeys,
     onChange : onSelectChange,
   };
+
+  const handleSearch = () => {
+    handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
+  }
+
+  const handleResetSearch = () => {
+    form.resetFields()
+    handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
+  }
   return {
     TableComponent : (
       <div>
         <div className={ `${ Styles.userButtonContainer } items-end flex justify-between` }>
-          <Button onClick={ handleInsert } icon={ <PlusOutlined/> } type="primary">
-            { GLOBAL_TABLE_TEXT.INSERT_TEXT }
-          </Button>
-          <Button danger icon={ <MinusOutlined/> } type="primary">
-            { GLOBAL_TABLE_TEXT.DELETE_TEXT }
-          </Button>
-          <Input className={"w-48"}/>
-          <Input className={"w-48"}/>
+          <div>
+            <Form className={ "flex flex-wrap" } form={ form }>
+              { columns.filter((item) => {
+                return item.isSearch
+              }).map(item => <Form.Item name={ item.dataIndex } className={ "ml-4 w-64" } key={ item.dataIndex }
+                                        label={ item.title as string }>
+                { item.searchIsOption ? <Select placeholder={ item.title as string } options={ item.searchIsOption }/> :
+                  item.isNumber ?
+                    <InputNumber min={ 1 } controls={ false } className={ "w-full" }
+                                 placeholder={ item.title as string }></InputNumber> :
+                    <Input placeholder={ item.title as string }/> }
+              </Form.Item>) }
+              <div>
+                <Button onClick={ handleSearch } className={ "h-8 w-18 ml-8" } icon={ <SearchOutlined/> }
+                        type="primary">
+                  { GLOBAL_TABLE_TEXT.SEARCH_TEXT }
+                </Button>
+                <Button onClick={ handleResetSearch } className={ "h-8 w-18 ml-4" } icon={ <ReloadOutlined/> }
+                        type="default">
+                  { GLOBAL_TABLE_TEXT.RESET_SEARCH_TEXT }
+                </Button>
+              </div>
+            </Form>
+          </div>
         </div>
         <div className={ Styles.userTableContainer }>
           <ConfigProvider locale={ zhCN }>
+            <div className={ 'min-w-[240px] mb-8' }>
+              <Button className={ "h-9 w-19" } onClick={ handleInsert } icon={ <PlusOutlined/> } type="primary">
+                { GLOBAL_TABLE_TEXT.INSERT_TEXT }
+              </Button>
+              <Badge count={ selectedRowKeys.length }>
+                <Button disabled={ selectedRowKeys.length < 1 } onClick={ () => handleDelete() }
+                        className={ "h-9 w-19 ml-8" } danger
+                        icon={ <MinusOutlined/> } type="primary">
+                  { GLOBAL_TABLE_TEXT.DELETE_TEXT }
+                </Button>
+              </Badge>
+            </div>
             <TableModalComponent<T> ModalInputs={ columns } modalTitle={ modalTitle }
                                     closeModal={ handleCloseModal }
                                     isModalOpen={ modalIsOpen }
                                     handleInsertData={ handleInsertData }
                                     handleGetUpdateData={ () => handleGetUpdateData(selectData!) }
                                     handleUpdateData={ handleUpdateData }
-                                    reloadTable={ () => handleFindData(page) }/>
+                                    reloadTable={ () => {
+                                      const { page, pageSize } = pageInfo
+                                      handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
+                                    } }/>
             <Table
               pagination={ {
                 position : ['bottomCenter'],
-                pageSize : page.pageSize,
+                pageSize : pageInfo.pageSize,
                 onChange : handleChangePage,
                 showQuickJumper : true
               } }
