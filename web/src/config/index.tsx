@@ -18,14 +18,16 @@ const systemText = {
     LOGIN_TITLE : "系统登录",
     LOGIN_BUTTON_TEXT : "登录",
     LOGIN_SUCCESS : "欢迎你,管理员",
-    LOGIN_FAIL : "请输入正确的登录信息！",
+    LOGIN_FAIL : "请输入正确的登录信息！如若多次尝试无法登录,可能是账号被管理员封禁！",
     LOGOUT : "退出登录成功！"
   },
   TABLE_TEXT : {
     INSERT_TEXT : "新增",
     UPDATE_TEXT : "编辑",
     DELETE_TEXT : "删除",
-    RESET_PASSWORD_TEXT : "重置密码"
+    RESET_PASSWORD_TEXT : "重置密码",
+    SEARCH_TEXT : "查询",
+    RESET_SEARCH_TEXT : "重置"
   },
   SYSTEM_TEXT : {
     ACTIVE_RELOAD_SUCCESS : "刷新",
@@ -39,6 +41,8 @@ const systemText = {
     ACTIVE_DANGER_ALERT : "危险警告",
     ACTIVE_SURE : "确定",
     ACTIVE_CANCEL : "取消",
+    ACTIVE_RESETPASSWORD_PREFIX : "重置后的密码为:",
+    ACTIVE_RESETPASSWORD_SUFFIX : ",请牢记密码,登录该账户后密码可进行更改！",
     ACTIVE_FAIL_ALERT : (active : string, err : string) => <>{ active }{ GLOBAL_SYSTEM_TEXT.ACTIVE_FAIL }<span
       className={ "text-red-400" }>{ GLOBAL_SYSTEM_TEXT.ACTIVE_REASON }{ err }</span>{ GLOBAL_SYSTEM_TEXT.ACTIVE_HELP }</>,
     ACTIVE_SUCCESS_ALERT : (active : string) => <><span
@@ -51,21 +55,30 @@ const systemText = {
       </div>
     </>,
     ACTIVE_DANGER_TITLE : () => <span className={ "text-red-400" }>{ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_ALERT }</span>,
-    ACTIVE_RESETPASSWORD_PREFIX : "重置后的密码为:",
-    ACTIVE_RESETPASSWORD_SUFFIX : ",请牢记密码,登录该账户后密码可进行更改！",
     ACTIVE_RESETPASSWORD_ALERT : (password : string) =>
       <>{ GLOBAL_SYSTEM_TEXT.ACTIVE_RESETPASSWORD_PREFIX }
         <span className={ "text-red-400" }>{ password }</span>
         { GLOBAL_SYSTEM_TEXT.ACTIVE_RESETPASSWORD_SUFFIX }
       </>
+  },
+  USER_TEXT : {
+    USER_ID : "ID",
+    USER_AVATAR : "头像",
+    USER_USERNAME : "用户名",
+    USER_NICKNAME : "昵称",
+    USER_PHONE : "手机号",
+    USER_ENABLE : "启用",
+    USER_ACTIVE_ENABLE_ON : "已启用",
+    USER_ACTIVE_ENABLE_OFF : "已禁用",
   }
-
-
 }
-export const GLOBAL_NOTIFICATION_TEXT = systemText.NOTIFICATION_TEXT
-export const GLOBAL_LOGIN_TEXT = systemText.LOGIN_TEXT
-export const GLOBAL_TABLE_TEXT = systemText.TABLE_TEXT
-export const GLOBAL_SYSTEM_TEXT = systemText.SYSTEM_TEXT
+const { NOTIFICATION_TEXT, LOGIN_TEXT, TABLE_TEXT, SYSTEM_TEXT, USER_TEXT } = systemText
+
+export const GLOBAL_NOTIFICATION_TEXT = NOTIFICATION_TEXT
+export const GLOBAL_LOGIN_TEXT = LOGIN_TEXT
+export const GLOBAL_TABLE_TEXT = TABLE_TEXT
+export const GLOBAL_SYSTEM_TEXT = SYSTEM_TEXT
+export const GLOBAL_USER_TEXT = USER_TEXT
 
 
 export default GLOBAL_CONFIG

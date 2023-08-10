@@ -6,16 +6,16 @@ import {
   getUsers,
   insertUser,
   resetUserPassword,
+  SearchUsersQuery,
   updateUserInfo,
   uploadAvatar,
   User
 } from '@/apis/userApis.ts';
 import { useLoading } from '@/hooks/useLoading'
-import { PageInfo } from "@/apis/baseApis.ts";
 import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
 import UploadComponent from "@/components/UploadComponent.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
-import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT } from "@/config";
+import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT, GLOBAL_USER_TEXT } from "@/config";
 
 type AvatarUploadProps = { upload : { file : File, avatarURL : string } }
 const UserComponent = () => {
@@ -24,7 +24,7 @@ const UserComponent = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const { withNotification } = useSystemActiveNotification()
 
-  const handleFindUsers = async (page : PageInfo) => {
+  const handleFindUsers = async (page : SearchUsersQuery) => {
     await withLoading(async () => {
       const { data } = await getUsers(page)
       setData(data.list)
@@ -32,7 +32,7 @@ const UserComponent = () => {
   }
   const columns : InputAndColumns<User>[] = [
     {
-      title : '头像',
+      title : GLOBAL_USER_TEXT.USER_AVATAR,
       dataIndex : 'avatar',
       render : (avatar : string) => {
         return <Image src={ avatar } width={ 72 } preview={ { maskClassName : "rounded-2xl" } }
@@ -42,43 +42,56 @@ const UserComponent = () => {
       loadingInputRender : (loading, avatarURL, setUpload, data) => <UploadComponent
         avatarURL={ avatarURL }
         image={ data?.avatar } setUpload={ setUpload }
-        loading={ loading }/>
+        loading={ loading }/>,
     },
     {
-      title : 'ID',
+      title : GLOBAL_USER_TEXT.USER_ID,
       dataIndex : 'id',
       width : 24,
       required : true,
-      isShow : true
+      isShow : true,
+      isSearch : true,
+      isNumber : true
     },
     {
-      title : '用户名',
+      title : GLOBAL_USER_TEXT.USER_USERNAME,
       dataIndex : 'username',
       width : 128,
-      required : true
+      required : true,
+      isSearch : true
     },
     {
-      title : '昵称',
+      title : GLOBAL_USER_TEXT.USER_NICKNAME,
       dataIndex : 'nickname',
       width : 128,
-      required : true
+      required : true,
+      isSearch : true
     },
     {
-      title : '手机号',
+      title : GLOBAL_USER_TEXT.USER_PHONE,
       dataIndex : 'phone',
       width : 128,
-      required : true
+      required : true,
+      isSearch : true
     },
     {
-      title : '启用',
+      title : GLOBAL_USER_TEXT.USER_ENABLE,
       dataIndex : 'enable',
       width : 64,
       render : (_, record, index) => {
         return (<Switch onChange={ (checked) => handleIsUserEnable(checked, index, record) }
-                        checked={ record.enable }/>)
+                        checked={ record.enable === 1 }/>)
       },
       InputType : "Switch",
-      required : true
+      required : true,
+      isSearch : true,
+      searchIsOption : [{
+        label : "启用",
+        value : 1
+      }, {
+        label : "禁用",
+        value : -1
+      }]
     },
   ]
 
@@ -94,8 +107,12 @@ const UserComponent = () => {
     if (file) fileName = await handleAvatarUpload(file)
     await updateUserInfo({ ...user, avatar : fileName })
   }
-  const handleDeleteUser = async (user : User) => {
-    await deleteUser(user.id)
+  const handleDeleteUser = async (ids : number[], user? : User) => {
+    if (user) {
+      await deleteUser([user.id])
+      return;
+    }
+    await deleteUser([...ids])
   }
   const handleResetPassword = async (user : User) => {
     await withNotification(async () => {
@@ -113,12 +130,12 @@ const UserComponent = () => {
     return getUserById(user.id)
   }
   const handleIsUserEnable = async (enable : boolean, index : number, record : User) => {
-    record.enable = enable
+    record.enable = enable ? 1 : -1
     const newDataList = [...data]
     newDataList.splice(index, 1, record)
     setData(newDataList)
     await updateUserInfo(record)
-    messageApi.success(enable ? "已启用" : "已禁用")
+    messageApi.success(enable ? GLOBAL_USER_TEXT.USER_ACTIVE_ENABLE_ON : GLOBAL_USER_TEXT.USER_ACTIVE_ENABLE_OFF)
   }
 
   const { TableComponent } = useTable<User>({
@@ -133,7 +150,7 @@ const UserComponent = () => {
   })
 
   return (
-    <div>
+    <div >
       { contextHolder }
       { TableComponent }
     </div>
