@@ -13,7 +13,7 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	{
 		Router.POST("/login", apis.SystemApisApp.SystemApis.UserApi.Login)
 	}
-	userRouter := Router.Use(middlewares.AuthMiddleware)
+	userRouter := Router.Use(middlewares.AuthMiddleware, middlewares.CasbinMiddleware)
 	//userRouter := Router.Use()
 	userApi := apis.SystemApisApp.SystemApis.UserApi
 	{
@@ -23,6 +23,7 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.PATCH("/user", userApi.UpdateUserById)
 		userRouter.DELETE("/user", userApi.DeleteUserById)
 		userRouter.PUT("/user", userApi.InsertUser)
+		userRouter.GET("/user", userApi.GetSelfInfo)
 		userRouter.PATCH("/user/:id", userApi.ResetUserPassword)
 	}
 }

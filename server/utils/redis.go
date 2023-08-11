@@ -11,6 +11,12 @@ func RedisGetToken(username string) string {
 }
 
 func RedisSetToken(username string, token string) error {
-	err := global.GRA_REDIS.Set(context.Background(), username, token, 24*3*time.Hour).Err()
-	return err
+	return global.GRA_REDIS.Set(context.Background(), username, token, 24*3*time.Hour).Err()
+}
+
+func RedisSetCasbinRequest(request string, allow bool) error {
+	return global.GRA_REDIS.Set(context.Background(), request, allow, 24*3*time.Hour).Err()
+}
+func RedisGetCasbinRequest(request string) (bool, error) {
+	return global.GRA_REDIS.Get(context.Background(), request).Bool()
 }
