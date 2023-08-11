@@ -1,15 +1,17 @@
 import { Avatar, Image, Upload } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { UploadComponentProp } from "@/components/TableModal.tsx";
 
 interface UploadProps {
-  avatarURL : string;
+  previewAvatar : string;
   image? : string;
   loading : boolean;
-  setUpload : (avatarURL : string, file : File) => void;
+  setUpload : React.Dispatch<React.SetStateAction<UploadComponentProp>>;
+  imageWidth? : number
 }
 
-const UploadComponent = (props : UploadProps) => {
-  const { loading, setUpload, image, avatarURL } = props
+const AvatarUpload = (props : UploadProps) => {
+  const { loading, setUpload, image, previewAvatar, imageWidth } = props
   const uploadButton = (
     <div>
       { loading ? <LoadingOutlined/> : <PlusOutlined/> }
@@ -19,13 +21,14 @@ const UploadComponent = (props : UploadProps) => {
 
   const beforeUpload = (file : File) => {
     const url = URL.createObjectURL(new Blob([file as BlobPart], { type : file.type }))
-    setUpload(url, file)
+    setUpload({ previewAvatar : url, file })
     return false
   }
 
   return (
     <div className={ "flex" }>
       <Upload
+        className={ "w-24" }
         name="avatar"
         listType="picture-card"
         showUploadList={ false }
@@ -36,11 +39,12 @@ const UploadComponent = (props : UploadProps) => {
         { image ? <Avatar shape={ "square" } src={ image } alt="avatar"
                           style={ { width : '100%', height : "100%" } }/> : uploadButton }
       </Upload>
-      <div>
-        <Image width={ 100 } preview={ { maskClassName : "rounded-2xl" } } className={ "rounded-2xl" }
-               src={ avatarURL }/>
+      <div className={ "ml-4 w-full h-full" } hidden={ previewAvatar === "" }>
+        <Image width={ imageWidth ? imageWidth : 100 } preview={ { maskClassName : "rounded-2xl" } }
+               className={ "rounded-2xl" }
+               src={ previewAvatar }/>
       </div>
     </div>
   )
 }
-export default UploadComponent
+export default AvatarUpload

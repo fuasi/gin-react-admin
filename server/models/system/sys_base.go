@@ -8,6 +8,7 @@ type Router struct {
 	ComponentPath string   `json:"componentPath,omitempty"`
 	ParentId      int      `json:"parentId,omitempty"`
 	RouterOrder   int      `json:"routerOrder,omitempty"`
+	Hidden        bool     `json:"hidden"`
 	Children      []Router `json:"children,omitempty" gorm:"-"`
 }
 

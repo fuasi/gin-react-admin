@@ -15,17 +15,17 @@ func initViper() {
 	//查找并读取配置文件
 	err := config.ReadInConfig()
 	if err != nil { // 处理读取配置文件的错误
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Errorf("Fatal error configs file: %s \n", err))
 	}
 	config.WatchConfig()
 	config.OnConfigChange(func(in fsnotify.Event) {
-		global.GRA_LOG.Info("config file changed:", in.Name)
+		global.GRA_LOG.Info("configs file changed:", in.Name)
 		if err := config.Unmarshal(&global.GRA_CONFIG); err != nil {
-			global.GRA_LOG.Error("config file change err:", err.Error())
+			global.GRA_LOG.Error("configs file change err:", err.Error())
 		}
 	})
 	if err := config.Unmarshal(&global.GRA_CONFIG); err != nil {
-		global.GRA_LOG.Error("config file change err:", err.Error())
+		global.GRA_LOG.Error("configs file change err:", err.Error())
 	}
 	global.GRA_VR = config
 }

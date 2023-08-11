@@ -1,12 +1,13 @@
 import { observable } from 'mobx'
+import { User } from "@/apis/userApis.ts";
 
-const userStorage = observable({
-    id : '',
+const userStorage = observable<{ user : User }>({
+  user : {
+    id : -1,
     avatar : '',
-    name : ''
+  }
 })
 
-
 export {
-    userStorage
+  userStorage
 }

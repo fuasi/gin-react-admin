@@ -1,16 +1,16 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Layout, Tabs, theme } from 'antd';
+import { ConfigProvider, Layout, Tabs, theme } from 'antd';
 import { useEffect, useState } from 'react';
-import SideMenuComponent, { BreadcrumbCache, MenuItems } from './components/SideMenuComponent.tsx';
+import SideMenu, { BreadcrumbCache, MenuItems } from './components/SideMenu.tsx';
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 import './backendLayout.scss'
-import HeaderComponent from '@/views/backend/components/HeaderComponent.tsx';
+import Header from '@/views/backend/components/Header.tsx';
 import { useKeyCounter } from '@/hooks/useKeyCounter'
 import { routerStorage } from "@/store/routerStorage.ts";
 import { historyStore } from "@/store/localstrageStore.ts";
+import zhCN from "antd/es/locale/zh_CN";
 
 const { Sider } = Layout;
-export type RouterMenu = { icon : JSX.Element, label : string, key : string }
 export type TabItem = { key : string }
 export type Tab = { label : JSX.Element, key : string }
 
@@ -23,7 +23,6 @@ const BackendLayout = () => {
   const [currentActiveTab, setCurrentActiveTab] = useState<string>("")
   const [breadcrumbCache, setBreadcrumbCache] = useState<BreadcrumbCache>(new Map())
   const { routerInfo } = routerStorage
-
   const navigate = useNavigate()
   useEffect(() => {
     const cache = getBreadcrumbCache()
@@ -67,13 +66,28 @@ const BackendLayout = () => {
     }
     return cache
   }
-  const handleAddTabItem = (tab : Tab) => {
-    setTabItem((item) => {
-      return [...item, tab]
-    })
-  }
-  const handleTabActive = (key : string) => {
-    setCurrentActiveTab(key)
+
+  // 添加标签页方法
+  const handleAddTabItem = (path : string) => {
+    const menu = breadcrumbCache.get(path)
+    if (menu) {
+      const { icon, title, path } = menu
+      const newItem : TabItem[] = []
+      for (const item of tabItem) {
+        newItem.push({ key : item.key })
+        if (item.key === path) {
+          setCurrentActiveTab(path)
+          navigate(path)
+          return
+        }
+      }
+      newItem.push({ key : path })
+      historyStore.history = newItem
+      setCurrentActiveTab(path)
+      setTabItem((item) => {
+        return [...item, { label : <span>{ icon }{ title }</span>, key : path, }]
+      })
+    }
   }
   const handleTabChange = (key : string) => {
     setCurrentActiveTab(key)
@@ -104,16 +118,15 @@ const BackendLayout = () => {
         {/*<div className="demo-logo-vertical">*/ }
         {/*    logooo*/ }
         {/*</div>*/ }
-        <SideMenuComponent breadcrumbCache={ breadcrumbCache }
-                           setCurrentActiveTab={ handleTabActive } tabItems={ tabItem } addTabs={ handleAddTabItem }
-                           setBreadcrumb={ setBreadcrumb }/>
+        <SideMenu breadcrumbCache={ breadcrumbCache } addTabs={ handleAddTabItem }
+                  setBreadcrumb={ setBreadcrumb }/>
       </Sider>
       <Layout className={ "relative" }>
-        <HeaderComponent handleFunc={ incr }
-                         setCollapsed={ setCollapsed }
-                         breadcrumb={ breadcrumb }
-                         colorBgContainer={ colorBgContainer }
-                         collapsed={ collapsed }/>
+        <Header addTab={ handleAddTabItem } handleFunc={ incr }
+                setCollapsed={ setCollapsed }
+                breadcrumb={ breadcrumb }
+                colorBgContainer={ colorBgContainer }
+                collapsed={ collapsed }/>
         <div>
           <Tabs type={ "editable-card" } hideAdd onChange={ handleTabChange } activeKey={ currentActiveTab }
                 onEdit={ handleTabEdit }
@@ -122,7 +135,9 @@ const BackendLayout = () => {
                 items={ tabItem }> </Tabs>
         </div>
         <div key={ key } className={ 'overflow-auto' }>
-          <Outlet/>
+          <ConfigProvider locale={ zhCN }>
+            <Outlet/>
+          </ConfigProvider>
         </div>
       </Layout>
     </Layout>

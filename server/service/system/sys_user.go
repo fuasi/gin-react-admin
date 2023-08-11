@@ -52,7 +52,7 @@ func (UserService *UserService) DeleteUserByIds(ids []uint) error {
 func (UserService *UserService) GetUserList(request request.SearchUser) (resultUser []system.SysUserPublic, total int64, err error) {
 	limit := request.PageSize
 	offset := (request.Page - 1) * request.PageSize
-	tx := global.GRA_DB.Debug().Model(system.SysUser{}).Scopes(
+	tx := global.GRA_DB.Model(system.SysUser{}).Scopes(
 		utils.SearchWhere("id", request.Id, false),
 		utils.SearchWhere("username", request.Username, true),
 		utils.SearchWhere("nickname", request.Nickname, true),
@@ -74,4 +74,9 @@ func (UserService *UserService) InsertUser(u system.SysUser) error {
 
 func (UserService *UserService) ResetUserPassword(u system.SysUser) (defaultPassword string, err error) {
 	return global.GRA_CONFIG.User.ResetPassword, global.GRA_DB.Model(&u).Where("id = ?", u.Id).UpdateColumn("password", utils.GetPasswordEncrypt(global.GRA_CONFIG.User.ResetPassword)).Error
+}
+
+func (UserService *UserService) GetSelfInfo(uid uint) (s system.SysUserPublic, err error) {
+	err = global.GRA_DB.Where("id = ?", uid).Find(&s).Error
+	return s, err
 }

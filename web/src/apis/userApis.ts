@@ -73,3 +73,9 @@ export function resetUserPassword(id : number) {
   })
 }
 
+export function getSelfInfo() {
+  return apiRequest<User>({
+    url : "/user",
+    method : "GET"
+  })
+}

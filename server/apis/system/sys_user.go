@@ -37,7 +37,7 @@ func (u *UserApi) Login(c *gin.Context) {
 	}
 
 	jwt := utils.NewJWT()
-	token, err := jwt.CreateToken(user)
+	token, err := jwt.CreateToken(login)
 	if err != nil {
 		global.GRA_LOG.Error("token创建失败:", err.Error(), "login:", login)
 		response.ErrorWithMessage(c, err.Error())
@@ -154,4 +154,14 @@ func (u *UserApi) ResetUserPassword(c *gin.Context) {
 		return
 	}
 	response.SuccessWithData(c, password)
+}
+
+func (u *UserApi) GetSelfInfo(c *gin.Context) {
+	id := c.GetUint("userId")
+	user, err := userService.GetSelfInfo(id)
+	if err != nil {
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
+	response.SuccessWithData(c, user)
 }

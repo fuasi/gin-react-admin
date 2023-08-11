@@ -1,30 +1,17 @@
-import zhCN from "antd/es/locale/zh_CN";
-import {
-  Badge,
-  Button,
-  ConfigProvider,
-  Form,
-  Input,
-  InputNumber,
-  Popconfirm,
-  Select,
-  Space,
-  Table,
-  TableProps
-} from "antd";
+import { Badge, Button, Form, Input, InputNumber, Popconfirm, Select, Space, Table, TableProps } from "antd";
 import { PageInfo } from "@/apis/baseApis.ts";
 import { useEffect, useState } from "react";
-import TableModalComponent from "@/components/TableModalComponent.tsx";
+import TableModal, { UploadComponentProp } from "@/components/TableModal.tsx";
 import { ColumnGroupType, ColumnType } from "antd/es/table";
 import {
   DeleteOutlined,
   EditOutlined,
   KeyOutlined,
   MinusOutlined,
-  PlusOutlined, ReloadOutlined,
+  PlusOutlined,
+  ReloadOutlined,
   SearchOutlined
 } from "@ant-design/icons";
-import Styles from "@/views/backend/admin/user/user.module.scss";
 import { HTTPResponse } from "@/apis";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT } from "@/config";
 import { notificationActiveFail, notificationActiveSuccess } from "@/utils/notification.tsx";
@@ -49,7 +36,7 @@ type InputType = 'Switch'
 export type InputAndColumns<T> =
   Pick<(ColumnGroupType<T> | ColumnType<T>), keyof (ColumnType<T> | ColumnGroupType<T>)>
   & {
-  loadingInputRender? : (loading : boolean, avatarURL : string, setUpload : (URL : string, file : File) => void, record? : T) => JSX.Element,
+  loadingInputRender? : (loading : boolean, avatarURL : string, setUpload : React.Dispatch<React.SetStateAction<UploadComponentProp>>, record? : T) => JSX.Element,
   InputType? : InputType
   dataIndex : string,
   inputType? : InputType,
@@ -143,7 +130,7 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
   return {
     TableComponent : (
       <div>
-        <div className={ `${ Styles.userButtonContainer } items-end flex justify-between` }>
+        <div className={ `layout-container min-h-[72px] items-end flex justify-between` }>
           <div>
             <Form className={ "flex flex-wrap" } form={ form }>
               { columns.filter((item) => {
@@ -169,8 +156,7 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
             </Form>
           </div>
         </div>
-        <div className={ Styles.userTableContainer }>
-          <ConfigProvider locale={ zhCN }>
+        <div className={ `layout-container min-h-[200px]` }>
             <div className={ 'min-w-[240px] mb-8' }>
               <Button className={ "h-9 w-19" } onClick={ handleInsert } icon={ <PlusOutlined/> } type="primary">
                 { GLOBAL_TABLE_TEXT.INSERT_TEXT }
@@ -183,13 +169,13 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
                 </Button>
               </Badge>
             </div>
-            <TableModalComponent<T> ModalInputs={ columns } modalTitle={ modalTitle }
-                                    closeModal={ handleCloseModal }
-                                    isModalOpen={ modalIsOpen }
-                                    handleInsertData={ handleInsertData }
-                                    handleGetUpdateData={ () => handleGetUpdateData(selectData!) }
-                                    handleUpdateData={ handleUpdateData }
-                                    reloadTable={ () => {
+            <TableModal<T> ModalInputs={ columns } modalTitle={ modalTitle }
+                           closeModal={ handleCloseModal }
+                           isModalOpen={ modalIsOpen }
+                           handleInsertData={ handleInsertData }
+                           handleGetUpdateData={ () => handleGetUpdateData(selectData!) }
+                           handleUpdateData={ handleUpdateData }
+                           reloadTable={ () => {
                                       const { page, pageSize } = pageInfo
                                       handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
                                     } }/>
@@ -239,7 +225,6 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
               }] : [] }
               dataSource={ dataSource }>
             </Table>
-          </ConfigProvider>
         </div>
       </div>)
   }
