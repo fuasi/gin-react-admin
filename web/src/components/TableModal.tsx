@@ -4,7 +4,7 @@ import { HTTPResponse } from "@/apis";
 import { GLOBAL_TABLE_TEXT } from "@/config";
 import { InputAndColumns } from "@/hooks/useTable.tsx";
 import { useLoading } from "@/hooks/useLoading.ts";
-import SwitchComponent from "@/components/SwitchComponent.tsx";
+import Switch from "@/components/Switch.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 
 interface ModalComponentProps<T> {
@@ -18,7 +18,11 @@ interface ModalComponentProps<T> {
   ModalInputs : InputAndColumns<T>[];
 }
 
-const TableModalComponent = <T extends object>(props : ModalComponentProps<T>) => {
+export type UploadComponentProp = {
+  file? : File,
+  previewAvatar : string
+}
+const TableModal = <T extends object>(props : ModalComponentProps<T>) => {
   const {
     handleUpdateData,
     modalTitle,
@@ -33,21 +37,15 @@ const TableModalComponent = <T extends object>(props : ModalComponentProps<T>) =
   const isUpdate = modalTitle === GLOBAL_TABLE_TEXT.UPDATE_TEXT
   const [form] = Form.useForm()
   const { loading, withLoading } = useLoading()
-  const [upload, setUpload] = useState<{
-    file? : File,
-    avatarURL : string
-  }>({ avatarURL : "" })
+  const [upload, setUpload] = useState<UploadComponentProp>({ previewAvatar : "" })
   const { withNotification } = useSystemActiveNotification()
-  const handleSetUpload = (URL : string, file : File) => {
-    setUpload({ avatarURL : URL, file : file })
-  }
 
   const handleCancel = () => {
-    if (upload.avatarURL.includes("blob:")) {
-      URL.revokeObjectURL(upload.avatarURL)
+    if (upload.previewAvatar.includes("blob:")) {
+      URL.revokeObjectURL(upload.previewAvatar)
     }
     setUpload((val) => {
-      return { ...val, avatarURL : "" }
+      return { ...val, previewAvatar : "" }
     })
     setNeedUpdateData(undefined)
     closeModal()
@@ -100,9 +98,9 @@ const TableModalComponent = <T extends object>(props : ModalComponentProps<T>) =
                        rules={ [{ required : value.required }] }
                        required={ value.required }
                        label={ value.title as (string | JSX.Element) }>
-              { value.loadingInputRender ? value.loadingInputRender(loading, upload.avatarURL, handleSetUpload, needUpdateData) : value.InputType === "Switch" ?
-                <SwitchComponent<T> handleSwitchChange={ handleSwitchChange } needUpdateData={ needUpdateData }
-                                    isUpdate={ isUpdate } dataIndex={ value.dataIndex }/> :
+              { value.loadingInputRender ? value.loadingInputRender(loading, upload.previewAvatar, setUpload, needUpdateData) : value.InputType === "Switch" ?
+                <Switch<T> handleSwitchChange={ handleSwitchChange } needUpdateData={ needUpdateData }
+                           isUpdate={ isUpdate } dataIndex={ value.dataIndex }/> :
                 <Input/> }
             </Form.Item>
           )
@@ -112,4 +110,4 @@ const TableModalComponent = <T extends object>(props : ModalComponentProps<T>) =
   )
 }
 
-export default TableModalComponent
+export default TableModal

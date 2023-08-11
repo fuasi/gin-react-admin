@@ -1,9 +1,9 @@
 import { Card } from 'antd';
-import Styles from './QuickEntryComponent.module.scss'
-import DashboardComponents from './DashboardComponents.module.scss'
+import Styles from './QuickEntry.module.scss'
+import DashboardComponents from './Dashboard.module.scss'
 import { SettingTwoTone } from "@ant-design/icons";
 
-const QuickEntryComponent = () => {
+const QuickEntry = () => {
     const array = new Array(5)
     array.fill(1)
     return (
@@ -25,4 +25,4 @@ const QuickEntryComponent = () => {
     )
 }
 
-export default QuickEntryComponent
+export default QuickEntry

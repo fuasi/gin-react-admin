@@ -1,11 +1,12 @@
 import { Avatar, Breadcrumb, Button, Dropdown, MenuProps, Space } from 'antd';
 import { ExpandOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ReloadOutlined, UserOutlined } from '@ant-design/icons';
-import { Header } from 'antd/es/layout/layout';
+import { Header as LayoutHeader } from 'antd/es/layout/layout';
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
-import { deleteToken, deleteUser, userStore } from '@/store/localstrageStore.ts';
+import { deleteHistory, deleteToken } from '@/store/localstrageStore.ts';
 import { useNavigate } from 'react-router-dom';
 import { notificationActiveSuccess } from "@/utils/notification.tsx";
 import { GLOBAL_SYSTEM_TEXT } from "@/config";
+import { userStorage } from "@/store/userStorage.ts";
 
 
 interface HeaderComponentProps {
@@ -14,10 +15,11 @@ interface HeaderComponentProps {
   colorBgContainer : string
   collapsed : boolean
   handleFunc : () => void
+  addTab : (path : string) => void
 }
 
-const HeaderComponent = (props : HeaderComponentProps) => {
-  const { handleFunc, collapsed, setCollapsed, breadcrumb, colorBgContainer } = props
+const Header = (props : HeaderComponentProps) => {
+  const { addTab, handleFunc, collapsed, setCollapsed, breadcrumb, colorBgContainer } = props
   const handleFullScreen = async () => {
     if (!document.fullscreenElement) {
       await document.documentElement.requestFullscreen();
@@ -31,12 +33,13 @@ const HeaderComponent = (props : HeaderComponentProps) => {
   const navigate = useNavigate()
   const handleUserLogout = () => {
     deleteToken();
-    deleteUser();
+    deleteHistory();
     navigate('/login', { replace : true })
   }
 
   const handleToUserInfo = () => {
-    navigate("/")
+    addTab("/self")
+    navigate("/self")
   }
   const handleReload = () => {
     notificationActiveSuccess(GLOBAL_SYSTEM_TEXT.ACTIVE_RELOAD_SUCCESS)
@@ -56,7 +59,7 @@ const HeaderComponent = (props : HeaderComponentProps) => {
     },
   ];
   return (
-    <Header style={ { padding : 0, background : colorBgContainer } }>
+    <LayoutHeader style={ { padding : 0, background : colorBgContainer } }>
       <div className={ 'flex flex-row justify-between items-center' }>
         <Space size={ 12 }>
           <Button
@@ -78,13 +81,13 @@ const HeaderComponent = (props : HeaderComponentProps) => {
                           className={ 'text-[20px] mr-6 cursor-pointer select-none' }/>
           <Dropdown trigger={ ['hover', 'click'] } menu={ { items } }>
             <Avatar shape="square" size={ 48 } className={ 'select-none' }
-                    src={ userStore.user?.avatar }
+                    src={ userStorage.user.avatar }
                     icon={ <UserOutlined/> }/>
           </Dropdown>
         </div>
       </div>
-    </Header>
+    </LayoutHeader>
   )
 }
 
-export default HeaderComponent
+export default Header

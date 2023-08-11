@@ -3,14 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 import { routerStorage } from "@/store/routerStorage.ts";
-import { Tab, TabItem } from "@/views/backend/backendLayout.tsx";
-import { historyStore } from "@/store/localstrageStore.ts";
+import { MenuItem } from "@/App.tsx";
 
 interface SideMenuComponentProps {
   setBreadcrumb : React.Dispatch<React.SetStateAction<Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[] | undefined>>;
-  addTabs : (tab : Tab) => void;
-  tabItems : TabItem[];
-  setCurrentActiveTab : (key : string) => void;
+  addTabs : (path : string) => void;
   breadcrumbCache : BreadcrumbCache
 }
 
@@ -22,9 +19,10 @@ export interface MenuItems {
   type? : 'group'
 }
 
-export type BreadcrumbCache = Map<string, { path : string, title : string, icon : React.ReactNode }>
-const SideMenuComponent = (props : SideMenuComponentProps) => {
-  const { breadcrumbCache, setBreadcrumb, addTabs, tabItems, setCurrentActiveTab } = props
+export type RouterInfo = { path : string, title : string, icon : React.ReactNode }
+export type BreadcrumbCache = Map<string, RouterInfo>
+const SideMenu = (props : SideMenuComponentProps) => {
+  const { breadcrumbCache, setBreadcrumb, addTabs } = props
   const location = useLocation()
   const { routerInfo } = routerStorage
   const navigate = useNavigate()
@@ -60,20 +58,7 @@ const SideMenuComponent = (props : SideMenuComponentProps) => {
 
   const handleSelect = (props : { key : string }) => {
     const { key } = props
-    const menu = breadcrumbCache.get(key)
-    const newItem : TabItem[] = []
-    for (const item of tabItems) {
-      newItem.push({ key : item.key })
-      if (item.key === key) {
-        setCurrentActiveTab(key)
-        navigate(key)
-        return
-      }
-    }
-    addTabs({ label : <span>{ menu?.icon }{ menu?.title }</span>, key : menu!.path, })
-    newItem.push({ key })
-    historyStore.history = newItem
-    setCurrentActiveTab(key)
+    addTabs(key)
     navigate(key)
   }
 
@@ -96,10 +81,12 @@ const SideMenuComponent = (props : SideMenuComponentProps) => {
       mode="inline"
       defaultOpenKeys={ handleDefaultOpenKeys }
       selectedKeys={ [defaultSelectedKeys] }
-      items={ routerInfo }
+      items={ routerInfo.filter((item : MenuItem) => {
+        return !item.hidden
+      }) }
       onClick={ handleBreadcrumb }
       onSelect={ handleSelect }
     />
   )
 }
-export default SideMenuComponent
+export default SideMenu

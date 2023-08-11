@@ -2,7 +2,7 @@ import { message, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-const RouterLoadingComponent = () => {
+const RouterLoading = () => {
     const [messageApi, contextHolder] = message.useMessage()
     const navigate = useNavigate()
     useEffect(() => {
@@ -27,4 +27,4 @@ const RouterLoadingComponent = () => {
 }
 
 
-export default RouterLoadingComponent
+export default RouterLoading

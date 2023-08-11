@@ -1,9 +1,9 @@
-import Styles from './TitleCardComponent.module.scss';
+import Styles from './TitleCard.module.scss';
 import Work from '@/assets/work.svg';
 import { Card } from 'antd';
-import DashboardComponents from './DashboardComponents.module.scss'
+import DashboardComponents from './Dashboard.module.scss'
 
-const TitleCardComponent = () => {
+const TitleCard = () => {
     const date = new Date()
     const getCurrentDateMessage = () => {
         if (date.getHours() >= 6 && date.getHours() <= 12) {
@@ -36,4 +36,4 @@ const TitleCardComponent = () => {
         </Card>
     )
 }
-export default TitleCardComponent
+export default TitleCard

@@ -1,5 +1,5 @@
 import { Card, List, Typography } from "antd";
-import DashboardComponents from "@/views/backend/dashboard/components/DashboardComponents.module.scss";
+import DashboardComponents from "@/views/backend/dashboard/components/Dashboard.module.scss";
 import EChartsReact from "echarts-for-react";
 
 const option = {
@@ -31,7 +31,7 @@ const data = [
     'Los Angeles battles huge wildfires.',
     'Los Angeles battles huge wildfires.',
 ];
-const EchartsComponent = () => {
+const Echarts = () => {
 
     return (
         <Card title={<span style={{ fontWeight : 'normal', fontSize : '18px' }}>数据统计</span>}
@@ -55,4 +55,4 @@ const EchartsComponent = () => {
     )
 }
 
-export default EchartsComponent
+export default Echarts

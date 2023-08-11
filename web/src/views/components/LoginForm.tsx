@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { HandleRouterInfo, HandleRouters } from '@/utils/router.tsx';
 import { routerStorage } from '@/store/routerStorage'
-import { tokenStore, userStore } from '@/store/localstrageStore'
+import { tokenStore } from '@/store/localstrageStore'
 import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.tsx";
 import { GLOBAL_LOGIN_TEXT } from "@/config";
 
-const LoginFormComponent = () => {
+const LoginForm = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
   const navigate = useNavigate()
   useEffect(() => {
@@ -25,7 +25,6 @@ const LoginFormComponent = () => {
       setButtonLoading(true)
       const { data } = await login(values)
       tokenStore.token = data.token
-      userStore.user = data.user
       await handleGetRouter()
       notificationLoginSuccess(GLOBAL_LOGIN_TEXT.LOGIN_SUCCESS)
       navigate('/dashboard')
@@ -74,4 +73,4 @@ const LoginFormComponent = () => {
   )
 }
 
-export default LoginFormComponent
+export default LoginForm
