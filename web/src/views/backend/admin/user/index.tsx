@@ -1,4 +1,4 @@
-import { Image, message, Switch } from 'antd';
+import { Image, message, Switch as AntdSwitch } from 'antd';
 import { useState } from 'react';
 import {
   deleteUser,
@@ -13,9 +13,9 @@ import {
 } from '@/apis/userApis.ts';
 import { useLoading } from '@/hooks/useLoading'
 import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
-import UploadComponent from "@/components/UploadComponent.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT, GLOBAL_USER_TEXT } from "@/config";
+import AvatarUpload from "@/components/AvatarUpload.tsx";
 
 type AvatarUploadProps = { upload : { file : File, avatarURL : string } }
 const UserComponent = () => {
@@ -39,8 +39,8 @@ const UserComponent = () => {
                       className={ "rounded-2xl" }/>
       },
       width : 64,
-      loadingInputRender : (loading, avatarURL, setUpload, data) => <UploadComponent
-        avatarURL={ avatarURL }
+      loadingInputRender : (loading, avatarURL, setUpload, data) => <AvatarUpload
+        previewAvatar={ avatarURL }
         image={ data?.avatar } setUpload={ setUpload }
         loading={ loading }/>,
     },
@@ -79,8 +79,8 @@ const UserComponent = () => {
       dataIndex : 'enable',
       width : 64,
       render : (_, record, index) => {
-        return (<Switch onChange={ (checked) => handleIsUserEnable(checked, index, record) }
-                        checked={ record.enable === 1 }/>)
+        return (<AntdSwitch onChange={ (checked) => handleIsUserEnable(checked, index, record) }
+                            checked={ record.enable === 1 }/>)
       },
       InputType : "Switch",
       required : true,
@@ -150,7 +150,7 @@ const UserComponent = () => {
   })
 
   return (
-    <div >
+    <div>
       { contextHolder }
       { TableComponent }
     </div>

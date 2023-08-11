@@ -1,16 +1,16 @@
 import Styles from "./dashboard.module.scss"
-import TitleCardComponent from "./components/TitleCardComponent.tsx";
-import QuickEntryComponent from "./components/QuickEntryComponent.tsx";
-import EchartsComponent from "@/views/backend/dashboard/components/EchartsComponent.tsx";
+import TitleCard from "./components/TitleCard.tsx";
+import QuickEntry from "./components/QuickEntry.tsx";
+import Echarts from "@/views/backend/dashboard/components/Echarts.tsx";
 
-const DashboardComponent = () => {
-    return (
-        <div className={ Styles.dashboardComponentContainer }>
-            <TitleCardComponent/>
-            <QuickEntryComponent/>
-            <EchartsComponent/>
-        </div>
-    )
+const DashboardView = () => {
+  return (
+    <div className={ Styles.dashboardComponentContainer }>
+      <TitleCard/>
+      <QuickEntry/>
+      <Echarts/>
+    </div>
+  )
 }
 
-export default DashboardComponent
+export default DashboardView

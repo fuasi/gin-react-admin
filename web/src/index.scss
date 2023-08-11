@@ -34,3 +34,11 @@
 span {
   font-family : Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, å¾®è½¯é›…é»‘, Arial, sans-serif;
 }
+
+.layout-container {
+  margin           : 16px 16px;
+  padding          : 24px;
+  background-color : white;
+  border-radius    : 0 0 8px 8px;
+  box-shadow       : 0 0 7px 1px rgba(0, 0, 0, .03);
+}
