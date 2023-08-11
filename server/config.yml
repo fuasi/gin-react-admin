@@ -15,3 +15,5 @@ upload:
 user:
   createUserPassword: "123456"
   resetPassword: "123456"
+casbin:
+  CasbinConfig: "./configs/"

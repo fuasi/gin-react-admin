@@ -1,4 +1,4 @@
-package config
+package viper_config
 
 type ServerConfig struct {
 	Redis    Redis
@@ -6,4 +6,5 @@ type ServerConfig struct {
 	JWT      JWT
 	Upload   Upload
 	User     UserConfig
+	Casbin   Casbin
 }
