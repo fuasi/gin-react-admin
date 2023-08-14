@@ -80,5 +80,5 @@ func (UserService *UserService) GetRouter() (routers []system.Router, err error)
 		}
 	}
 	//-------- 返回组装路由后返回给前端 --------
-	return routers, err
+	return routerTree, err
 }

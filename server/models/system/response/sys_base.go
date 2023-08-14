@@ -3,6 +3,6 @@ package request
 import "server/models/system"
 
 type LoginResponse struct {
-	Token string               //令牌
-	User  system.SysUserPublic //用户信息
+	Token string               `json:"token,omitempty"` //令牌
+	User  system.SysUserPublic `json:"user,omitempty"`  //用户信息
 }

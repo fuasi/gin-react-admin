@@ -8,6 +8,7 @@ import { routerStorage } from '@/store/routerStorage'
 import { tokenStore } from '@/store/localstrageStore'
 import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.tsx";
 import { GLOBAL_LOGIN_TEXT } from "@/config";
+import { userStorage } from "@/store/userStorage.ts";
 
 const LoginForm = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
@@ -25,6 +26,7 @@ const LoginForm = () => {
       setButtonLoading(true)
       const { data } = await login(values)
       tokenStore.token = data.token
+      userStorage.user = data.user
       await handleGetRouter()
       notificationLoginSuccess(GLOBAL_LOGIN_TEXT.LOGIN_SUCCESS)
       navigate('/dashboard')
@@ -50,14 +52,14 @@ const LoginForm = () => {
         <Form.Item
           name="username"
           rules={ [{ required : true, message : 'Please enter the correct user name' }] }
-          initialValue={"admin"}
+          initialValue={ "admin" }
         >
           <Input className={ 'h-10' } placeholder={ '请输入账号' } prefix={ <UserOutlined/> }/>
         </Form.Item>
         <Form.Item
           name="password"
           rules={ [{ required : true, message : 'Please enter the correct password' }] }
-          initialValue={"123456"}
+          initialValue={ "123456" }
         >
           <Input.Password className={ 'h-10' } placeholder={ '请输入密码' } prefix={ <LockOutlined/> }/>
         </Form.Item>
