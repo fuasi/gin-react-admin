@@ -44,7 +44,7 @@ export function getUserById(query : number) {
 
 export function uploadAvatar(form : FormData) {
   return apiRequest<string>({
-    url : "/avatar",
+    url : "/file",
     method : "POST",
     data : form
   })

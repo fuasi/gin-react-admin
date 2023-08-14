@@ -97,7 +97,7 @@ const UserComponent = () => {
 
   const handleAvatarUpload = async (file : File) => {
     const form = new FormData()
-    form.append("avatar", file)
+    form.append("file", file)
     const { data } = await uploadAvatar(form)
     return data
   }
