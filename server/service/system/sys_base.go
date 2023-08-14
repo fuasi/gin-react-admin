@@ -1,14 +1,27 @@
 package system
 
 import (
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
 	"server/global"
 	"server/models/system"
+	"server/utils"
 )
 
 type BaseService struct {
 }
 
-func (b *BaseService) GetRouter() (router []system.Router, err error) {
-	err = global.GRA_DB.Find(&router).Error
-	return router, err
+func (BaseService *BaseService) Login(u system.SysUser) (resultUser system.SysUser, err error) {
+	var user system.SysUser
+	if errors.Is(global.GRA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) {
+		return resultUser, errors.New("账号或密码错误")
+	}
+	if user.Enable == -1 {
+		return resultUser, errors.New("账号已被禁用,请联系管理员启用!")
+	}
+	login := utils.VerifyPassword(user.Password, u.Password)
+	if !login {
+		return resultUser, errors.New("账号或密码错误")
+	}
+	return user, err
 }

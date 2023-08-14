@@ -7,4 +7,5 @@ type ServerConfig struct {
 	Upload   Upload
 	User     UserConfig
 	Casbin   Casbin
+	System   System
 }

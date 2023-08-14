@@ -16,4 +16,6 @@ user:
   createUserPassword: "123456"
   resetPassword: "123456"
 casbin:
-  CasbinConfig: "./configs/"
+  casbinConfig: "./configs/"
+system:
+  apiPrefix: "/api"

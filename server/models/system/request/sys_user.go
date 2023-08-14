@@ -12,5 +12,5 @@ type Login struct {
 
 type SearchUser struct {
 	request.PageInfo
-	system.SysUser
+	system.SysUserPublic
 }

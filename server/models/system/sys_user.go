@@ -10,17 +10,17 @@ type SysUser struct {
 }
 
 type SysUserPublic struct {
-	Id       uint   `json:"id,omitempty" uri:"id"`
-	Username string `json:"username,omitempty"`
-	Avatar   string `json:"avatar,omitempty"`
-	Nickname string `json:"nickname,omitempty"`
-	Phone    string `json:"phone,omitempty"`
-	Enable   int    `json:"enable,omitempty"`
+	Id       uint   `json:"id,omitempty" uri:"id"` //主键ID
+	Username string `json:"username,omitempty"`    //用户名
+	Avatar   string `json:"avatar,omitempty"`      //头像
+	Nickname string `json:"nickname,omitempty"`    //昵称
+	Phone    string `json:"phone,omitempty"`       //手机号
+	Enable   int    `json:"enable,omitempty"`      //账号是否启用(启用:1,不启用:-1)
 	common.BaseModel
 }
 
 type SysUserPrivate struct {
-	Password string `json:"password,omitempty"`
+	Password string `json:"password,omitempty"` //密码
 }
 
 func (SysUser) TableName() string {

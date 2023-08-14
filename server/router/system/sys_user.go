@@ -2,8 +2,7 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
-	"server/apis"
-	"server/middlewares"
+	"server/apis/v1"
 )
 
 type UserRouter struct {
@@ -11,19 +10,19 @@ type UserRouter struct {
 
 func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	{
-		Router.POST("/login", apis.SystemApisApp.SystemApis.UserApi.Login)
 	}
-	userRouter := Router.Use(middlewares.AuthMiddleware, middlewares.CasbinMiddleware)
-	//userRouter := Router.Use()
-	userApi := apis.SystemApisApp.SystemApis.UserApi
+	userRouter := Router.Use()
+	userApi := v1.SystemApisApp.SystemApis.UserApi
 	{
-		userRouter.POST("/check", apis.SystemApisApp.SystemApis.UserApi.CheckLogin)
-		userRouter.POST("/users", userApi.GetUserList)
 		userRouter.GET("/user/:id", userApi.GetUserById)
 		userRouter.PATCH("/user", userApi.UpdateUserById)
 		userRouter.DELETE("/user", userApi.DeleteUserById)
-		userRouter.PUT("/user", userApi.InsertUser)
-		userRouter.GET("/user", userApi.GetSelfInfo)
+		userRouter.POST("/users", userApi.GetUserList)
+		userRouter.POST("/check", userApi.CheckLogin)
 		userRouter.PATCH("/user/:id", userApi.ResetUserPassword)
+		userRouter.GET("/user", userApi.GetSelfInfo)
+		userRouter.PUT("/user", userApi.InsertUser)
+		userRouter.POST("/file", userApi.UploadFile)
+		userRouter.GET("/router", userApi.GetRouter)
 	}
 }

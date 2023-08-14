@@ -12,21 +12,6 @@ import (
 type UserService struct {
 }
 
-func (UserService *UserService) Login(u system.SysUser) (resultUser system.SysUser, err error) {
-	var user system.SysUser
-	if errors.Is(global.GRA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) {
-		return resultUser, errors.New("账号或密码错误")
-	}
-	if user.Enable == -1 {
-		return resultUser, errors.New("账号已被禁用,请联系管理员启用!")
-	}
-	login := utils.VerifyPassword(user.Password, u.Password)
-	if !login {
-		return resultUser, errors.New("账号或密码错误")
-	}
-	return user, err
-}
-
 func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system.SysUser, err error) {
 	if errors.Is(global.GRA_DB.Where("id = ?", u.Id).First(&resultUser.SysUserPublic).Error, gorm.ErrRecordNotFound) {
 		return resultUser, errors.New("未找到用户")
@@ -79,4 +64,21 @@ func (UserService *UserService) ResetUserPassword(u system.SysUser) (defaultPass
 func (UserService *UserService) GetSelfInfo(uid uint) (s system.SysUserPublic, err error) {
 	err = global.GRA_DB.Where("id = ?", uid).Find(&s).Error
 	return s, err
+}
+func (UserService *UserService) GetRouter() (routers []system.Router, err error) {
+	err = global.GRA_DB.Find(&routers).Error
+	//-------- 返回组装路由后返回给前端 --------
+	routerMap := map[int][]system.Router{}
+	for _, router := range routers {
+		routerMap[router.ParentId] = append(routerMap[router.ParentId], router)
+	}
+	var routerTree []system.Router
+	for _, router := range routers {
+		router.Children = routerMap[router.Id]
+		if router.ParentId == -1 {
+			routerTree = append(routerTree, router)
+		}
+	}
+	//-------- 返回组装路由后返回给前端 --------
+	return routers, err
 }
