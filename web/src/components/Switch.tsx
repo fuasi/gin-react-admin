@@ -13,7 +13,7 @@ const Switch = <T extends object>(props : SwitchComponentProps<T>) => {
   const [modalSwitch, setModalSwitch] = useState(true)
   const { dataIndex, isUpdate, handleSwitchChange, needUpdateData } = props
   const handleModalSwitchChange = (change : boolean, dataIndex : string) => {
-    form.setFieldValue(dataIndex, change)
+    form.setFieldValue(dataIndex, change ? 1 : -1)
     setModalSwitch(change)
   }
   useEffect(() => {
@@ -24,7 +24,7 @@ const Switch = <T extends object>(props : SwitchComponentProps<T>) => {
   return (
     <AntdSwitch
       onChange={ isUpdate ? (checked) => handleSwitchChange(checked, dataIndex) : (checked) => handleModalSwitchChange(checked, dataIndex) }
-      checked={ needUpdateData ? needUpdateData[dataIndex as keyof typeof needUpdateData] : modalSwitch }/>
+      checked={ needUpdateData ? needUpdateData[dataIndex as keyof typeof needUpdateData] === 1 : modalSwitch }/>
   )
 }
 
