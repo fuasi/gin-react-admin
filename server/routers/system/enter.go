@@ -1,6 +1,7 @@
 package system
 
-type SystemRouterGroup struct {
+type SysRouterGroup struct {
 	UserRouter
 	BaseRouter
+	ApiRouter
 }

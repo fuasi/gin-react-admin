@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"reflect"
+	"server/models/common/request"
 )
 
 func SearchWhere(query string, args any, isLike bool) func(tx *gorm.DB) *gorm.DB {
@@ -18,8 +19,11 @@ func SearchWhere(query string, args any, isLike bool) func(tx *gorm.DB) *gorm.DB
 
 	}
 }
-func likeQuery(keyword string) string {
-	return "%" + keyword + "%"
+
+func PageQuery(pageInfo request.PageInfo) (limit int, offset int) {
+	limit = pageInfo.PageSize
+	offset = (pageInfo.Page - 1) * pageInfo.PageSize
+	return limit, offset
 }
 
 func IsBlank(i any) bool {

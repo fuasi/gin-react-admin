@@ -35,8 +35,7 @@ func (UserService *UserService) DeleteUserByIds(ids []uint) error {
 }
 
 func (UserService *UserService) GetUserList(request request.SearchUser) (resultUser []system.SysUserPublic, total int64, err error) {
-	limit := request.PageSize
-	offset := (request.Page - 1) * request.PageSize
+	limit, offset := utils.PageQuery(request.PageInfo)
 	tx := global.GRA_DB.Model(system.SysUser{}).Scopes(
 		utils.SearchWhere("id", request.Id, false),
 		utils.SearchWhere("username", request.Username, true),
@@ -66,7 +65,7 @@ func (UserService *UserService) GetSelfInfo(uid uint) (s system.SysUserPublic, e
 	return s, err
 }
 func (UserService *UserService) GetRouter() (routers []system.Router, err error) {
-	err = global.GRA_DB.Find(&routers).Error
+	err = global.GRA_DB.Find(&routers).Order("id,router_order").Error
 	//-------- 返回组装路由后返回给前端 --------
 	routerMap := map[int][]system.Router{}
 	for _, router := range routers {

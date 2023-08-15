@@ -23,6 +23,6 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.GET("/user", userApi.GetSelfInfo)
 		userRouter.PUT("/user", userApi.InsertUser)
 		userRouter.POST("/file", userApi.UploadFile)
-		userRouter.GET("/router", userApi.GetRouter)
+		userRouter.GET("/routers", userApi.GetRouter)
 	}
 }

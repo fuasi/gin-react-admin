@@ -8,7 +8,6 @@ import (
 	"server/models/common/response"
 	"server/models/system"
 	"server/models/system/request"
-	UserResponse "server/models/system/response"
 	"time"
 )
 
@@ -113,7 +112,7 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 		return
 	}
 
-	response.SuccessWithData(c, UserResponse.GetUserListResponse{
+	response.SuccessWithData(c, response.PageQueryResponse[system.SysUserPublic]{
 		Total: total,
 		List:  list,
 	})

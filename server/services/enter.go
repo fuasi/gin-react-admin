@@ -1,10 +1,11 @@
-package service
+package services
 
-import "server/service/system"
+import "server/services/system"
 
 type ServiceGroup struct {
 	system.UserService
 	system.BaseService
+	system.ApiService
 }
 
 var ServiceGroupApp = new(ServiceGroup)
