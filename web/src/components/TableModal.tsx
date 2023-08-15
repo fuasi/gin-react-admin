@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import { useEffect, useState } from "react";
 import { HTTPResponse } from "@/apis";
 import { GLOBAL_TABLE_TEXT } from "@/config";
@@ -67,7 +67,7 @@ const TableModal = <T extends object>(props : ModalComponentProps<T>) => {
   const handleSwitchChange = (change : boolean, dataIndex : string) => {
     setNeedUpdateData((item) => {
       if (item) {
-        return { ...item, [dataIndex] : change }
+        return { ...item, [dataIndex] : change ? 1 : -1 }
       }
       return undefined
     })
@@ -89,8 +89,7 @@ const TableModal = <T extends object>(props : ModalComponentProps<T>) => {
       onOk={ isUpdate ? () => withLoading(handleUpdate) : () => withLoading(handleInsert) }
       onCancel={ () => handleCancel() } title={ modalTitle }
       open={ isModalOpen }>
-      <Form preserve={ false } name={ "form" } form={ form }
-            labelCol={ { span : 4 } }>
+      <Form preserve={ false } name={ "form" } form={ form }>
         { ModalInputs.map((value) => {
           return (
             <Form.Item hidden={ value.isShow } name={ value.dataIndex }
@@ -98,10 +97,11 @@ const TableModal = <T extends object>(props : ModalComponentProps<T>) => {
                        rules={ [{ required : value.required }] }
                        required={ value.required }
                        label={ value.title as (string | JSX.Element) }>
-              { value.loadingInputRender ? value.loadingInputRender(loading, upload.previewAvatar, setUpload, needUpdateData) : value.InputType === "Switch" ?
+              { value.useAvatarUploadComponent ? value.useAvatarUploadComponent(loading, upload.previewAvatar, setUpload, needUpdateData) : value.inputType === "Switch" ?
                 <Switch<T> handleSwitchChange={ handleSwitchChange } needUpdateData={ needUpdateData }
-                           isUpdate={ isUpdate } dataIndex={ value.dataIndex }/> :
-                <Input/> }
+                           isUpdate={ isUpdate } dataIndex={ value.dataIndex }/> : value.inputType === "Select" ?
+                  <Select options={ value.searchIsOption } /> :
+                  <Input/> }
             </Form.Item>
           )
         }) }

@@ -7,12 +7,12 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"server/global"
 	"server/middlewares"
-	"server/router"
+	"server/routers"
 )
 
 func InitRouter() *gin.Engine {
 	Router := gin.Default()
-	systemRouter := router.RouterGroupApp.System
+	systemRouter := routers.RouterGroupApp.System
 	{
 		// swagger文档
 		Router.GET(fmt.Sprintf("%s/swagger/*any", global.GRA_CONFIG.System.ApiPrefix), ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -27,6 +27,7 @@ func InitRouter() *gin.Engine {
 	PrivateRouter.Use(middlewares.AuthMiddleware)
 	{
 		systemRouter.InitUserRouter(PrivateRouter)
+		systemRouter.InitApiRouter(PrivateRouter)
 	}
 	return Router
 }

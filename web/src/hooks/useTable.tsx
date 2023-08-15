@@ -17,7 +17,7 @@ import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT } from "@/config";
 import { notificationActiveFail, notificationActiveSuccess } from "@/utils/notification.tsx";
 
 interface TableHookProps<T> {
-  tableProps : Pick<TableProps<T>, keyof TableProps<T>>;
+  tableProps : Pick<TableProps<T>, keyof TableProps<T>> & { total : number };
   handleFindData : (page : PageInfo & T) => void;
   getUpdateData : (record : T) => HTTPResponse<T>;
   handleUpdateData : (record : T, args : any) => Promise<void>;
@@ -31,13 +31,12 @@ interface TableHookResult {
   TableComponent : JSX.Element
 }
 
-type InputType = 'Switch'
+type InputType = 'Switch' | 'Select'
 
 export type InputAndColumns<T> =
   Pick<(ColumnGroupType<T> | ColumnType<T>), keyof (ColumnType<T> | ColumnGroupType<T>)>
   & {
-  loadingInputRender? : (loading : boolean, avatarURL : string, setUpload : React.Dispatch<React.SetStateAction<UploadComponentProp>>, record? : T) => JSX.Element,
-  InputType? : InputType
+  useAvatarUploadComponent? : (loading : boolean, avatarURL : string, setUpload : React.Dispatch<React.SetStateAction<UploadComponentProp>>, record? : T) => JSX.Element,
   dataIndex : string,
   inputType? : InputType,
   required? : boolean,
@@ -52,7 +51,7 @@ export type InputAndColumns<T> =
 
 
 export const useTable = <T extends object>(props : TableHookProps<T>) : TableHookResult => {
-  const { loading, dataSource } = props.tableProps
+  const { loading, dataSource, total } = props.tableProps
   const {
     handleUpdateData,
     handleInsertData,
@@ -62,7 +61,7 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
     handleUserResetPassword,
     columns
   } = props
-  const [pageInfo, setPageInfo] = useState<PageInfo>({ page : 1, pageSize : 10 })
+  const [pageInfo, setPageInfo] = useState<PageInfo>({ page : 1, pageSize : 20 })
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [modalTitle, setModalTitle] = useState(GLOBAL_TABLE_TEXT.INSERT_TEXT)
   const [selectData, setSelectData] = useState<T>()
@@ -97,6 +96,7 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
       } else {
         await handleDeleteData(selectedRowKeys as number[])
       }
+      setSelectedRowKeys([])
       handleFindData({
         page, pageSize, ...form.getFieldsValue(true)
       })
@@ -157,74 +157,77 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
           </div>
         </div>
         <div className={ `layout-container min-h-[200px]` }>
-            <div className={ 'min-w-[240px] mb-8' }>
-              <Button className={ "h-9 w-19" } onClick={ handleInsert } icon={ <PlusOutlined/> } type="primary">
-                { GLOBAL_TABLE_TEXT.INSERT_TEXT }
+          <div className={ 'min-w-[240px] mb-8' }>
+            <Button className={ "h-9 w-19" } onClick={ handleInsert } icon={ <PlusOutlined/> } type="primary">
+              { GLOBAL_TABLE_TEXT.INSERT_TEXT }
+            </Button>
+            <Badge count={ selectedRowKeys.length }>
+              <Button disabled={ selectedRowKeys.length < 1 } onClick={ () => handleDelete() }
+                      className={ "h-9 w-19 ml-8" } danger
+                      icon={ <MinusOutlined/> } type="primary">
+                { GLOBAL_TABLE_TEXT.DELETE_TEXT }
               </Button>
-              <Badge count={ selectedRowKeys.length }>
-                <Button disabled={ selectedRowKeys.length < 1 } onClick={ () => handleDelete() }
-                        className={ "h-9 w-19 ml-8" } danger
-                        icon={ <MinusOutlined/> } type="primary">
-                  { GLOBAL_TABLE_TEXT.DELETE_TEXT }
-                </Button>
-              </Badge>
-            </div>
-            <TableModal<T> ModalInputs={ columns } modalTitle={ modalTitle }
-                           closeModal={ handleCloseModal }
-                           isModalOpen={ modalIsOpen }
-                           handleInsertData={ handleInsertData }
-                           handleGetUpdateData={ () => handleGetUpdateData(selectData!) }
-                           handleUpdateData={ handleUpdateData }
-                           reloadTable={ () => {
-                                      const { page, pageSize } = pageInfo
-                                      handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
-                                    } }/>
-            <Table
-              pagination={ {
-                position : ['bottomCenter'],
-                pageSize : pageInfo.pageSize,
-                onChange : handleChangePage,
-                showQuickJumper : true
-              } }
-              loading={ loading }
-              bordered
-              rowSelection={ rowSelection }
-              rowKey={ 'id' }
-              columns={ columns ? [...columns, {
-                title : GLOBAL_SYSTEM_TEXT.ACTIVE,
-                key : 'action',
-                width : 256,
-                render : (_, record) => (<Space size="middle">
-                  <a onClick={ () => handleOpenUpdate(record) }><EditOutlined
-                    className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.UPDATE_TEXT }</a>
+            </Badge>
+          </div>
+          <TableModal<T> ModalInputs={ columns } modalTitle={ modalTitle }
+                         closeModal={ handleCloseModal }
+                         isModalOpen={ modalIsOpen }
+                         handleInsertData={ handleInsertData }
+                         handleGetUpdateData={ () => handleGetUpdateData(selectData!) }
+                         handleUpdateData={ handleUpdateData }
+                         reloadTable={ () => {
+                           const { page, pageSize } = pageInfo
+                           handleFindData({ page, pageSize, ...form.getFieldsValue(true) })
+                         } }/>
+          <Table
+            pagination={ {
+              position : ['bottomCenter'],
+              current : pageInfo.page,
+              pageSize : pageInfo.pageSize,
+              onChange : handleChangePage,
+              showQuickJumper : true,
+              total : total,
+              showSizeChanger : true
+            } }
+            loading={ loading }
+            bordered
+            rowSelection={ rowSelection }
+            rowKey={ 'id' }
+            columns={ columns ? [...columns, {
+              title : GLOBAL_SYSTEM_TEXT.ACTIVE,
+              key : 'action',
+              width : 256,
+              render : (_, record) => (<Space size="middle">
+                <a onClick={ () => handleOpenUpdate(record) }><EditOutlined
+                  className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.UPDATE_TEXT }</a>
+                <Popconfirm
+                  title={ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE }
+                  description={ GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.DELETE_TEXT) }
+                  onConfirm={ () => handleDelete(record) }
+                  okText={ GLOBAL_SYSTEM_TEXT.ACTIVE_SURE }
+                  cancelText={ GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL }
+                >
+                  <a className={ "text-red-400" }><DeleteOutlined
+                    className={ 'mr-2' }/>
+                    { GLOBAL_TABLE_TEXT.DELETE_TEXT }</a>
+                </Popconfirm>
+                { handleUserResetPassword ?
                   <Popconfirm
                     title={ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE }
-                    description={ GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.DELETE_TEXT) }
-                    onConfirm={ () => handleDelete(record) }
+                    description={ GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT) }
+                    onConfirm={ () => handleUserResetPassword(record) }
                     okText={ GLOBAL_SYSTEM_TEXT.ACTIVE_SURE }
                     cancelText={ GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL }
                   >
-                    <a className={ "text-red-400" }><DeleteOutlined
-                      className={ 'mr-2' }/>
-                      { GLOBAL_TABLE_TEXT.DELETE_TEXT }</a>
+                    <a><KeyOutlined
+                      className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT }
+                    </a>
                   </Popconfirm>
-                  { handleUserResetPassword ?
-                    <Popconfirm
-                      title={ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE }
-                      description={ GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT) }
-                      onConfirm={ () => handleUserResetPassword(record) }
-                      okText={ GLOBAL_SYSTEM_TEXT.ACTIVE_SURE }
-                      cancelText={ GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL }
-                    >
-                      <a><KeyOutlined
-                        className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT }
-                      </a>
-                    </Popconfirm>
-                    : <></> }
-                </Space>)
-              }] : [] }
-              dataSource={ dataSource }>
-            </Table>
+                  : <></> }
+              </Space>)
+            }] : [] }
+            dataSource={ dataSource }>
+          </Table>
         </div>
       </div>)
   }

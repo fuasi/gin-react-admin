@@ -1,10 +1,6 @@
 import { apiRequest } from "@/apis/index.ts";
-import { PageInfo } from "@/apis/baseApis.ts";
+import { GetList, PageInfo } from "@/apis/baseApis.ts";
 
-export interface GetUsers {
-  list : User[]
-  total : number
-}
 
 export interface User {
   id : number
@@ -20,7 +16,7 @@ export interface User {
 export type SearchUsersQuery = User & PageInfo
 
 export function getUsers(query : SearchUsersQuery) {
-  return apiRequest<GetUsers>({
+  return apiRequest<GetList<User>>({
     url : "/users",
     method : "POST",
     data : query

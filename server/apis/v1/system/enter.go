@@ -1,13 +1,15 @@
 package system
 
-import "server/service"
+import "server/services"
 
 type SystemApi struct {
-	UserApi UserApi
-	BaseApi BaseApi
+	UserApi   UserApi
+	BaseApi   BaseApi
+	SysApiApi SysApiApi
 }
 
 var (
-	userService = service.ServiceGroupApp.UserService
-	baseService = service.ServiceGroupApp.BaseService
+	userService = services.ServiceGroupApp.UserService
+	baseService = services.ServiceGroupApp.BaseService
+	apiService  = services.ServiceGroupApp.ApiService
 )

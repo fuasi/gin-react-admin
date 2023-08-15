@@ -1,6 +1,11 @@
 import { apiRequest } from './index.ts';
 import { User } from "@/apis/userApis.ts";
 
+export interface GetList<T> {
+  list : T[]
+  total : number
+}
+
 export interface PageInfo {
   pageSize : number
   page : number
@@ -40,7 +45,7 @@ export function checkLogin() {
 
 export function getRouter() {
   return apiRequest<RouterResponse[]>({
-    url : '/router',
+    url : '/routers',
     method : 'GET'
   })
 }

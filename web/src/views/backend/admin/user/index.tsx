@@ -16,18 +16,19 @@ import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT, GLOBAL_USER_TEXT } from "@/config";
 import AvatarUpload from "@/components/AvatarUpload.tsx";
+import { GetList } from "@/apis/baseApis.ts";
 
 type AvatarUploadProps = { upload : { file : File, avatarURL : string } }
 const UserComponent = () => {
   const { loading, withLoading } = useLoading()
-  const [data, setData] = useState<User[]>([])
+  const [data, setData] = useState<GetList<User>>({ list : [], total : 0 })
   const [messageApi, contextHolder] = message.useMessage()
   const { withNotification } = useSystemActiveNotification()
 
   const handleFindUsers = async (page : SearchUsersQuery) => {
     await withLoading(async () => {
       const { data } = await getUsers(page)
-      setData(data.list)
+      setData(data)
     })
   }
   const columns : InputAndColumns<User>[] = [
@@ -39,7 +40,7 @@ const UserComponent = () => {
                       className={ "rounded-2xl" }/>
       },
       width : 64,
-      loadingInputRender : (loading, avatarURL, setUpload, data) => <AvatarUpload
+      useAvatarUploadComponent : (loading, avatarURL, setUpload, data) => <AvatarUpload
         previewAvatar={ avatarURL }
         image={ data?.avatar } setUpload={ setUpload }
         loading={ loading }/>,
@@ -82,7 +83,7 @@ const UserComponent = () => {
         return (<AntdSwitch onChange={ (checked) => handleIsUserEnable(checked, index, record) }
                             checked={ record.enable === 1 }/>)
       },
-      InputType : "Switch",
+      inputType : "Switch",
       required : true,
       isSearch : true,
       searchIsOption : [{
@@ -124,16 +125,18 @@ const UserComponent = () => {
     const { file } = params.upload
     let fileName = user.avatar
     if (file) fileName = await handleAvatarUpload(file)
-    await insertUser({ ...user, avatar : fileName })
+    await insertUser({ ...user, enable : user.enable ? 1 : -1, avatar : fileName })
   }
   const getUpdateUserById = (user : User) => {
     return getUserById(user.id)
   }
   const handleIsUserEnable = async (enable : boolean, index : number, record : User) => {
     record.enable = enable ? 1 : -1
-    const newDataList = [...data]
+    const newDataList = [...data.list]
     newDataList.splice(index, 1, record)
-    setData(newDataList)
+    setData((item) => {
+      return { ...item, list : item.list = newDataList }
+    })
     await updateUserInfo(record)
     messageApi.success(enable ? GLOBAL_USER_TEXT.USER_ACTIVE_ENABLE_ON : GLOBAL_USER_TEXT.USER_ACTIVE_ENABLE_OFF)
   }
@@ -141,7 +144,7 @@ const UserComponent = () => {
   const { TableComponent } = useTable<User>({
     handleFindData : handleFindUsers,
     getUpdateData : getUpdateUserById,
-    tableProps : { loading : loading, columns : columns, dataSource : data },
+    tableProps : { loading : loading, columns : columns, dataSource : data.list, total : data.total },
     columns : columns,
     handleUpdateData : handleUpdate,
     handleUserResetPassword : handleResetPassword,

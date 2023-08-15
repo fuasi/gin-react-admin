@@ -98,15 +98,15 @@ const BackendLayout = () => {
     if (tabItem.length <= 1) return;
     let selectTabItem = "";
     const filter = tabItem.filter((item, index) => {
-      if (item.key === e) {
+      if (item.key === e && e === currentActiveTab) {
         selectTabItem = tabItem[index - 1 >= 0 ? index - 1 : index + 1].key
         setCurrentActiveTab(selectTabItem)
       }
       return item.key !== e
     })
     setTabItem(filter)
-    historyStore.history = filter
-    navigate(selectTabItem)
+    historyStore.history = historyStore.history?.filter((item) => item.key !== e)
+    if (selectTabItem !== "") navigate(selectTabItem)
   }
 
   return (

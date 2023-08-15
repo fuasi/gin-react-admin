@@ -13,5 +13,5 @@ type Router struct {
 }
 
 func (Router) TableName() string {
-	return "gra_router"
+	return "gra_routers"
 }

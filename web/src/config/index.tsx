@@ -70,15 +70,23 @@ const systemText = {
     USER_ENABLE : "启用",
     USER_ACTIVE_ENABLE_ON : "已启用",
     USER_ACTIVE_ENABLE_OFF : "已禁用",
+  },
+  API_TEXT : {
+    API_ID : "ID",
+    API_PATH : "API路径",
+    API_COMMENT : "API简介",
+    API_METHOD : "API请求方法",
+    API_GROUP : "API分组"
   }
 }
-const { NOTIFICATION_TEXT, LOGIN_TEXT, TABLE_TEXT, SYSTEM_TEXT, USER_TEXT } = systemText
+const { NOTIFICATION_TEXT, API_TEXT, LOGIN_TEXT, TABLE_TEXT, SYSTEM_TEXT, USER_TEXT } = systemText
 
 export const GLOBAL_NOTIFICATION_TEXT = NOTIFICATION_TEXT
 export const GLOBAL_LOGIN_TEXT = LOGIN_TEXT
 export const GLOBAL_TABLE_TEXT = TABLE_TEXT
 export const GLOBAL_SYSTEM_TEXT = SYSTEM_TEXT
 export const GLOBAL_USER_TEXT = USER_TEXT
+export const GLOBAL_API_TEXT = API_TEXT
 
 
 export default GLOBAL_CONFIG
