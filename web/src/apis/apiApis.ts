@@ -1,5 +1,5 @@
 import { apiRequest } from "@/apis/index.ts";
-import { GetList, PageInfo } from "@/apis/baseApis.ts";
+import { GetList, SearchQuery } from "@/apis/baseApis.ts";
 
 export interface Api {
   id : number,
@@ -8,9 +8,7 @@ export interface Api {
   apiGroup : string,
 }
 
-export type SearchApisQuery = Api & PageInfo
-
-export function getApis(query : SearchApisQuery) {
+export function getApis(query : SearchQuery<Api>) {
   return apiRequest<GetList<Api>>({
     url : "/apis",
     method : "POST",

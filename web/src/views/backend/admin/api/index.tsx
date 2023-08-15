@@ -1,9 +1,9 @@
 import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
-import { Api, deleteApi, getApiById, getApis, insertApi, SearchApisQuery, updateApi } from "@/apis/apiApis.ts";
+import { Api, deleteApi, getApiById, getApis, insertApi, updateApi } from "@/apis/apiApis.ts";
 import { GLOBAL_API_TEXT } from "@/config";
 import { useState } from "react";
 import { useLoading } from "@/hooks/useLoading.ts";
-import { GetList } from "@/apis/baseApis.ts";
+import { GetList, SearchQuery } from "@/apis/baseApis.ts";
 
 const ApiView = () => {
   const [data, setData] = useState<GetList<Api>>({ list : [], total : 0 })
@@ -59,7 +59,7 @@ const ApiView = () => {
     }
   ]
 
-  const handleFindData = async (query : SearchApisQuery) => {
+  const handleFindData = async (query : SearchQuery<Api>) => {
     await withLoading(async () => {
       const { data } = await getApis(query)
       setData(data)

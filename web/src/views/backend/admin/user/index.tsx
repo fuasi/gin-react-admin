@@ -6,7 +6,6 @@ import {
   getUsers,
   insertUser,
   resetUserPassword,
-  SearchUsersQuery,
   updateUserInfo,
   uploadAvatar,
   User
@@ -16,7 +15,7 @@ import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT, GLOBAL_USER_TEXT } from "@/config";
 import AvatarUpload from "@/components/AvatarUpload.tsx";
-import { GetList } from "@/apis/baseApis.ts";
+import { GetList, SearchQuery } from "@/apis/baseApis.ts";
 
 type AvatarUploadProps = { upload : { file : File, avatarURL : string } }
 const UserComponent = () => {
@@ -25,7 +24,7 @@ const UserComponent = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const { withNotification } = useSystemActiveNotification()
 
-  const handleFindUsers = async (page : SearchUsersQuery) => {
+  const handleFindUsers = async (page : SearchQuery<User>) => {
     await withLoading(async () => {
       const { data } = await getUsers(page)
       setData(data)

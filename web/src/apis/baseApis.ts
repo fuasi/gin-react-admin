@@ -1,6 +1,8 @@
 import { apiRequest } from './index.ts';
 import { User } from "@/apis/userApis.ts";
 
+export type SearchQuery<T> = T & PageInfo
+
 export interface GetList<T> {
   list : T[]
   total : number
