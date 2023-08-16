@@ -8,6 +8,7 @@ import (
 	"server/models/common/response"
 	"server/models/system"
 	"server/models/system/request"
+	userRequest "server/models/system/response"
 	"server/utils"
 	"time"
 )
@@ -184,12 +185,15 @@ func (u *UserApi) ResetUserPassword(c *gin.Context) {
 // @Router /api/user [GET]
 func (u *UserApi) GetSelfInfo(c *gin.Context) {
 	id := c.GetUint("userId")
-	user, err := userService.GetSelfInfo(id)
+	user, path, err := userService.GetSelfInfo(id)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-	response.SuccessWithData(c, user)
+	response.SuccessWithData(c, userRequest.GetSelfInfoResponse{
+		SysUserPublic: user,
+		Path:          path,
+	})
 }
 
 // GetRouter

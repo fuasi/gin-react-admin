@@ -11,6 +11,7 @@ export interface User {
   enable? : number
   createdAt? : string
   updatedAt? : string
+  path : string
 }
 
 export function getUsers(query : SearchQuery<User>) {

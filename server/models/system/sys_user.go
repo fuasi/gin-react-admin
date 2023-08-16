@@ -16,6 +16,7 @@ type SysUserPublic struct {
 	Nickname string `json:"nickname,omitempty"`    //昵称
 	Phone    string `json:"phone,omitempty"`       //手机号
 	Enable   int    `json:"enable,omitempty"`      //账号是否启用(启用:1,不启用:-1)
+	RoleId   uint   `json:"roleId,omitempty"`
 	common.BaseModel
 }
 

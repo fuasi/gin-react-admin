@@ -19,7 +19,7 @@ func (RoleService *RoleService) GetRoleList(role request.SearchRole) (roles []sy
 	if err != nil {
 		return roles, 0, err
 	}
-	err = tx.Offset(offset).Limit(limit).Select("id,role_name,default_home").Order("id").Find(&roles).Error
+	err = tx.Offset(offset).Limit(limit).Select("id,role_name,default_router_id").Order("id").Find(&roles).Error
 	return roles, total, err
 }
 

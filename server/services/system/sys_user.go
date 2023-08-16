@@ -60,9 +60,22 @@ func (UserService *UserService) ResetUserPassword(u system.SysUser) (defaultPass
 	return global.GRA_CONFIG.User.ResetPassword, global.GRA_DB.Model(&u).Where("id = ?", u.Id).UpdateColumn("password", utils.GetPasswordEncrypt(global.GRA_CONFIG.User.ResetPassword)).Error
 }
 
-func (UserService *UserService) GetSelfInfo(uid uint) (s system.SysUserPublic, err error) {
-	err = global.GRA_DB.Where("id = ?", uid).Find(&s).Error
-	return s, err
+func (UserService *UserService) GetSelfInfo(uid uint) (user system.SysUserPublic, path string, err error) {
+	err = global.GRA_DB.Where("id = ?", uid).Find(&user).Error
+	if err != nil {
+		return user, path, err
+	}
+	var role system.SysRole
+	err = global.GRA_DB.Select("default_router_id").Where("id = ?", user.RoleId).First(&role).Error
+	if err != nil {
+		return user, path, err
+	}
+	var router system.Router
+	err = global.GRA_DB.Select("path").Where("id = ?", role.DefaultRouterId).First(&router).Error
+	if err != nil {
+		return user, router.Path, err
+	}
+	return user, router.Path, err
 }
 func (UserService *UserService) GetRouter(id uint) (routers []system.Router, err error) {
 	var role system.SysRole
