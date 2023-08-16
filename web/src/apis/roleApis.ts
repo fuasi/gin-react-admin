@@ -7,7 +7,7 @@ export interface Role {
   roleName : string;
   allowApiId : number[];
   allowRouterId : number[];
-  defaultHome : number;
+  defaultRouterId : number;
 }
 
 export interface RoleRouterTree {
