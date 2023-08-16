@@ -4,6 +4,7 @@ import { GLOBAL_API_TEXT } from "@/config";
 import { useState } from "react";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { GetList, SearchQuery } from "@/apis/baseApis.ts";
+import { Tag } from "antd";
 
 const ApiView = () => {
   const [data, setData] = useState<GetList<Api>>({ list : [], total : 0 })
@@ -56,6 +57,19 @@ const ApiView = () => {
       }, {
         label : "PATCH / 更新", value : "PATCH / 更新"
       }]
+    },
+    {
+      title : GLOBAL_API_TEXT.REQUIRED,
+      dataIndex : 'required',
+      width : 72,
+      align : "center",
+      inputType : "Select",
+      required : true,
+      isSearch : true,
+      searchIsOption : [{ label : "必选", value : true }, { label : "非必选", value : false }],
+      render : (record) => {
+        return <>{ record ? <Tag color={ "error" }>必选</Tag> : <Tag color={ "processing" }>非必选</Tag> }</>
+      }
     }
   ]
 

@@ -76,7 +76,8 @@ const systemText = {
     API_PATH : "API路径",
     API_COMMENT : "API简介",
     API_METHOD : "API请求方法",
-    API_GROUP : "API分组"
+    API_GROUP : "API分组",
+    REQUIRED : "权限",
   }
 }
 const { NOTIFICATION_TEXT, API_TEXT, LOGIN_TEXT, TABLE_TEXT, SYSTEM_TEXT, USER_TEXT } = systemText

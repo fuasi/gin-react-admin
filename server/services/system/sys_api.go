@@ -19,7 +19,8 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 		utils.SearchWhere("api_path", request.ApiPath, true),
 		utils.SearchWhere("api_group", request.ApiGroup, true),
 		utils.SearchWhere("api_comment", request.ApiComment, true),
-		utils.SearchWhere("api_method", request.ApiMethod, false))
+		utils.SearchWhere("api_method", request.ApiMethod, false),
+		utils.SearchWhere("required", request.Required, false))
 	err = tx.Count(&total).Error
 	if err != nil {
 		return nil, 0, errors.New("查询数据数量失败")
@@ -29,7 +30,13 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 }
 
 func (api ApiService) UpdateApi(a system.SysApi) error {
-	return global.GRA_DB.Where("id = ?", a.Id).Updates(a).Error
+	return global.GRA_DB.Model(&a).Where("id = ?", a.Id).Updates(map[string]any{
+		"api_group":   a.ApiGroup,
+		"api_path":    a.ApiPath,
+		"api_comment": a.ApiComment,
+		"required":    a.Required,
+		"api_method":  a.ApiMethod,
+	}).Error
 }
 
 func (api ApiService) DeleteApi(ids []int) error {

@@ -1,5 +1,5 @@
 import { apiRequest } from "@/apis/index.ts";
-import { GetList, PageInfo } from "@/apis/baseApis.ts";
+import { GetList, SearchQuery } from "@/apis/baseApis.ts";
 
 
 export interface User {
@@ -13,9 +13,7 @@ export interface User {
   updatedAt? : string
 }
 
-export type SearchUsersQuery = User & PageInfo
-
-export function getUsers(query : SearchUsersQuery) {
+export function getUsers(query : SearchQuery<User>) {
   return apiRequest<GetList<User>>({
     url : "/users",
     method : "POST",

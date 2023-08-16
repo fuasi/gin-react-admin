@@ -8,6 +8,7 @@ import (
 	"server/models/common/response"
 	"server/models/system"
 	"server/models/system/request"
+	"server/utils"
 	"time"
 )
 
@@ -200,13 +201,14 @@ func (u *UserApi) GetSelfInfo(c *gin.Context) {
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @Router /api/user [GET]
 func (u *UserApi) GetRouter(c *gin.Context) {
-	routers, err := userService.GetRouter()
+	routers, err := userService.GetRouter(c.GetUint("userId"))
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		global.GRA_LOG.Error("查询路由失败:", err.Error())
 		return
 	}
-	response.SuccessWithData(c, routers)
+	tree := utils.GetRouterTree(&routers)
+	response.SuccessWithData(c, tree)
 }
 
 // UploadFile

@@ -10,7 +10,7 @@ import { notificationStorage } from "@/store/notificationStorage.ts";
 import { getSelfInfo } from "@/apis/userApis.ts";
 import { userStorage } from "@/store/userStorage.ts";
 
-export type MenuItem = Required<MenuProps>['items'][number] & { hidden : boolean };
+export type MenuItem = Required<MenuProps>['items'][number] & { hidden : boolean, id : number };
 
 const App = () => {
   const [routers, setRouters] = useState<RouteObject[]>()

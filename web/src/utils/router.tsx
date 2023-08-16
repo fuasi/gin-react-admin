@@ -55,21 +55,22 @@ export const HandleRouters = (props : { handleRouters : RouterResponse[] | undef
   }
   return routersChildren
 }
-const getItem = (label : string, hidden : boolean, key? : React.Key | null, icon? : React.ReactNode, children? : MenuItem[]) : MenuItem => {
-  return { key, icon, children, label, hidden } as MenuItem;
+const getItem = (label : string, hidden : boolean, key? : React.Key | null, icon? : React.ReactNode, children? : MenuItem[], id ? : number) : MenuItem => {
+  return { id, key, icon, children, label, hidden } as MenuItem;
 }
 // 组装菜单
 export const HandleRouterInfo = (props : { handleRouterInfo : RouterResponse[] }) => {
   const routersChildren : MenuItem[] = []
   if (props.handleRouterInfo) {
     for (const handleRouter of props.handleRouterInfo) {
-      const router : MenuItem = getItem(handleRouter.name,
+      const router : MenuItem = getItem(
+        handleRouter.name,
         handleRouter.hidden,
         handleRouter.path,
         IconComponent({ icon : handleRouter.icon }),
         handleRouter.children ? HandleRouterInfo({
           handleRouterInfo : handleRouter.children,
-        }) : undefined)
+        },) : undefined, handleRouter.id)
       routersChildren.push(router)
     }
   }

@@ -1,6 +1,6 @@
 import { Badge, Button, Form, Input, InputNumber, Popconfirm, Select, Space, Table, TableProps } from "antd";
 import { PageInfo } from "@/apis/baseApis.ts";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableModal, { UploadComponentProp } from "@/components/TableModal.tsx";
 import { ColumnGroupType, ColumnType } from "antd/es/table";
 import {
@@ -10,7 +10,8 @@ import {
   MinusOutlined,
   PlusOutlined,
   ReloadOutlined,
-  SearchOutlined
+  SearchOutlined,
+  SettingOutlined
 } from "@ant-design/icons";
 import { HTTPResponse } from "@/apis";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT } from "@/config";
@@ -25,6 +26,7 @@ interface TableHookProps<T> {
   handleDeleteData : (ids : number[], record? : T) => void;
   columns : InputAndColumns<T>[];
   handleUserResetPassword? : (record : T) => void;
+  handleRoleAuthority? : (record : T) => void
 }
 
 interface TableHookResult {
@@ -44,7 +46,7 @@ export type InputAndColumns<T> =
   isSearch? : boolean,
   searchIsOption? : {
     label : string,
-    value : string | number
+    value : string | number | boolean
   }[],
   isNumber? : boolean
 }
@@ -58,6 +60,7 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
     handleFindData,
     handleDeleteData,
     getUpdateData,
+    handleRoleAuthority,
     handleUserResetPassword,
     columns
   } = props
@@ -198,6 +201,8 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
               key : 'action',
               width : 256,
               render : (_, record) => (<Space size="middle">
+                { handleRoleAuthority ? <a onClick={ () => handleRoleAuthority(record) }><SettingOutlined
+                  className={ 'mr-2' }/>权限</a> : <></> }
                 <a onClick={ () => handleOpenUpdate(record) }><EditOutlined
                   className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.UPDATE_TEXT }</a>
                 <Popconfirm
@@ -211,19 +216,21 @@ export const useTable = <T extends object>(props : TableHookProps<T>) : TableHoo
                     className={ 'mr-2' }/>
                     { GLOBAL_TABLE_TEXT.DELETE_TEXT }</a>
                 </Popconfirm>
-                { handleUserResetPassword ?
-                  <Popconfirm
-                    title={ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE }
-                    description={ GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT) }
-                    onConfirm={ () => handleUserResetPassword(record) }
-                    okText={ GLOBAL_SYSTEM_TEXT.ACTIVE_SURE }
-                    cancelText={ GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL }
-                  >
-                    <a><KeyOutlined
-                      className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT }
-                    </a>
-                  </Popconfirm>
-                  : <></> }
+                {
+                  handleUserResetPassword ?
+                    <Popconfirm
+                      title={ GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE }
+                      description={ GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT) }
+                      onConfirm={ () => handleUserResetPassword(record) }
+                      okText={ GLOBAL_SYSTEM_TEXT.ACTIVE_SURE }
+                      cancelText={ GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL }
+                    >
+                      <a><KeyOutlined
+                        className={ 'mr-2' }/>{ GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT }
+                      </a>
+                    </Popconfirm>
+                    : <></>
+                }
               </Space>)
             }] : [] }
             dataSource={ dataSource }>

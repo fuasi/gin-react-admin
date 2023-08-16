@@ -64,20 +64,15 @@ func (UserService *UserService) GetSelfInfo(uid uint) (s system.SysUserPublic, e
 	err = global.GRA_DB.Where("id = ?", uid).Find(&s).Error
 	return s, err
 }
-func (UserService *UserService) GetRouter() (routers []system.Router, err error) {
-	err = global.GRA_DB.Find(&routers).Order("id,router_order").Error
-	//-------- 返回组装路由后返回给前端 --------
-	routerMap := map[int][]system.Router{}
-	for _, router := range routers {
-		routerMap[router.ParentId] = append(routerMap[router.ParentId], router)
+func (UserService *UserService) GetRouter(id uint) (routers []system.Router, err error) {
+	var role system.SysRole
+	err = global.GRA_DB.Where("id = ?", id).Select("allow_router_id").Find(&role).Error
+	if err != nil {
+		return nil, err
 	}
-	var routerTree []system.Router
-	for _, router := range routers {
-		router.Children = routerMap[router.Id]
-		if router.ParentId == -1 {
-			routerTree = append(routerTree, router)
-		}
+	err = global.GRA_DB.Model(&routers).Where("id = any (?)", role.AllowRouterId).Find(&routers).Order("id,router_order").Error
+	if err != nil {
+		return nil, err
 	}
-	//-------- 返回组装路由后返回给前端 --------
-	return routerTree, err
+	return routers, err
 }

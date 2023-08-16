@@ -6,6 +6,7 @@ export interface Api {
   apiPath : string,
   apiMethod : string,
   apiGroup : string,
+  required : boolean
 }
 
 export function getApis(query : SearchQuery<Api>) {

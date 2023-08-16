@@ -9,8 +9,6 @@ type UserRouter struct {
 }
 
 func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
-	{
-	}
 	userRouter := Router.Use()
 	userApi := v1.SystemApisApp.SystemApis.UserApi
 	{

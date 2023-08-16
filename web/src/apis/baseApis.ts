@@ -28,6 +28,7 @@ export interface RouterResponse {
   routerOrder : number
   children? : RouterResponse[]
   hidden : boolean
+  required : boolean
 }
 
 export function login(query : LoginQuery) {

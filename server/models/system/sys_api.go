@@ -9,6 +9,7 @@ type SysApi struct {
 	ApiComment string `json:"apiComment,omitempty"`
 	ApiMethod  string `json:"apiMethod,omitempty"`
 	ApiGroup   string `json:"apiGroup,omitempty"`
+	Required   bool   `json:"required"`
 }
 
 func (SysApi) TableName() string {
