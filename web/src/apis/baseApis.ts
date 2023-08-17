@@ -1,5 +1,4 @@
 import { apiRequest } from './index.ts';
-import { User } from "@/apis/userApis.ts";
 
 export type SearchQuery<T> = T & PageInfo
 
@@ -32,7 +31,7 @@ export interface RouterResponse {
 }
 
 export function login(query : LoginQuery) {
-  return apiRequest<{ user : User, token : string }>({
+  return apiRequest<{ token : string }>({
     url : '/login',
     method : 'POST',
     data : query

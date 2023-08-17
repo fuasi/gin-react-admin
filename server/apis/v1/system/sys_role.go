@@ -102,8 +102,9 @@ func (r *RoleApi) GetRoleMenuTree(c *gin.Context) {
 	}
 	routerTree := utils.GetRouterTree(&tree)
 	response.SuccessWithData(c, roleResponse.RouterTreeResponse{
-		Selected: role.AllowRouterId,
-		Routers:  routerTree,
+		Selected:        role.AllowRouterId,
+		Routers:         routerTree,
+		DefaultRouterId: role.DefaultRouterId,
 	})
 }
 func (r *RoleApi) GetRoleAuthority(c *gin.Context) {

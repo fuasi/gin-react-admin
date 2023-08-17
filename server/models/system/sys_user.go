@@ -18,6 +18,7 @@ type SysUserPublic struct {
 	Enable   int    `json:"enable,omitempty"`      //账号是否启用(启用:1,不启用:-1)
 	RoleId   uint   `json:"roleId,omitempty"`
 	RoleName string `json:"roleName,omitempty" gorm:"-"`
+	Path     string `json:"path,omitempty" gorm:"-"`
 	common.BaseModel
 }
 

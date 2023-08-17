@@ -17,7 +17,7 @@ export const LazyComponent = (url : string) => {
   </Suspense>
 }
 
-const IconComponent = (props : { icon : string }) => {
+export const IconComponent = (props : { icon : string }) => {
   const { icon } = props
   const antIcon : { [key : string] : any } = icons
   return createElement(antIcon[icon])

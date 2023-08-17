@@ -9,27 +9,33 @@ import { tokenStore } from '@/store/localstrageStore'
 import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.tsx";
 import { GLOBAL_LOGIN_TEXT } from "@/config";
 import { userStorage } from "@/store/userStorage.ts";
+import { getSelfInfo } from "@/apis/userApis.ts";
 
 const LoginForm = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
   const navigate = useNavigate()
   useEffect(() => {
-    checkLogin().then(handleGetRouter).then(() => navigate('/dashboard'))
+    checkLogin().then(handleGetRouter).then(() => navigate(userStorage.user.path))
   }, [])
   const handleGetRouter = async () => {
     const { data } = await getRouter()
     routerStorage.routers = HandleRouters({ handleRouters : data })
     routerStorage.routerInfo = HandleRouterInfo({ handleRouterInfo : data })
   }
+
+  const setLoginUser = async () => {
+    const { data } = await getSelfInfo()
+    userStorage.user = data
+  }
   const onFinish = async (values : LoginQuery) => {
     try {
       setButtonLoading(true)
       const { data } = await login(values)
       tokenStore.token = data.token
-      userStorage.user = data.user
+      await setLoginUser()
       await handleGetRouter()
       notificationLoginSuccess(GLOBAL_LOGIN_TEXT.LOGIN_SUCCESS)
-      navigate('/dashboard')
+      navigate(userStorage.user.path)
     } catch (e) {
       notificationLoginFail(GLOBAL_LOGIN_TEXT.LOGIN_FAIL)
     } finally {

@@ -13,6 +13,7 @@ export interface Role {
 export interface RoleRouterTree {
   routers : RouterResponse[]
   selected : number[]
+  defaultRouterId : number
 }
 
 export interface RoleApis {

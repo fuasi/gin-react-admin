@@ -25,14 +25,19 @@ const RoleView = () => {
   const [checkMenu, setCheckMenu] = useState(false)
   const [data, setData] = useState<GetList<Role>>({ list : [], total : 0 })
   const [drawerOpen, setDrawerOpen] = useState({ isOpen : false, roleId : -1 })
-  const [roleRouterTree, setRoleRouterTree] = useState<RoleRouterTree>({ routers : [], selected : [] })
+  const [roleRouterTree, setRoleRouterTree] = useState<RoleRouterTree>({
+    routers : [],
+    selected : [],
+    defaultRouterId : 0
+  })
   const [roleAuthority, setRoleAuthority] = useState<RoleApis>({ apis : [], selected : [] })
   const [checkedKeys, setCheckedKeys] = useState<CheckedKey>({ keys : [], parent : [] });
   const [checkedAuthorityKeys, setCheckedAuthorityKeys] = useState<Key[]>([]);
   const tabItems : TabsProps['items'] = [{
     key : "menu",
     label : "菜单",
-    children : <Menu setCheckedKeys={ setCheckedKeys } checkedKeys={ checkedKeys } checkMenu={ checkMenu }
+    children : <Menu setRoleRouterTree={ setRoleRouterTree } setCheckedKeys={ setCheckedKeys }
+                     checkedKeys={ checkedKeys } checkMenu={ checkMenu }
                      setCheckMenu={ () => setCheckMenu(false) }
                      roleRouterTree={ roleRouterTree }/>
   }, {
@@ -90,7 +95,6 @@ const RoleView = () => {
   const handleGetRouters = async (id : number) => {
     const { data } = await getMenu(id)
     setRoleRouterTree(data)
-    console.log(data)
     setCheckedKeys({ ...checkedKeys, keys : data.selected })
   }
 
@@ -121,7 +125,7 @@ const RoleView = () => {
       roleName : "",
       allowRouterId : [...checkedKeys.keys, ...checkedKeys.parent] as number[],
       allowApiId : checkedAuthorityKeys.filter(item => typeof item === "number") as number[],
-      defaultRouterId : 0
+      defaultRouterId : roleRouterTree.defaultRouterId
     })
     notificationActiveSuccess("更新权限")
     onClose()

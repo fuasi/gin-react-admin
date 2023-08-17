@@ -39,7 +39,7 @@ func (RoleService *RoleService) InsertRole(role system.SysRole) error {
 	return global.GRA_DB.Select("role_name").Create(&role).Error
 }
 func (RoleService *RoleService) GetRoleMenuTree(id string) (routers []system.Router, role system.SysRole, err error) {
-	err = global.GRA_DB.Where("id = ?", id).Select("allow_router_id").Find(&role).Error
+	err = global.GRA_DB.Where("id = ?", id).Select("allow_router_id,default_router_id").Find(&role).Error
 	if err != nil {
 		return nil, role, err
 	}

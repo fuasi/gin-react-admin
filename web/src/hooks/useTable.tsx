@@ -34,7 +34,10 @@ interface TableHookResult {
 }
 
 type InputType = 'Switch' | 'Select'
-
+export type SearchIsOptionType = {
+  label : string,
+  value : string | number | boolean
+}[]
 export type InputAndColumns<T> =
   Pick<(ColumnGroupType<T> | ColumnType<T>), keyof (ColumnType<T> | ColumnGroupType<T>)>
   & {
@@ -44,10 +47,7 @@ export type InputAndColumns<T> =
   required? : boolean,
   isShow? : boolean,
   isSearch? : boolean,
-  searchIsOption? : {
-    label : string,
-    value : string | number | boolean
-  }[],
+  searchIsOption? : SearchIsOptionType,
   isNumber? : boolean
 }
 
