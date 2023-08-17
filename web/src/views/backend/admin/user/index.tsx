@@ -1,5 +1,5 @@
-import { Image, message, Switch as AntdSwitch } from 'antd';
-import { useState } from 'react';
+import { Image, message, Switch as AntdSwitch, Tag } from 'antd';
+import { useEffect, useState } from 'react';
 import {
   deleteUser,
   getUserById,
@@ -11,19 +11,33 @@ import {
   User
 } from '@/apis/userApis.ts';
 import { useLoading } from '@/hooks/useLoading'
-import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
+import { InputAndColumns, SearchIsOptionType, useTable } from "@/hooks/useTable.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 import { GLOBAL_SYSTEM_TEXT, GLOBAL_TABLE_TEXT, GLOBAL_USER_TEXT } from "@/config";
 import AvatarUpload from "@/components/AvatarUpload.tsx";
 import { GetList, SearchQuery } from "@/apis/baseApis.ts";
+import { getAllRole } from "@/apis/roleApis.ts";
 
 type AvatarUploadProps = { upload : { file : File, avatarURL : string } }
 const UserComponent = () => {
   const { loading, withLoading } = useLoading()
   const [data, setData] = useState<GetList<User>>({ list : [], total : 0 })
   const [messageApi, contextHolder] = message.useMessage()
+  const [roleMap, setRoleMap] = useState(new Map<number, string>())
   const { withNotification } = useSystemActiveNotification()
-
+  const [roles, setRoles] = useState<SearchIsOptionType>([])
+  useEffect(() => {
+    getAllRole().then(res => {
+      const roles = new Map<number, string>()
+      const initRoles : SearchIsOptionType = []
+      for (const role of res.data) {
+        initRoles.push({ label : role.roleName, value : role.id })
+        roles.set(role.id, role.roleName)
+      }
+      setRoleMap(roles)
+      setRoles(initRoles)
+    })
+  }, [])
   const handleFindUsers = async (page : SearchQuery<User>) => {
     await withLoading(async () => {
       const { data } = await getUsers(page)
@@ -75,6 +89,17 @@ const UserComponent = () => {
       isSearch : true
     },
     {
+      title : "角色",
+      dataIndex : "roleId",
+      width : 64,
+      align : "center",
+      render : (_, record) => {
+        return <Tag color={ "processing" }>{ roleMap.get(record.roleId) }</Tag>
+      },
+      inputType : "Select",
+      searchIsOption : roles
+    },
+    {
       title : GLOBAL_USER_TEXT.USER_ENABLE,
       dataIndex : 'enable',
       width : 64,
@@ -91,10 +116,9 @@ const UserComponent = () => {
       }, {
         label : "禁用",
         value : -1
-      }]
-    },
+      }],
+    }
   ]
-
   const handleAvatarUpload = async (file : File) => {
     const form = new FormData()
     form.append("file", file)

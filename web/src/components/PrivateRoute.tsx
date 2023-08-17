@@ -6,8 +6,9 @@ const PrivateRoute = ({ children } : { children : React.ReactNode }) => {
   const location = useLocation()
   if (!tokenStore.token) {
     return <Navigate replace to={ '/login' }/>
+  } else {
+    if (location.pathname === '/') return <Navigate to={ '/login' }/>
   }
-  if (location.pathname === '/') return <Navigate to={ '/dashboard' }/>
   return children
 }
 export default PrivateRoute

@@ -55,7 +55,6 @@ const RoleView = () => {
     width : 420,
     required : true,
     isSearch : true,
-    isNumber : true
   }]
   const handleFindData = async (query : SearchQuery<Role>) => {
     await withLoading(async () => {
@@ -122,7 +121,7 @@ const RoleView = () => {
       roleName : "",
       allowRouterId : [...checkedKeys.keys, ...checkedKeys.parent] as number[],
       allowApiId : checkedAuthorityKeys.filter(item => typeof item === "number") as number[],
-      defaultHome : 0
+      defaultRouterId : 0
     })
     notificationActiveSuccess("更新权限")
     onClose()

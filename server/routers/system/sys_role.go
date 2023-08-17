@@ -19,5 +19,6 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 		roleRouter.PUT("/role", roleApis.InsertRole)
 		roleRouter.GET("/routers/:id", roleApis.GetRoleMenuTree)
 		roleRouter.GET("/authority/:id", roleApis.GetRoleAuthority)
+		roleRouter.GET("/roles", roleApis.GetAllRole)
 	}
 }

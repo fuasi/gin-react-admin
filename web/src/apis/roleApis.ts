@@ -72,3 +72,10 @@ export function getAuthority(query : number) {
     method : "GET"
   })
 }
+
+export function getAllRole() {
+  return apiRequest<Role[]>({
+    url : "/roles",
+    method : "GET"
+  })
+}

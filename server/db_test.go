@@ -1,19 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"server/global"
-	"server/initialize"
-	"server/models/system"
 	"testing"
 )
 
 func TestDb(t *testing.T) {
-	initialize.InitEnter()
-	initialize.InitDataBase()
-	users := new([]system.SysUser)
-	global.GRA_DB.Where(system.SysUser{
-		SysUserPublic: system.SysUserPublic{Enable: true},
-	}).Find(&users)
-	fmt.Println(users)
+	var n, k int
+	n = 5
+	k = 2
+	var mp = make(map[int]bool)
+	var start = 0
+	for !mp[start*k] {
+		start *= k + 1
+		mp[start] = true
+	}
+	var ans []int
+	for i := 1; i <= n; i++ {
+		if !mp[i] {
+			ans = append(ans, i)
+		}
+	}
+
 }

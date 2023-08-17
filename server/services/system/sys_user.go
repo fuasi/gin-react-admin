@@ -20,13 +20,14 @@ func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system
 }
 
 func (UserService *UserService) UpdateUserById(u system.SysUser) error {
-	return global.GRA_DB.Model(&system.SysUser{}).Select("avatar", "nickname", "phone", "enable").
+	return global.GRA_DB.Model(&system.SysUser{}).Select("avatar", "nickname", "phone", "enable", "role_id").
 		Where("id = ?", u.Id).
 		Updates(map[string]interface{}{
 			"avatar":   u.Avatar,
 			"nickname": u.Nickname,
 			"phone":    u.Phone,
 			"enable":   u.Enable,
+			"role_id":  u.RoleId,
 		}).Error
 }
 
@@ -79,7 +80,11 @@ func (UserService *UserService) GetSelfInfo(uid uint) (user system.SysUserPublic
 }
 func (UserService *UserService) GetRouter(id uint) (routers []system.Router, err error) {
 	var role system.SysRole
-	err = global.GRA_DB.Where("id = ?", id).Select("allow_router_id").Find(&role).Error
+	var user system.SysUser
+	if err = global.GRA_DB.Select("role_id").Where("id = ?", id).First(&user).Error; err != nil {
+		return routers, err
+	}
+	err = global.GRA_DB.Where("id = ?", user.RoleId).Select("allow_router_id").Find(&role).Error
 	if err != nil {
 		return nil, err
 	}

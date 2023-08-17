@@ -19,8 +19,7 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 		utils.SearchWhere("api_path", request.ApiPath, true),
 		utils.SearchWhere("api_group", request.ApiGroup, true),
 		utils.SearchWhere("api_comment", request.ApiComment, true),
-		utils.SearchWhere("api_method", request.ApiMethod, false),
-		utils.SearchWhere("required", request.Required, false))
+		utils.SearchWhere("api_method", request.ApiMethod, false))
 	err = tx.Count(&total).Error
 	if err != nil {
 		return nil, 0, errors.New("查询数据数量失败")

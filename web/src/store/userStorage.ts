@@ -5,6 +5,7 @@ const userStorage = observable<{ user : User }>({
   user : {
     id : -1,
     avatar : '',
+    path : ''
   }
 })
 

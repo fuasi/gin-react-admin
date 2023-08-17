@@ -118,3 +118,12 @@ func (r *RoleApi) GetRoleAuthority(c *gin.Context) {
 		Apis:     apis,
 	})
 }
+func (r *RoleApi) GetAllRole(c *gin.Context) {
+	roles, err := roleService.GetAllRole()
+	if err != nil {
+		global.GRA_LOG.Error("获取全部角色失败:", err.Error())
+		response.Error(c)
+		return
+	}
+	response.SuccessWithData(c, roles)
+}

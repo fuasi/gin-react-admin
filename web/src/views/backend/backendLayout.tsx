@@ -7,8 +7,9 @@ import './backendLayout.scss'
 import Header from '@/views/backend/components/Header.tsx';
 import { useKeyCounter } from '@/hooks/useKeyCounter'
 import { routerStorage } from "@/store/routerStorage.ts";
-import { historyStore } from "@/store/localstrageStore.ts";
+import { deleteHistory, historyStore } from "@/store/localstrageStore.ts";
 import zhCN from "antd/es/locale/zh_CN";
+import { userStorage } from "@/store/userStorage.ts";
 
 const { Sider } = Layout;
 export type TabItem = { key : string }
@@ -28,24 +29,31 @@ const BackendLayout = () => {
     const cache = getBreadcrumbCache()
     setBreadcrumbCache(cache)
     if (tabItem.length <= 0) {
-      if (historyStore.history) {
+      if (historyStore.history?.length >= 1) {
         const history : Tab[] = []
         for (const item of historyStore.history) {
-          const { title, path, icon } = cache.get(item.key)!;
-          history.push({ label : <span>{ icon }{ title }</span>, key : path })
+          if (cache.get(item.key)) {
+            const { title, path, icon } = cache.get(item.key)!;
+            history.push({ label : <span>{ icon }{ title }</span>, key : path })
+            continue
+          }
+          deleteHistory()
+          navigate(userStorage.user.path)
         }
         setTabItem(history)
         setCurrentActiveTab(location.hash.split('#')[1])
         return
       }
-      const { title, path, icon } = cache.get(location.hash.split('#')[1])!;
-      historyStore.history = [{ key : path }]
-      setTabItem([{
-        label : <span>{ icon }{ title }</span>,
-        key : path
-      }])
-      setCurrentActiveTab(path)
-      navigate(path)
+      if (cache.get(location.hash.split('#')[1])) {
+        const { title, path, icon } = cache.get(location.hash.split('#')[1])!;
+        historyStore.history = [{ key : path }]
+        setTabItem([{
+          label : <span>{ icon }{ title }</span>,
+          key : path
+        }])
+        setCurrentActiveTab(path)
+        navigate(path)
+      }
     }
   }, [location.pathname])
   const initBreadcrumbCacheChildren = (children : MenuItems[], cache : BreadcrumbCache) => {

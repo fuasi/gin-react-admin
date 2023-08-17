@@ -65,7 +65,6 @@ const ApiView = () => {
       align : "center",
       inputType : "Select",
       required : true,
-      isSearch : true,
       searchIsOption : [{ label : "必选", value : true }, { label : "非必选", value : false }],
       render : (record) => {
         return <>{ record ? <Tag color={ "error" }>必选</Tag> : <Tag color={ "processing" }>非必选</Tag> }</>
