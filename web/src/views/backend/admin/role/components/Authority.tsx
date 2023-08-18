@@ -52,6 +52,7 @@ const Authority = ({ roleAuthority, checkedKeys, setCheckedKeys } : RoleAuthorit
         </div>
         }
         fieldNames={ { title : "apiComment", key : "id" } }
+        selectable={ false }
         defaultExpandAll={ true }
         defaultExpandParent={ true }
         autoExpandParent={ true }
