@@ -88,7 +88,7 @@ func (UserService *UserService) GetRouter(id uint) (routers []system.Router, err
 	if err != nil {
 		return nil, err
 	}
-	err = global.GRA_DB.Model(&routers).Where("id = any (?)", role.AllowRouterId).Find(&routers).Order("id,router_order").Error
+	err = global.GRA_DB.Model(&routers).Where("id = any (?)", role.AllowRouterId).Order("id,router_order").Find(&routers).Error
 	if err != nil {
 		return nil, err
 	}
