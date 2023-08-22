@@ -17,14 +17,14 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 	tx := global.GRA_DB.Model(&apis).Scopes(
 		utils.SearchWhere("id", request.Id, false),
 		utils.SearchWhere("api_path", request.ApiPath, true),
-		utils.SearchWhere("api_group", request.ApiGroup, true),
+		utils.SearchWhere("api_group_id", request.ApiGroupId, false),
 		utils.SearchWhere("api_comment", request.ApiComment, true),
 		utils.SearchWhere("api_method", request.ApiMethod, false))
 	err = tx.Count(&total).Error
 	if err != nil {
 		return nil, 0, errors.New("查询数据数量失败")
 	}
-	err = tx.Order("id").Offset(offset).Limit(limit).Find(&apis).Error
+	err = tx.Debug().Model(&apis).Order("id").Joins("right join gra_routers on gra_routers.id = gra_apis.api_group_id").Select("gra_apis.*,gra_routers.name as api_group").Offset(offset).Limit(limit).Find(&apis).Error
 	return apis, total, err
 }
 

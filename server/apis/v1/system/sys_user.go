@@ -24,7 +24,7 @@ type UserApi struct {
 // @Success 20000 {object} response.Response{code=int,data=system.SysUserPublic,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/user/:id [GET]
+// @SysRouter /api/user/:id [GET]
 func (u *UserApi) GetUserById(c *gin.Context) {
 	var user system.SysUser
 	err := c.ShouldBindUri(&user)
@@ -49,7 +49,7 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,data=string,msg=string} "上传成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/user [PATCH]
+// @SysRouter /api/user [PATCH]
 func (u *UserApi) UpdateUserById(c *gin.Context) {
 	var user system.SysUser
 	err := c.ShouldBind(&user)
@@ -74,7 +74,7 @@ func (u *UserApi) UpdateUserById(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/user [DELETE]
+// @SysRouter /api/user [DELETE]
 func (u *UserApi) DeleteUserById(c *gin.Context) {
 	var ids []uint
 	err := c.ShouldBind(&ids)
@@ -99,7 +99,7 @@ func (u *UserApi) DeleteUserById(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,data=UserResponse.GetUserListResponse,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/users [POST]
+// @SysRouter /api/users [POST]
 func (u *UserApi) GetUserList(c *gin.Context) {
 	var page request.SearchUser
 	err := c.ShouldBind(&page)
@@ -127,7 +127,7 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,data=UserResponse.GetUserListResponse,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/check [POST]
+// @SysRouter /api/check [POST]
 func (u *UserApi) CheckLogin(c *gin.Context) {
 	response.Success(c)
 }
@@ -154,7 +154,7 @@ func (u *UserApi) InsertUser(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,data=string,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/user/:id [PATCH]
+// @SysRouter /api/user/:id [PATCH]
 func (u *UserApi) ResetUserPassword(c *gin.Context) {
 	var user system.SysUser
 	if err := c.ShouldBindUri(&user); err != nil {
@@ -182,7 +182,7 @@ func (u *UserApi) ResetUserPassword(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,data=system.SysUserPublic,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/user [GET]
+// @SysRouter /api/user [GET]
 func (u *UserApi) GetSelfInfo(c *gin.Context) {
 	id := c.GetUint("userId")
 	user, path, err := userService.GetSelfInfo(id)
@@ -200,10 +200,10 @@ func (u *UserApi) GetSelfInfo(c *gin.Context) {
 // @Tags UserApis
 // @Summary 获取路由树
 // @Produce json
-// @Success 20000 {object} response.Response{code=int,data=[]system.Router,msg=string} "成功"
+// @Success 20000 {object} response.Response{code=int,data=[]system.SysRouter,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/user [GET]
+// @SysRouter /api/user [GET]
 func (u *UserApi) GetRouter(c *gin.Context) {
 	routers, err := userService.GetRouter(c.GetUint("userId"))
 	if err != nil {
@@ -224,7 +224,7 @@ func (u *UserApi) GetRouter(c *gin.Context) {
 // @Success 20000 {object} response.Response{code=int,data=string,msg=string} "上传成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/file [POST]
+// @SysRouter /api/file [POST]
 func (u *UserApi) UploadFile(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {

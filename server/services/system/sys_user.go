@@ -71,14 +71,14 @@ func (UserService *UserService) GetSelfInfo(uid uint) (user system.SysUserPublic
 	if err != nil {
 		return user, path, err
 	}
-	var router system.Router
+	var router system.SysRouter
 	err = global.GRA_DB.Select("path").Where("id = ?", role.DefaultRouterId).First(&router).Error
 	if err != nil {
 		return user, router.Path, err
 	}
 	return user, router.Path, err
 }
-func (UserService *UserService) GetRouter(id uint) (routers []system.Router, err error) {
+func (UserService *UserService) GetRouter(id uint) (routers []system.SysRouter, err error) {
 	var role system.SysRole
 	var user system.SysUser
 	if err = global.GRA_DB.Select("role_id").Where("id = ?", id).First(&user).Error; err != nil {

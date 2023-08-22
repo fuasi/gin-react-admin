@@ -21,7 +21,7 @@ type BaseApi struct {
 // @Success 20000 {object} response.Response{code=int,data=baseResponse.LoginResponse,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @Router /api/login [post]
+// @SysRouter /api/login [post]
 func (b *BaseApi) Login(c *gin.Context) {
 	var l = request.Login{}
 	err := c.ShouldBindJSON(&l)

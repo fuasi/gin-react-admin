@@ -92,3 +92,11 @@ func (api *SysApiApi) InsertApi(c *gin.Context) {
 	}
 	response.Success(c)
 }
+
+func (api *SysApiApi) GetApiGroupOptions(c *gin.Context) {
+
+}
+
+func (api *SysApiApi) GetAllowUserApi(c *gin.Context) {
+
+}

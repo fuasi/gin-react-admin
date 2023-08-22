@@ -7,6 +7,7 @@ type ServiceGroup struct {
 	system.BaseService
 	system.ApiService
 	system.RoleService
+	system.RouterService
 }
 
 var ServiceGroupApp = new(ServiceGroup)
