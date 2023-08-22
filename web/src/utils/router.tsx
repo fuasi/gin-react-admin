@@ -11,7 +11,9 @@ import { MenuItem } from "@/App.tsx";
 
 
 export const LazyComponent = (url : string) => {
-  const Component = lazy(() => import(url))
+  const components : Record<string, any> = import.meta.glob("../views/**/index.tsx")
+  // const Component = lazy(() => import(url))
+  const Component = lazy(components[`${ url }/index.tsx`])
   return <Suspense fallback={ <RouterLoading/> }>
     <Component/>
   </Suspense>
