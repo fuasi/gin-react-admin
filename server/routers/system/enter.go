@@ -5,4 +5,5 @@ type SysRouterGroup struct {
 	BaseRouter
 	ApiRouter
 	RoleRouter
+	RoutersRouter
 }

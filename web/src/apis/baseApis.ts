@@ -28,6 +28,7 @@ export interface RouterResponse {
   children? : RouterResponse[]
   hidden : boolean
   required : boolean
+  isApiGroup : number
 }
 
 export function login(query : LoginQuery) {

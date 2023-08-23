@@ -29,6 +29,7 @@ func InitRouter() *gin.Engine {
 		systemRouter.InitUserRouter(PrivateRouter)
 		systemRouter.InitApiRouter(PrivateRouter)
 		systemRouter.InitRoleRouter(PrivateRouter)
+		systemRouter.InitRoutersRouter(PrivateRouter)
 	}
 	return Router
 }

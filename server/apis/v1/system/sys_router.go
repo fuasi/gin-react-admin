@@ -13,7 +13,7 @@ type RouterApi struct {
 
 func (api *RouterApi) GetRouterList(c *gin.Context) {
 	var page request.SearchRouter
-	err := c.ShouldBind(page)
+	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamError(c)
 		return

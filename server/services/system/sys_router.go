@@ -18,11 +18,11 @@ func (r *RouterService) GetRouterList(page request.SearchRouter) (routers []syst
 		utils.SearchWhere("path", page.Path, true),
 		utils.SearchWhere("is_api_group", page.IsApiGroup, false),
 	)
-	err = db.Count(&total).Error
+	err = db.Model(&routers).Count(&total).Error
 	if err != nil {
 		return routers, total, err
 	}
-	err = db.Limit(limit).Offset(offset).Find(&routers).Error
+	err = db.Limit(limit).Offset(offset).Order("id").Find(&routers).Error
 	return routers, total, err
 }
 
