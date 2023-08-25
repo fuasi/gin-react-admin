@@ -2,7 +2,7 @@ import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
 import { GetList, RouterResponse, SearchQuery } from "@/apis/baseApis.ts";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { useState } from "react";
-import { getRouterList } from "@/apis/routerApis.ts";
+import { getRouterList, updateRouter } from "@/apis/routerApis.ts";
 import { IconComponent } from "@/utils/router.tsx";
 
 const RouterView = () => {
@@ -80,8 +80,8 @@ const RouterView = () => {
     })
 
   }
-  const getUpdateData = () => {
-
+  const getUpdateData = async (router : RouterResponse) => {
+    await updateRouter(router)
   }
   const handleUpdateData = () => {
 
