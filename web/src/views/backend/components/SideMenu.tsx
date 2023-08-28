@@ -5,6 +5,7 @@ import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/
 import { routerStorage } from "@/store/routerStorage.ts";
 import { MenuItem } from "@/App.tsx";
 
+
 interface SideMenuComponentProps {
   setBreadcrumb : React.Dispatch<React.SetStateAction<Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[] | undefined>>;
   addTabs : (path : string) => void;
@@ -74,7 +75,6 @@ const SideMenu = (props : SideMenuComponentProps) => {
     cacheOpenKeys.push(cachePath)
     return cacheOpenKeys
   }, [location.pathname])
-
   return (
     <Menu
       theme="dark"
