@@ -2,8 +2,11 @@ import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
 import { GetList, RouterResponse, SearchQuery } from "@/apis/baseApis.ts";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { useState } from "react";
-import { getRouterList, updateRouter } from "@/apis/routerApis.ts";
+import { findRouterById, getRouterList, insertRouter, updateRouter } from "@/apis/routerApis.ts";
 import { IconComponent } from "@/utils/router.tsx";
+import { Api, deleteApi } from "@/apis/apiApis.ts";
+import api from "@/views/backend/admin/api";
+import { Tag } from "antd";
 
 const RouterView = () => {
   const { withLoading, loading } = useLoading()
@@ -25,9 +28,8 @@ const RouterView = () => {
   }, {
     title : "菜单图标",
     dataIndex : 'icon',
-    width : 248,
+    width : 144,
     required : true,
-    align : "center",
     render : (_, record) => {
       return <IconComponent icon={ record.icon }/>
     }
@@ -45,27 +47,43 @@ const RouterView = () => {
   }, {
     title : "父节点",
     dataIndex : 'parentId',
-    width : 420,
+    width : 120,
     required : true,
   }, {
     title : "排序",
     dataIndex : 'routerOrder',
-    width : 240,
+    width : 120,
     required : true,
   }, {
-    title : "是否隐藏",
+    title : "选项隐藏",
     dataIndex : 'hidden',
-    width : 240,
+    width : 120,
     required : true,
+    inputType : "Select",
     searchIsOption : [{
+      label : "显示",
+      value : false
+    }, {
       label : "隐藏",
-      value : "false"
+      value : true
     }],
+    render : (_, record) =>
+      record.hidden ? <Tag color={ "error" }>隐藏</Tag> : <Tag color={ "blue" }>未隐藏</Tag>
   }, {
     title : "权限",
     dataIndex : 'required',
-    width : 240,
+    width : 120,
+    inputType : "Select",
+    searchIsOption : [{
+      label : "必选",
+      value : true
+    }, {
+      label : "非必选",
+      value : false
+    }],
     required : true,
+    render : (_, record) =>
+      record.required ? <Tag color={ "error" }>必选</Tag> : <Tag color={ "blue" }>非必选</Tag>
   }, {
     title : " Api组别",
     dataIndex : 'IsApiGroup',
@@ -80,17 +98,21 @@ const RouterView = () => {
     })
 
   }
-  const getUpdateData = async (router : RouterResponse) => {
+  const getUpdateData = (router : RouterResponse) => {
+    return findRouterById(router.id)
+  }
+  const handleUpdateData = async (router : RouterResponse) => {
     await updateRouter(router)
   }
-  const handleUpdateData = () => {
-
+  const handleInsertData = async (router : RouterResponse) => {
+    await insertRouter(router)
   }
-  const handleInsertData = () => {
-
-  }
-  const handleDeleteData = () => {
-
+  const handleDeleteData = async (ids : number[], router ? : RouterResponse) => {
+    if (router) {
+      await deleteApi([router.id])
+      return;
+    }
+    await deleteApi([...ids])
   }
   const { TableComponent } = useTable({
     columns,
