@@ -27,7 +27,7 @@ func (r *RouterService) GetRouterList(page request.SearchRouter) (routers []syst
 }
 
 func (r *RouterService) UpdateRouter(router system.SysRouter) error {
-	return global.GRA_DB.Where("id = ?", router.Id).Updates(&router).Error
+	return global.GRA_DB.Updates(&router).Error
 }
 func (r *RouterService) InsertRouter(router system.SysRouter) error {
 	return global.GRA_DB.Create(&router).Error
