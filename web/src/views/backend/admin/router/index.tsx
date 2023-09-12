@@ -1,16 +1,22 @@
-import { InputAndColumns, useTable } from "@/hooks/useTable.tsx";
+import { InputAndColumns, SearchIsOptionType, useTable } from "@/hooks/useTable.tsx";
 import { GetList, RouterResponse, SearchQuery } from "@/apis/baseApis.ts";
 import { useLoading } from "@/hooks/useLoading.ts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { findRouterById, getRouterList, insertRouter, updateRouter } from "@/apis/routerApis.ts";
 import { IconComponent } from "@/utils/router.tsx";
-import { Api, deleteApi } from "@/apis/apiApis.ts";
-import api from "@/views/backend/admin/api";
+import { deleteApi } from "@/apis/apiApis.ts";
 import { Tag } from "antd";
+import * as icons from '@ant-design/icons'
 
 const RouterView = () => {
   const { withLoading, loading } = useLoading()
   const [data, setData] = useState<GetList<RouterResponse>>({ list : [], total : 0 })
+  const [iconList, setIconList] = useState<SearchIsOptionType>([])
+  useEffect(() => {
+    const RouterIcons : SearchIsOptionType = []
+    for (const key in icons) RouterIcons.push({ label : <><IconComponent icon={ key }/> { key }</>, value : key })
+    setIconList(RouterIcons)
+  }, [])
   const columns : InputAndColumns<RouterResponse>[] = [{
     title : "ID",
     dataIndex : 'id',
@@ -30,6 +36,8 @@ const RouterView = () => {
     dataIndex : 'icon',
     width : 144,
     required : true,
+    inputType : "Select",
+    searchIsOption : iconList,
     render : (_, record) => {
       return <IconComponent icon={ record.icon }/>
     }
@@ -86,12 +94,24 @@ const RouterView = () => {
       record.required ? <Tag color={ "error" }>必选</Tag> : <Tag color={ "blue" }>非必选</Tag>
   }, {
     title : " Api组别",
-    dataIndex : 'IsApiGroup',
+    dataIndex : 'isApiGroup',
     width : 240,
+    inputType : "Select",
+    searchIsOption : [{
+      label : "组别",
+      value : 1
+    }, {
+      label : "非组别",
+      value : -1
+    }],
     required : true,
+    render : (_, record) => record.isApiGroup !== -1 ? <Tag color={ "error" }>组别</Tag> :
+      <Tag color={ "blue" }>非组别</Tag>
   }]
-
   const handleFindData = async (query : SearchQuery<RouterResponse>) => {
+    // for (const iconKey in icons) {
+    //   console.log(iconKey)
+    // }
     await withLoading(async () => {
       const { data } = await getRouterList(query)
       setData(data)
