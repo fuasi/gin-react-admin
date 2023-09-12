@@ -35,7 +35,7 @@ interface TableHookResult {
 
 type InputType = 'Switch' | 'Select'
 export type SearchIsOptionType = {
-  label : string,
+  label : React.ReactNode,
   value : string | number | boolean
 }[]
 export type InputAndColumns<T> =
