@@ -24,7 +24,7 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 	if err != nil {
 		return nil, 0, errors.New("查询数据数量失败")
 	}
-	err = tx.Debug().Model(&apis).Order("id").Joins("right join gra_routers on gra_routers.id = gra_apis.api_group_id").Select("gra_apis.*,gra_routers.name as api_group").Offset(offset).Limit(limit).Find(&apis).Error
+	err = tx.Model(&apis).Order("id").Joins("right join gra_routers on gra_routers.id = gra_apis.api_group_id where gra_routers.id = gra_apis.api_group_id").Select("gra_apis.*,gra_routers.name as api_group").Offset(offset).Limit(limit).Find(&apis).Error
 	return apis, total, err
 }
 
