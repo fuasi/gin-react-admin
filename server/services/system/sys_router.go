@@ -4,6 +4,7 @@ import (
 	"server/global"
 	"server/models/system"
 	"server/models/system/request"
+	response "server/models/system/response"
 	"server/utils"
 )
 
@@ -38,5 +39,10 @@ func (r *RouterService) DeleteRouter(id []int) error {
 }
 func (r *RouterService) FindRouterById(params system.SysRouter) (router system.SysRouter, err error) {
 	err = global.GRA_DB.Where("id = ?", params.Id).First(&router).Error
+	return router, err
+}
+
+func (r *RouterService) FindRouterGroup() (router []response.SysRouterGroup, err error) {
+	err = global.GRA_DB.Select("id,name").Where("is_api_group = ?", 1).Group("id,name").Find(&router).Error
 	return router, err
 }

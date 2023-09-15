@@ -1,10 +1,17 @@
 import { apiRequest } from './index.ts';
+import { SearchIsOptionType } from "@/hooks/useTable.tsx";
 
 export type SearchQuery<T> = T & PageInfo
 
 export interface GetList<T> {
   list : T[]
   total : number
+}
+
+export interface GetApiGroupList<T> {
+  list : T[]
+  total : number
+  apiGroupOptions : SearchIsOptionType
 }
 
 export interface PageInfo {

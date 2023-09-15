@@ -24,10 +24,16 @@ func (api *SysApiApi) GetApiList(c *gin.Context) {
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-
-	response.SuccessWithData(c, response.PageQueryResponse[system.SysApi]{
-		Total: total,
-		List:  list,
+	group, err := routerService.FindRouterGroup()
+	if err != nil {
+		global.GRA_LOG.Error("获取API分组信息失败:", err.Error())
+		response.ErrorWithMessage(c, err.Error())
+		return
+	}
+	response.SuccessWithData(c, response.PageQueryAndGroupResponse[system.SysApi]{
+		Total:           total,
+		List:            list,
+		ApiGroupOptions: group,
 	})
 }
 

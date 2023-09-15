@@ -30,11 +30,11 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 
 func (api ApiService) UpdateApi(a system.SysApi) error {
 	return global.GRA_DB.Model(&a).Where("id = ?", a.Id).Updates(map[string]any{
-		"api_group":   a.ApiGroup,
-		"api_path":    a.ApiPath,
-		"api_comment": a.ApiComment,
-		"required":    a.Required,
-		"api_method":  a.ApiMethod,
+		"api_group_id": a.ApiGroupId,
+		"api_path":     a.ApiPath,
+		"api_comment":  a.ApiComment,
+		"required":     a.Required,
+		"api_method":   a.ApiMethod,
 	}).Error
 }
 

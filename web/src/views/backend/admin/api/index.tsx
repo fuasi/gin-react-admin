@@ -3,11 +3,11 @@ import { Api, deleteApi, getApiById, getApis, insertApi, updateApi } from "@/api
 import { GLOBAL_API_TEXT } from "@/config";
 import { useState } from "react";
 import { useLoading } from "@/hooks/useLoading.ts";
-import { GetList, SearchQuery } from "@/apis/baseApis.ts";
+import { GetApiGroupList, SearchQuery } from "@/apis/baseApis.ts";
 import { Tag } from "antd";
 
 const ApiView = () => {
-  const [data, setData] = useState<GetList<Api>>({ list : [], total : 0 })
+  const [data, setData] = useState<GetApiGroupList<Api>>({ list : [], total : 0, apiGroupOptions : [] })
   const { withLoading, loading } = useLoading()
   const columns : InputAndColumns<Api>[] = [
     {
@@ -34,10 +34,13 @@ const ApiView = () => {
     },
     {
       title : GLOBAL_API_TEXT.API_GROUP,
-      dataIndex : 'apiGroup',
+      dataIndex : 'apiGroupId',
       width : 128,
       required : true,
-      isSearch : true
+      isSearch : true,
+      inputType : "Select",
+      render : (_, record) => <>{ record.apiGroup }</>,
+      searchIsOption : data.apiGroupOptions
     },
     {
       title : GLOBAL_API_TEXT.API_METHOD,
