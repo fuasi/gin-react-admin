@@ -48,5 +48,11 @@ func (api ApiService) FindApiById(a system.SysApi) (resultApi system.SysApi, err
 	return resultApi, err
 }
 func (api ApiService) InsertApi(sysApi system.SysApi) error {
-	return global.GRA_DB.Create(&sysApi).Error
+	return global.GRA_DB.Model(&sysApi).Create(map[string]any{
+		"api_group_id": sysApi.ApiGroupId,
+		"api_path":     sysApi.ApiPath,
+		"api_comment":  sysApi.ApiComment,
+		"required":     sysApi.Required,
+		"api_method":   sysApi.ApiMethod,
+	}).Error
 }
