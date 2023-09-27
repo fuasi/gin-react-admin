@@ -72,7 +72,7 @@ go build ./app.go
 ## 2. Features
 
 ### Completed
-- [√] User management: Login and login permission control
+- [√] User management: User account rights management and login and login rights control
 - [√] Role management: Create the main object of permission control, you can assign different api permissions and menu permissions to roles.
 - [√] Menu management: Realize dynamic menu configuration for users, and realize different menus for different roles.
 - [√] Api management: Set and adjust user api interface information.
