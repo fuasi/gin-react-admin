@@ -1,25 +1,25 @@
 # gin-react-admin
 
  <a href="https://github.com/facebook/react">
-    <img src="https://img.shields.io/badge/react-18.2.0-brightgreen.svg" alt="pinia">
+    <img src="https://img.shields.io/badge/react-18.2.0-brightgreen.svg" alt="react">
   </a>
   <a href="https://github.com/fuasi/gin-react-admin/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-BSG-brightgreen.svg" alt="license">
   </a>
   <a href="https://img.shields.io/badge/golang-1.20.5-blue.svg">
-    <img src="https://img.shields.io/badge/golang-1.20.5-blue.svg" alt="license">
+    <img src="https://img.shields.io/badge/golang-1.20.5-blue.svg" alt="golang">
   </a>  
 <a href="https://img.shields.io/badge/gin-1.20.5-blue.svg">
-    <img src="https://img.shields.io/badge/gin-1.9.1-blue.svg" alt="license">
+    <img src="https://img.shields.io/badge/gin-1.9.1-blue.svg" alt="gin">
   </a>
 <a href="https://img.shields.io/badge/vite-4.3.9-orange.svg">
-    <img src="https://img.shields.io/badge/vite-4.3.9-orange.svg" alt="license">
+    <img src="https://img.shields.io/badge/vite-4.3.9-orange.svg" alt="vite">
   </a>
 <a href="https://img.shields.io/badge/typescript-5.0.2-orange.svg">
-    <img src="https://img.shields.io/badge/typescript-5.0.2-orange.svg" alt="license">
+    <img src="https://img.shields.io/badge/typescript-5.0.2-orange.svg" alt="typescript">
   </a>
 <a href="https://img.shields.io/badge/gorm-1.25.1-blue.svg">
-    <img src="https://img.shields.io/badge/gorm-1.25.1-blue.svg" alt="license">
+    <img src="https://img.shields.io/badge/gorm-1.25.1-blue.svg" alt="gorm">
   </a>  
 
 ## 1. 使用说明
