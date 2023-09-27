@@ -29,6 +29,8 @@
 ### 1.1 预览地址
 <a href="http://117.72.33.35:7888/">项目预览</a> (暂未设置数据定时重置,请勿随意修改)
 
+> gin-react-admin是一个基于 [react](https://react.dev/) 和 [gin](https://gin-gonic.com) 开发的全栈前后端分离的开发基础平台，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，能够快速的开发出React和Golang的后台管理系统。
+
 ### 1.2 Web运行
 ```
 # 克隆项目
