@@ -22,6 +22,8 @@
     <img src="https://img.shields.io/badge/gorm-1.25.1-blue.svg" alt="gorm">
   </a>  
 
+[English](./README-en.md) | 简体中文
+
 ## 1. 使用说明
 
 ### 1.1 预览地址
@@ -29,8 +31,9 @@
 
 ### 1.2 Web运行
 ```
-
+# 克隆项目
 git clone https://github.com/fuasi/gin-react-admin.git
+
 # 进入前端
 cd web
 
@@ -43,30 +46,33 @@ pnpm dev
 ```
 ### 1.3 Server运行
 ```
-
+# 克隆项目
 git clone https://github.com/fuasi/gin-react-admin.git
 
-cd server (进入前端)
+# 进入后端
+cd server
 
-go generate (安装依赖包)
+# 安装依赖包
+go generate
 
+# 编译
 # 如果使用Windows编译Linux,需要调整参数: 
 # go env -w GOOS=linux
 # go env -w GOARCH=amd64
 
-go build ./app.go (编译)
+go build ./app.go 
 
-#运行 (Linux)
+# 运行 (Linux)
 ./app
 
-#运行 (Windows)
+# 运行 (Windows)
 ./app.exe
 ```
 
 ## 2. 功能一览
 
 ### 已完成
-- [√] 登录：以及权限控制
+- [√] 用户管理：用户的账号权限管理以及登录和登录权限控制
 - [√] 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
 - [√] 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
 - [√] api管理：设置与调整用户的api接口信息。
