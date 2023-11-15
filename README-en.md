@@ -29,6 +29,10 @@ English | [简体中文](./README.md)
 ### 1.1 PrevView
 <a href="http://117.72.33.35:7888/">Demo</a> (Periodic data reset has not been set. Do not modify it)
 
+> Gin-react-admin is a full-stack back-end separation development base platform based on [React](https://react.dev/) and [Gin](https://gin-gonic.com), integrating jwt authentication, dynamic routing, dynamic menu, casbin authentication, which can quickly develop react and Golang background management systems.
+
+
+
 ### 1.2 Web Run
 ```
 # clone the project
@@ -72,7 +76,7 @@ go build ./app.go
 ## 2. Features
 
 ### Completed
-- [√] User management: Login and login permission control
+- [√] User management: User account rights management and login and login rights control
 - [√] Role management: Create the main object of permission control, you can assign different api permissions and menu permissions to roles.
 - [√] Menu management: Realize dynamic menu configuration for users, and realize different menus for different roles.
 - [√] Api management: Set and adjust user api interface information.
@@ -84,3 +88,14 @@ go build ./app.go
 ## 3. Licenses
 
 This project source code adopted [The BSD 3-Clause License](https://choosealicense.com/licenses/bsd-3-clause/) licenses。
+
+## 4. Supports
+<a href="https://www.jetbrains.com/community/opensource/?utm_campaign=opensource&utm_content=approved&utm_medium=email&utm_source=newsletter&utm_term=jblogo#support">
+ <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg?_gl=1*1fzwo2p*_ga*MTQyNTQzMTA0MC4xNjkxNTU0MzA1*_ga_9J976DJZ68*MTY5NTgwNDEzMC40LjEuMTY5NTgwNjkyMi40LjAuMA..&_ga=2.3695794.346469446.1695804131-1425431040.1691554305" alt="open-source"/>
+</a>
+<a href="https://www.jetbrains.com/community/opensource/?utm_campaign=opensource&utm_content=approved&utm_medium=email&utm_source=newsletter&utm_term=jblogo#support">
+ <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/GoLand_icon.svg?_gl=1*1158lr9*_ga*MTQyNTQzMTA0MC4xNjkxNTU0MzA1*_ga_9J976DJZ68*MTY5NTgwNDEzMC40LjEuMTY5NTgwNjg4My40My4wLjA.&_ga=2.57167784.346469446.1695804131-1425431040.1691554305" alt="open-source"/>
+</a>
+<a href="https://www.jetbrains.com/community/opensource/?utm_campaign=opensource&utm_content=approved&utm_medium=email&utm_source=newsletter&utm_term=jblogo#support">
+ <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/WebStorm_icon.svg?_gl=1*fl3528*_ga*MTQyNTQzMTA0MC4xNjkxNTU0MzA1*_ga_9J976DJZ68*MTY5NTgwNDEzMC40LjEuMTY5NTgwNjkxNi4xMC4wLjA.&_ga=2.57167784.346469446.1695804131-1425431040.1691554305" alt="open-source"/>
+</a>
