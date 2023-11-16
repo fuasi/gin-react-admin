@@ -1,41 +1,41 @@
 import { apiRequest } from "@/apis/index.ts";
-import { GetList, RouterResponse, SearchQuery } from "@/apis/baseApis.ts";
+import { GetList , RouterResponse , SearchQuery } from "@/apis/baseApis.ts";
 
-export function getRouterList(query : SearchQuery<RouterResponse>) {
+export function getRouterList(query: SearchQuery<RouterResponse>) {
   return apiRequest<GetList<RouterResponse>>({
-    url : "/router",
-    method : "POST",
-    data : query
+    url: "/router" ,
+    method: "POST" ,
+    data: query
   })
 }
 
-export function findRouterById(id : number) {
+export function findRouterById(id: number) {
   return apiRequest({
-    url : `/router/${ id }`,
-    method : "GET",
+    url: `/router/${id}` ,
+    method: "GET" ,
   })
 }
 
-export function updateRouter(router : RouterResponse) {
+export function updateRouter(router: RouterResponse) {
   return apiRequest({
-    url : "/router",
-    method : "PATCH",
-    data : router
+    url: "/router" ,
+    method: "PATCH" ,
+    data: router
   })
 }
 
-export function deleteRouter(id : number[]) {
+export function deleteRouter(id: number[]) {
   return apiRequest({
-    url : "/router",
-    method : "DELETE",
-    data : id
+    url: "/router" ,
+    method: "DELETE" ,
+    data: id
   })
 }
 
-export function insertRouter(router : RouterResponse) {
+export function insertRouter(router: RouterResponse) {
   return apiRequest({
-    url : "/router",
-    method : "PUT",
-    data : router
+    url: "/router" ,
+    method: "PUT" ,
+    data: router
   })
 }

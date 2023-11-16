@@ -16,7 +16,6 @@ func SearchWhere(query string, args any, isLike bool) func(tx *gorm.DB) *gorm.DB
 			return tx.Where(fmt.Sprintf("%s like ?", query), "%"+args.(string)+"%")
 		}
 		return tx.Where(fmt.Sprintf("%s = ?", query), args)
-
 	}
 }
 

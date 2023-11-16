@@ -1,4 +1,4 @@
-import { Route , RouteObject , Routes , useLocation , useNavigate } from 'react-router-dom';
+import { Route , RouteObject , Routes , useNavigate } from 'react-router-dom';
 import { HandleRouterInfo , HandleRouters } from '@/utils/router';
 import { useEffect , useState } from 'react';
 import { getRouter } from '@/apis/baseApis.ts';
@@ -9,7 +9,6 @@ import { autorun } from "mobx";
 import { notificationStorage } from "@/store/notificationStorage.ts";
 import { getSelfInfo } from "@/apis/userApis.ts";
 import { userStorage } from "@/store/userStorage.ts";
-import { AnimatePresence } from "framer-motion";
 import LoginLayout from "@/views/loginLayout.tsx";
 import PrivateRoute from "@/components/PrivateRoute.tsx";
 import RouterLoading from "@/components/RouterLoading.tsx";
@@ -48,7 +47,6 @@ const App = () => {
       })
     }
   } , [])
-  const location = useLocation();
   return (
     <div>
       {contextHolder}

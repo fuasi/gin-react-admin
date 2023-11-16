@@ -14,7 +14,6 @@ import { useLoading } from '@/hooks/useLoading'
 import { InputAndColumns , SearchIsOptionType , useTable } from "@/hooks/useTable.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 import { GLOBAL_SYSTEM_TEXT , GLOBAL_TABLE_TEXT , GLOBAL_USER_TEXT } from "@/config";
-import AvatarUpload from "@/components/AvatarUpload.tsx";
 import { GetList , SearchQuery } from "@/apis/baseApis.ts";
 import { getAllRole } from "@/apis/roleApis.ts";
 
@@ -53,10 +52,7 @@ const UserComponent = () => {
                       className={"rounded-2xl"}/>
       } ,
       width: 64 ,
-      useAvatarUploadComponent: (loading , avatarURL , setUpload , data) => <AvatarUpload
-        previewAvatar={avatarURL}
-        image={data?.avatar} setUpload={setUpload}
-        loading={loading}/> ,
+      inputType: "Avatar"
     } ,
     {
       title: GLOBAL_USER_TEXT.USER_ID ,
