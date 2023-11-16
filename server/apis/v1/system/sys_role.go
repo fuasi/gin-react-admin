@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/common/response"
 	"server/models/system"
 	"server/models/system/request"
@@ -109,14 +110,20 @@ func (r *RoleApi) GetRoleMenuTree(c *gin.Context) {
 }
 func (r *RoleApi) GetRoleAuthority(c *gin.Context) {
 	id := c.Param("id")
-	apis, role, err := roleService.GetRoleAuthority(id)
+	role, err := roleService.GetRoleAuthority(id)
 	if err != nil {
 		global.GRA_LOG.Error("获取Api权限失败:", err.Error())
 		return
 	}
+	list, _, err := apiService.GetApiList(request.SearchApi{
+		PageInfo: commonRequest.PageInfo{
+			Page:     1,
+			PageSize: -1,
+		},
+	})
 	response.SuccessWithData(c, roleResponse.ApiResponse{
 		Selected: role.AllowApiId,
-		Apis:     apis,
+		Apis:     list,
 	})
 }
 func (r *RoleApi) GetAllRole(c *gin.Context) {

@@ -46,14 +46,12 @@ func (RoleService *RoleService) GetRoleMenuTree(id string) (routers []system.Sys
 	err = global.GRA_DB.Order("id,router_order").Find(&routers).Error
 	return routers, role, err
 }
-func (RoleService *RoleService) GetRoleAuthority(id string) (apis []system.SysApi, role system.SysRole, err error) {
-
+func (RoleService *RoleService) GetRoleAuthority(id string) (role system.SysRole, err error) {
 	err = global.GRA_DB.Where("id = ?", id).Select("allow_api_id").Find(&role).Error
 	if err != nil {
-		return nil, role, err
+		return role, err
 	}
-	err = global.GRA_DB.Find(&apis).Error
-	return apis, role, err
+	return role, err
 }
 
 func (RoleService *RoleService) GetAllRole() (roles []system.SysRole, err error) {
