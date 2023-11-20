@@ -2,7 +2,6 @@ package system
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"server/global"
 	"server/models/common/response"
@@ -10,10 +9,9 @@ import (
 	"server/models/system/request"
 	userRequest "server/models/system/response"
 	"server/utils"
-	"time"
 )
 
-type UserApi struct {
+type UserApis struct {
 }
 
 // GetUserById
@@ -25,14 +23,14 @@ type UserApi struct {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/user/:id [GET]
-func (u *UserApi) GetUserById(c *gin.Context) {
+func (u *UserApis) GetUserById(c *gin.Context) {
 	var user system.SysUser
 	err := c.ShouldBindUri(&user)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	getUser, err := userService.GetUserById(user)
+	getUser, err := userServices.GetUserById(user)
 	if err != nil {
 		global.GRA_LOG.Error(" 根据ID获取用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
@@ -50,14 +48,14 @@ func (u *UserApi) GetUserById(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/user [PATCH]
-func (u *UserApi) UpdateUserById(c *gin.Context) {
+func (u *UserApis) UpdateUserById(c *gin.Context) {
 	var user system.SysUser
 	err := c.ShouldBind(&user)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = userService.UpdateUserById(user)
+	err = userServices.UpdateUserById(user)
 	if err != nil {
 		global.GRA_LOG.Error(" 根据ID修改用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
@@ -75,14 +73,14 @@ func (u *UserApi) UpdateUserById(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/user [DELETE]
-func (u *UserApi) DeleteUserById(c *gin.Context) {
+func (u *UserApis) DeleteUserById(c *gin.Context) {
 	var ids []uint
 	err := c.ShouldBind(&ids)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = userService.DeleteUserByIds(ids)
+	err = userServices.DeleteUserByIds(ids)
 	if err != nil {
 		global.GRA_LOG.Error(" 根据ID删除用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
@@ -100,14 +98,14 @@ func (u *UserApi) DeleteUserById(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/users [POST]
-func (u *UserApi) GetUserList(c *gin.Context) {
+func (u *UserApis) GetUserList(c *gin.Context) {
 	var page request.SearchUser
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	list, total, err := userService.GetUserList(page)
+	list, total, err := userServices.GetUserList(page)
 	if err != nil {
 		global.GRA_LOG.Error(" 获取用户列表失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
@@ -128,17 +126,17 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/check [POST]
-func (u *UserApi) CheckLogin(c *gin.Context) {
+func (u *UserApis) CheckLogin(c *gin.Context) {
 	response.Success(c)
 }
-func (u *UserApi) InsertUser(c *gin.Context) {
+func (u *UserApis) InsertUser(c *gin.Context) {
 	var user system.SysUser
 	err := c.ShouldBind(&user)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = userService.InsertUser(user)
+	err = userServices.InsertUser(user)
 	if err != nil {
 		global.GRA_LOG.Error(" 添加用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
@@ -155,13 +153,13 @@ func (u *UserApi) InsertUser(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/user/:id [PATCH]
-func (u *UserApi) ResetUserPassword(c *gin.Context) {
+func (u *UserApis) ResetUserPassword(c *gin.Context) {
 	var user system.SysUser
 	if err := c.ShouldBindUri(&user); err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	var password, err = userService.ResetUserPassword(user)
+	var password, err = userServices.ResetUserPassword(user)
 	if err != nil {
 		marshal, err := json.Marshal(user)
 		if err != nil {
@@ -183,9 +181,9 @@ func (u *UserApi) ResetUserPassword(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/user [GET]
-func (u *UserApi) GetSelfInfo(c *gin.Context) {
+func (u *UserApis) GetSelfInfo(c *gin.Context) {
 	id := c.GetUint("userId")
-	user, path, err := userService.GetSelfInfo(id)
+	user, path, err := userServices.GetSelfInfo(id)
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		return
@@ -204,8 +202,8 @@ func (u *UserApi) GetSelfInfo(c *gin.Context) {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/user [GET]
-func (u *UserApi) GetRouter(c *gin.Context) {
-	routers, err := userService.GetRouter(c.GetUint("userId"))
+func (u *UserApis) GetRouter(c *gin.Context) {
+	routers, err := userServices.GetRouter(c.GetUint("userId"))
 	if err != nil {
 		response.ErrorWithMessage(c, err.Error())
 		global.GRA_LOG.Error("查询路由失败:", err.Error())
@@ -213,29 +211,4 @@ func (u *UserApi) GetRouter(c *gin.Context) {
 	}
 	tree := utils.GetRouterTree(&routers)
 	response.SuccessWithData(c, tree)
-}
-
-// UploadFile
-// @Tags UserApis
-// @Summary 头像上传
-// @Produce json
-// @accept multipart/form-data
-// @Param file formData file true "上传的文件"
-// @Success 20000 {object} response.Response{code=int,data=string,msg=string} "上传成功"
-// @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
-// @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
-// @SysRouter /api/file [POST]
-func (u *UserApi) UploadFile(c *gin.Context) {
-	file, err := c.FormFile("file")
-	if err != nil {
-		response.ErrorWithMessage(c, "上传失败:"+err.Error())
-		return
-	}
-	var fileName = fmt.Sprintf("/%d.png", time.Now().Unix())
-	err = c.SaveUploadedFile(file, fmt.Sprintf("%s%s", global.GRA_CONFIG.Upload.Path, fileName))
-	if err != nil {
-		response.ErrorWithMessage(c, "上传失败:"+err.Error())
-		return
-	}
-	response.SuccessWithData(c, fmt.Sprintf("%s%s", global.GRA_CONFIG.Upload.GetImagePath, fileName))
 }

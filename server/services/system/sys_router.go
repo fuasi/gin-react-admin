@@ -8,10 +8,10 @@ import (
 	"server/utils"
 )
 
-type RouterService struct {
+type RouterServices struct {
 }
 
-func (r *RouterService) GetRouterList(page request.SearchRouter) (routers []system.SysRouter, total int64, err error) {
+func (r *RouterServices) GetRouterList(page request.SearchRouter) (routers []system.SysRouter, total int64, err error) {
 	limit, offset := utils.PageQuery(page.PageInfo)
 	db := global.GRA_DB.Scopes(
 		utils.SearchWhere("id", page.Id, false),
@@ -27,22 +27,22 @@ func (r *RouterService) GetRouterList(page request.SearchRouter) (routers []syst
 	return routers, total, err
 }
 
-func (r *RouterService) UpdateRouter(router system.SysRouter) error {
+func (r *RouterServices) UpdateRouter(router system.SysRouter) error {
 	return global.GRA_DB.Updates(&router).Error
 }
-func (r *RouterService) InsertRouter(router system.SysRouter) error {
+func (r *RouterServices) InsertRouter(router system.SysRouter) error {
 	return global.GRA_DB.Create(&router).Error
 }
 
-func (r *RouterService) DeleteRouter(id []int) error {
+func (r *RouterServices) DeleteRouter(id []int) error {
 	return global.GRA_DB.Delete(system.SysRouter{}, id).Error
 }
-func (r *RouterService) FindRouterById(params system.SysRouter) (router system.SysRouter, err error) {
+func (r *RouterServices) FindRouterById(params system.SysRouter) (router system.SysRouter, err error) {
 	err = global.GRA_DB.Where("id = ?", params.Id).First(&router).Error
 	return router, err
 }
 
-func (r *RouterService) FindRouterGroup() (router []response.SysRouterGroup, err error) {
+func (r *RouterServices) FindRouterGroup() (router []response.SysRouterGroup, err error) {
 	err = global.GRA_DB.Select("id,name").Where("is_api_group = ?", 1).Group("id,name").Find(&router).Error
 	return router, err
 }

@@ -10,7 +10,7 @@ type ApiRouter struct {
 
 func (u *ApiRouter) InitApiRouter(Router *gin.RouterGroup) {
 	apiRouter := Router.Use()
-	apiApi := v1.SystemApisApp.SystemApis.SysApiApi
+	apiApi := v1.SystemApisApp.SystemApis.SysApiApis
 	{
 		apiRouter.POST("/apis", apiApi.GetApiList)
 		apiRouter.PATCH("/api", apiApi.UpdateApi)

@@ -9,17 +9,17 @@ import (
 	"server/utils"
 )
 
-type UserService struct {
+type UserServices struct {
 }
 
-func (UserService *UserService) GetUserById(u system.SysUser) (resultUser system.SysUser, err error) {
+func (UserService *UserServices) GetUserById(u system.SysUser) (resultUser system.SysUser, err error) {
 	if errors.Is(global.GRA_DB.Where("id = ?", u.Id).First(&resultUser.SysUserPublic).Error, gorm.ErrRecordNotFound) {
 		return resultUser, errors.New("未找到用户")
 	}
 	return resultUser, err
 }
 
-func (UserService *UserService) UpdateUserById(u system.SysUser) error {
+func (UserService *UserServices) UpdateUserById(u system.SysUser) error {
 	return global.GRA_DB.Model(&system.SysUser{}).Select("avatar", "nickname", "phone", "enable", "role_id").
 		Where("id = ?", u.Id).
 		Updates(map[string]interface{}{
@@ -31,11 +31,11 @@ func (UserService *UserService) UpdateUserById(u system.SysUser) error {
 		}).Error
 }
 
-func (UserService *UserService) DeleteUserByIds(ids []uint) error {
+func (UserService *UserServices) DeleteUserByIds(ids []uint) error {
 	return global.GRA_DB.Delete(system.SysUser{}, ids).Error
 }
 
-func (UserService *UserService) GetUserList(request request.SearchUser) (resultUser []system.SysUserPublic, total int64, err error) {
+func (UserService *UserServices) GetUserList(request request.SearchUser) (resultUser []system.SysUserPublic, total int64, err error) {
 	limit, offset := utils.PageQuery(request.PageInfo)
 	tx := global.GRA_DB.Model(system.SysUser{}).Scopes(
 		utils.SearchWhere("id", request.Id, false),
@@ -52,16 +52,16 @@ func (UserService *UserService) GetUserList(request request.SearchUser) (resultU
 	return resultUser, total, err
 }
 
-func (UserService *UserService) InsertUser(u system.SysUser) error {
+func (UserService *UserServices) InsertUser(u system.SysUser) error {
 	u.Password = utils.GetPasswordEncrypt(global.GRA_CONFIG.User.CreateUserPassword)
 	return global.GRA_DB.Create(&u).Error
 }
 
-func (UserService *UserService) ResetUserPassword(u system.SysUser) (defaultPassword string, err error) {
+func (UserService *UserServices) ResetUserPassword(u system.SysUser) (defaultPassword string, err error) {
 	return global.GRA_CONFIG.User.ResetPassword, global.GRA_DB.Model(&u).Where("id = ?", u.Id).UpdateColumn("password", utils.GetPasswordEncrypt(global.GRA_CONFIG.User.ResetPassword)).Error
 }
 
-func (UserService *UserService) GetSelfInfo(uid uint) (user system.SysUserPublic, path string, err error) {
+func (UserService *UserServices) GetSelfInfo(uid uint) (user system.SysUserPublic, path string, err error) {
 	err = global.GRA_DB.Where("id = ?", uid).Find(&user).Error
 	if err != nil {
 		return user, path, err
@@ -78,7 +78,7 @@ func (UserService *UserService) GetSelfInfo(uid uint) (user system.SysUserPublic
 	}
 	return user, router.Path, err
 }
-func (UserService *UserService) GetRouter(id uint) (routers []system.SysRouter, err error) {
+func (UserService *UserServices) GetRouter(id uint) (routers []system.SysRouter, err error) {
 	var role system.SysRole
 	var user system.SysUser
 	if err = global.GRA_DB.Select("role_id").Where("id = ?", id).First(&user).Error; err != nil {

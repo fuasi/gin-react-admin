@@ -6,4 +6,5 @@ type SysRouterGroup struct {
 	ApiRouter
 	RoleRouter
 	RoutersRouter
+	FileRouter
 }

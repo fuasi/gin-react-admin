@@ -9,10 +9,10 @@ import (
 	"server/utils"
 )
 
-type ApiService struct {
+type ApiServices struct {
 }
 
-func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysApi, total int64, err error) {
+func (api ApiServices) GetApiList(request request.SearchApi) (apis []system.SysApi, total int64, err error) {
 	limit, offset := utils.PageQuery(request.PageInfo)
 	tx := global.GRA_DB.Model(&apis).Scopes(
 		utils.SearchWhere("id", request.Id, false),
@@ -28,7 +28,7 @@ func (api ApiService) GetApiList(request request.SearchApi) (apis []system.SysAp
 	return apis, total, err
 }
 
-func (api ApiService) UpdateApi(a system.SysApi) error {
+func (api ApiServices) UpdateApi(a system.SysApi) error {
 	return global.GRA_DB.Model(&a).Where("id = ?", a.Id).Updates(map[string]any{
 		"api_group_id": a.ApiGroupId,
 		"api_path":     a.ApiPath,
@@ -38,16 +38,16 @@ func (api ApiService) UpdateApi(a system.SysApi) error {
 	}).Error
 }
 
-func (api ApiService) DeleteApi(ids []int) error {
+func (api ApiServices) DeleteApi(ids []int) error {
 	return global.GRA_DB.Delete(system.SysApi{}, ids).Error
 }
-func (api ApiService) FindApiById(a system.SysApi) (resultApi system.SysApi, err error) {
+func (api ApiServices) FindApiById(a system.SysApi) (resultApi system.SysApi, err error) {
 	if errors.Is(global.GRA_DB.Where("id = ?", a.Id).First(&resultApi).Error, gorm.ErrRecordNotFound) {
 		return resultApi, errors.New("未找到该API")
 	}
 	return resultApi, err
 }
-func (api ApiService) InsertApi(sysApi system.SysApi) error {
+func (api ApiServices) InsertApi(sysApi system.SysApi) error {
 	return global.GRA_DB.Model(&sysApi).Create(map[string]any{
 		"api_group_id": sysApi.ApiGroupId,
 		"api_path":     sysApi.ApiPath,

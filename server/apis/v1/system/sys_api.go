@@ -8,23 +8,23 @@ import (
 	"server/models/system/request"
 )
 
-type SysApiApi struct {
+type SysApiApis struct {
 }
 
-func (api *SysApiApi) GetApiList(c *gin.Context) {
+func (api *SysApiApis) GetApiList(c *gin.Context) {
 	var page request.SearchApi
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	list, total, err := apiService.GetApiList(page)
+	list, total, err := apiServices.GetApiList(page)
 	if err != nil {
 		global.GRA_LOG.Error("获取API列表失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
 		return
 	}
-	group, err := routerService.FindRouterGroup()
+	group, err := routerServices.FindRouterGroup()
 	if err != nil {
 		global.GRA_LOG.Error("获取API分组信息失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())
@@ -37,14 +37,14 @@ func (api *SysApiApi) GetApiList(c *gin.Context) {
 	})
 }
 
-func (api *SysApiApi) UpdateApi(c *gin.Context) {
+func (api *SysApiApis) UpdateApi(c *gin.Context) {
 	sysApi := system.SysApi{}
 	err := c.ShouldBind(&sysApi)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = apiService.UpdateApi(sysApi)
+	err = apiServices.UpdateApi(sysApi)
 	if err != nil {
 		global.GRA_LOG.Error("更新Api失败:", err.Error())
 		response.Error(c)
@@ -53,14 +53,14 @@ func (api *SysApiApi) UpdateApi(c *gin.Context) {
 	response.Success(c)
 }
 
-func (api *SysApiApi) DeleteApi(c *gin.Context) {
+func (api *SysApiApis) DeleteApi(c *gin.Context) {
 	var ids []int
 	err := c.ShouldBind(&ids)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = apiService.DeleteApi(ids)
+	err = apiServices.DeleteApi(ids)
 	if err != nil {
 		global.GRA_LOG.Error("删除Api失败:", err.Error())
 		response.Error(c)
@@ -68,14 +68,14 @@ func (api *SysApiApi) DeleteApi(c *gin.Context) {
 	}
 	response.Success(c)
 }
-func (api *SysApiApi) FindApiById(c *gin.Context) {
+func (api *SysApiApis) FindApiById(c *gin.Context) {
 	var sysApi system.SysApi
 	err := c.ShouldBindUri(&sysApi)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	a, err := apiService.FindApiById(sysApi)
+	a, err := apiServices.FindApiById(sysApi)
 	if err != nil {
 		global.GRA_LOG.Error("根据ID查询API失败:", err.Error())
 		response.Error(c)
@@ -83,14 +83,14 @@ func (api *SysApiApi) FindApiById(c *gin.Context) {
 	}
 	response.SuccessWithData(c, a)
 }
-func (api *SysApiApi) InsertApi(c *gin.Context) {
+func (api *SysApiApis) InsertApi(c *gin.Context) {
 	var sysApi system.SysApi
 	err := c.ShouldBind(&sysApi)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = apiService.InsertApi(sysApi)
+	err = apiServices.InsertApi(sysApi)
 	if err != nil {
 		global.GRA_LOG.Error("根据ID查询API失败:", err.Error())
 		response.Error(c)
@@ -99,10 +99,10 @@ func (api *SysApiApi) InsertApi(c *gin.Context) {
 	response.Success(c)
 }
 
-func (api *SysApiApi) GetApiGroupOptions(c *gin.Context) {
+func (api *SysApiApis) GetApiGroupOptions(c *gin.Context) {
 
 }
 
-func (api *SysApiApi) GetAllowUserApi(c *gin.Context) {
+func (api *SysApiApis) GetAllowUserApi(c *gin.Context) {
 
 }

@@ -3,17 +3,20 @@ package system
 import "server/services"
 
 type SystemApi struct {
-	UserApi   UserApi
-	BaseApi   BaseApi
-	SysApiApi SysApiApi
-	RoleApi   RoleApi
-	RouterApi RouterApi
+	UserApis   UserApis
+	BaseApis   BaseApis
+	SysApiApis SysApiApis
+	RoleApis   RoleApis
+	RouterApis RouterApis
+	FileApis   FileApis
 }
 
 var (
-	userService   = services.ServiceGroupApp.UserService
-	baseService   = services.ServiceGroupApp.BaseService
-	apiService    = services.ServiceGroupApp.ApiService
-	roleService   = services.ServiceGroupApp.RoleService
-	routerService = services.ServiceGroupApp.RouterService
+	userServices   = services.ServiceGroupApp.UserServices
+	baseServices   = services.ServiceGroupApp.BaseServices
+	apiServices    = services.ServiceGroupApp.ApiServices
+	roleServices   = services.ServiceGroupApp.RoleServices
+	routerServices = services.ServiceGroupApp.RouterServices
+
+	fileServices = services.ServiceGroupApp.FileServices
 )

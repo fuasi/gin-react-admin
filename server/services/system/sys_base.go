@@ -8,10 +8,10 @@ import (
 	"server/utils"
 )
 
-type BaseService struct {
+type BaseServices struct {
 }
 
-func (BaseService *BaseService) Login(u system.SysUser) (resultUser system.SysUser, err error) {
+func (BaseService *BaseServices) Login(u system.SysUser) (resultUser system.SysUser, err error) {
 	var user system.SysUser
 	if errors.Is(global.GRA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) {
 		return resultUser, errors.New("账号或密码错误")

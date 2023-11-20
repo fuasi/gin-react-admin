@@ -11,7 +11,7 @@ type BaseRouter struct {
 
 func (u *BaseRouter) InitBaseRouter(Router *gin.RouterGroup) {
 	baseRouter := Router.Use()
-	baseApi := v1.SystemApisApp.SystemApis.BaseApi
+	baseApi := v1.SystemApisApp.SystemApis.BaseApis
 	{
 		baseRouter.POST("/login", baseApi.Login)
 	}

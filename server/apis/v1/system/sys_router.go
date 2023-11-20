@@ -8,17 +8,17 @@ import (
 	"server/models/system/request"
 )
 
-type RouterApi struct {
+type RouterApis struct {
 }
 
-func (api *RouterApi) GetRouterList(c *gin.Context) {
+func (api *RouterApis) GetRouterList(c *gin.Context) {
 	var page request.SearchRouter
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	list, total, err := routerService.GetRouterList(page)
+	list, total, err := routerServices.GetRouterList(page)
 	if err != nil {
 		global.GRA_LOG.Error("获取路由列表失败:", err.Error())
 		response.Error(c)
@@ -30,14 +30,14 @@ func (api *RouterApi) GetRouterList(c *gin.Context) {
 	})
 }
 
-func (api *RouterApi) UpdateRouter(c *gin.Context) {
+func (api *RouterApis) UpdateRouter(c *gin.Context) {
 	var r system.SysRouter
 	err := c.ShouldBind(&r)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = routerService.UpdateRouter(r)
+	err = routerServices.UpdateRouter(r)
 	if err != nil {
 		global.GRA_LOG.Error("更新路由数据失败:", err.Error())
 		response.Error(c)
@@ -45,14 +45,14 @@ func (api *RouterApi) UpdateRouter(c *gin.Context) {
 	}
 	response.Success(c)
 }
-func (api *RouterApi) InsertRouter(c *gin.Context) {
+func (api *RouterApis) InsertRouter(c *gin.Context) {
 	var r system.SysRouter
 	err := c.ShouldBind(&r)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = routerService.InsertRouter(r)
+	err = routerServices.InsertRouter(r)
 	if err != nil {
 		global.GRA_LOG.Error("创建路由失败:", err.Error())
 		response.Error(c)
@@ -60,14 +60,14 @@ func (api *RouterApi) InsertRouter(c *gin.Context) {
 	}
 	response.Success(c)
 }
-func (api *RouterApi) DeleteRouter(c *gin.Context) {
+func (api *RouterApis) DeleteRouter(c *gin.Context) {
 	var id []int
 	err := c.ShouldBind(&id)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = routerService.DeleteRouter(id)
+	err = routerServices.DeleteRouter(id)
 	if err != nil {
 		global.GRA_LOG.Error("删除路由失败:", err.Error())
 		response.Error(c)
@@ -75,14 +75,14 @@ func (api *RouterApi) DeleteRouter(c *gin.Context) {
 	}
 	response.Success(c)
 }
-func (api *RouterApi) FindRouterById(c *gin.Context) {
+func (api *RouterApis) FindRouterById(c *gin.Context) {
 	var r system.SysRouter
 	err := c.ShouldBindUri(&r)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	router, err := routerService.FindRouterById(r)
+	router, err := routerServices.FindRouterById(r)
 	if err != nil {
 		global.GRA_LOG.Error("根据ID查询失败:", err.Error())
 		response.Error(c)

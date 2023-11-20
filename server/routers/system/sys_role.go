@@ -10,7 +10,7 @@ type RoleRouter struct {
 
 func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	roleRouter := Router.Use()
-	roleApis := v1.SystemApisApp.SystemApis.RoleApi
+	roleApis := v1.SystemApisApp.SystemApis.RoleApis
 	{
 		roleRouter.POST("/roles", roleApis.GetRoleList)
 		roleRouter.PATCH("/role", roleApis.UpdateRole)

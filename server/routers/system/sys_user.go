@@ -10,7 +10,7 @@ type UserRouter struct {
 
 func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userRouter := Router.Use()
-	userApi := v1.SystemApisApp.SystemApis.UserApi
+	userApi := v1.SystemApisApp.SystemApis.UserApis
 	{
 		userRouter.GET("/user/:id", userApi.GetUserById)
 		userRouter.PATCH("/user", userApi.UpdateUserById)
@@ -20,7 +20,6 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.PATCH("/user/:id", userApi.ResetUserPassword)
 		userRouter.GET("/user", userApi.GetSelfInfo)
 		userRouter.PUT("/user", userApi.InsertUser)
-		userRouter.POST("/file", userApi.UploadFile)
 		userRouter.GET("/routers", userApi.GetRouter)
 	}
 }

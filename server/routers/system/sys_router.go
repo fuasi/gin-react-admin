@@ -10,7 +10,7 @@ type RoutersRouter struct {
 
 func (r *RoutersRouter) InitRoutersRouter(Router *gin.RouterGroup) {
 	routersRouter := Router.Use()
-	routerApi := v1.SystemApisApp.SystemApis.RouterApi
+	routerApi := v1.SystemApisApp.SystemApis.RouterApis
 	{
 		routersRouter.GET("/router/:id", routerApi.FindRouterById)
 		routersRouter.POST("/router", routerApi.GetRouterList)

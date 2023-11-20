@@ -10,7 +10,7 @@ import (
 	"server/utils"
 )
 
-type BaseApi struct {
+type BaseApis struct {
 }
 
 // Login
@@ -22,7 +22,7 @@ type BaseApi struct {
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/login [post]
-func (b *BaseApi) Login(c *gin.Context) {
+func (b *BaseApis) Login(c *gin.Context) {
 	var l = request.Login{}
 	err := c.ShouldBindJSON(&l)
 	if err != nil {
@@ -37,7 +37,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 			Password: l.Password,
 		},
 	}
-	login, err := baseService.Login(user)
+	login, err := baseServices.Login(user)
 	if err != nil {
 		global.GRA_LOG.Error("登录失败:", err.Error(), "login:", login)
 		response.ErrorWithMessage(c, err.Error())

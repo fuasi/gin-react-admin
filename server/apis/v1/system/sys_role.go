@@ -11,17 +11,17 @@ import (
 	"server/utils"
 )
 
-type RoleApi struct {
+type RoleApis struct {
 }
 
-func (r *RoleApi) GetRoleList(c *gin.Context) {
+func (r *RoleApis) GetRoleList(c *gin.Context) {
 	var role request.SearchRole
 	err := c.ShouldBind(&role)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	list, total, err := roleService.GetRoleList(role)
+	list, total, err := roleServices.GetRoleList(role)
 	if err != nil {
 		global.GRA_LOG.Error("查询角色列表失败:", err.Error())
 		response.Error(c)
@@ -33,14 +33,14 @@ func (r *RoleApi) GetRoleList(c *gin.Context) {
 	})
 }
 
-func (r *RoleApi) UpdateRole(c *gin.Context) {
+func (r *RoleApis) UpdateRole(c *gin.Context) {
 	var role system.SysRole
 	err := c.ShouldBind(&role)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = roleService.UpdateRole(role)
+	err = roleServices.UpdateRole(role)
 	if err != nil {
 		global.GRA_LOG.Error("更新角色失败:", err.Error())
 		response.Error(c)
@@ -49,14 +49,14 @@ func (r *RoleApi) UpdateRole(c *gin.Context) {
 	response.Success(c)
 }
 
-func (r *RoleApi) DeleteRole(c *gin.Context) {
+func (r *RoleApis) DeleteRole(c *gin.Context) {
 	var id []uint
 	err := c.ShouldBind(&id)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = roleService.DeleteRole(id)
+	err = roleServices.DeleteRole(id)
 	if err != nil {
 		global.GRA_LOG.Error("删除角色失败:", err.Error())
 		response.Error(c)
@@ -64,28 +64,28 @@ func (r *RoleApi) DeleteRole(c *gin.Context) {
 	}
 	response.Success(c)
 }
-func (r *RoleApi) FindRoleById(c *gin.Context) {
+func (r *RoleApis) FindRoleById(c *gin.Context) {
 	var role system.SysRole
 	err := c.ShouldBindUri(&role)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	role, err = roleService.FindRoleById(role)
+	role, err = roleServices.FindRoleById(role)
 	if err != nil {
 		return
 	}
 	response.SuccessWithData(c, role)
 }
 
-func (r *RoleApi) InsertRole(c *gin.Context) {
+func (r *RoleApis) InsertRole(c *gin.Context) {
 	var role system.SysRole
 	err := c.ShouldBind(&role)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = roleService.InsertRole(role)
+	err = roleServices.InsertRole(role)
 	if err != nil {
 		response.Error(c)
 		return
@@ -93,9 +93,9 @@ func (r *RoleApi) InsertRole(c *gin.Context) {
 	response.Success(c)
 }
 
-func (r *RoleApi) GetRoleMenuTree(c *gin.Context) {
+func (r *RoleApis) GetRoleMenuTree(c *gin.Context) {
 	id := c.Param("id")
-	tree, role, err := roleService.GetRoleMenuTree(id)
+	tree, role, err := roleServices.GetRoleMenuTree(id)
 	if err != nil {
 		global.GRA_LOG.Error("获取角色路由树失败:", err.Error())
 		response.Error(c)
@@ -108,14 +108,14 @@ func (r *RoleApi) GetRoleMenuTree(c *gin.Context) {
 		DefaultRouterId: role.DefaultRouterId,
 	})
 }
-func (r *RoleApi) GetRoleAuthority(c *gin.Context) {
+func (r *RoleApis) GetRoleAuthority(c *gin.Context) {
 	id := c.Param("id")
-	role, err := roleService.GetRoleAuthority(id)
+	role, err := roleServices.GetRoleAuthority(id)
 	if err != nil {
 		global.GRA_LOG.Error("获取Api权限失败:", err.Error())
 		return
 	}
-	list, _, err := apiService.GetApiList(request.SearchApi{
+	list, _, err := apiServices.GetApiList(request.SearchApi{
 		PageInfo: commonRequest.PageInfo{
 			Page:     1,
 			PageSize: -1,
@@ -126,8 +126,8 @@ func (r *RoleApi) GetRoleAuthority(c *gin.Context) {
 		Apis:     list,
 	})
 }
-func (r *RoleApi) GetAllRole(c *gin.Context) {
-	roles, err := roleService.GetAllRole()
+func (r *RoleApis) GetAllRole(c *gin.Context) {
+	roles, err := roleServices.GetAllRole()
 	if err != nil {
 		global.GRA_LOG.Error("获取全部角色失败:", err.Error())
 		response.Error(c)
