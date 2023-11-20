@@ -36,7 +36,7 @@ func (r *RouterServices) InsertRouter(router system.SysRouter) error {
 }
 
 func (r *RouterServices) DeleteRouter(id []int) error {
-	return global.GRA_DB.Delete(system.SysRouter{}, id).Error
+	return global.GRA_DB.Debug().Delete(system.SysRouter{}, id).Error
 }
 func (r *RouterServices) FindRouterById(params system.SysRouter) (router system.SysRouter, err error) {
 	err = global.GRA_DB.Where("id = ?", params.Id).First(&router).Error

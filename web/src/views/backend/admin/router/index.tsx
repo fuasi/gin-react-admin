@@ -2,9 +2,8 @@ import { InputAndColumns , SearchIsOptionType , useTable } from "@/hooks/useTabl
 import { GetList , RouterResponse , SearchQuery } from "@/apis/baseApis.ts";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { useEffect , useState } from "react";
-import { findRouterById , getRouterList , insertRouter , updateRouter } from "@/apis/routerApis.ts";
+import { deleteRouter , findRouterById , getRouterList , insertRouter , updateRouter } from "@/apis/routerApis.ts";
 import { IconComponent } from "@/utils/router.tsx";
-import { deleteApi } from "@/apis/apiApis.ts";
 import { Tag } from "antd";
 import * as icons from '@ant-design/icons'
 
@@ -131,10 +130,10 @@ const RouterView = () => {
   }
   const handleDeleteData = async (ids: number[] , router ?: RouterResponse) => {
     if (router) {
-      await deleteApi([router.id])
+      await deleteRouter([router.id])
       return;
     }
-    await deleteApi([...ids])
+    await deleteRouter([...ids])
   }
   const {TableComponent} = useTable({
     columns ,
