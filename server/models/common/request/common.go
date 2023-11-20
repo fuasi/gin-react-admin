@@ -5,3 +5,8 @@ type PageInfo struct {
 	PageSize int    `json:"pageSize,omitempty" gorm:"-"`
 	KeyWord  string `json:"keyWord,omitempty" gorm:"-"`
 }
+
+type Search[T any] struct {
+	PageInfo
+	Condition T
+}

@@ -3,16 +3,16 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/common/response"
 	"server/models/system"
-	"server/models/system/request"
 )
 
 type SysApiApis struct {
 }
 
 func (api *SysApiApis) GetApiList(c *gin.Context) {
-	var page request.SearchApi
+	var page commonRequest.Search[system.SysApi]
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())

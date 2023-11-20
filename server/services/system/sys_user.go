@@ -4,8 +4,8 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	global "server/global"
+	commonRequest "server/models/common/request"
 	"server/models/system"
-	"server/models/system/request"
 	"server/utils"
 )
 
@@ -35,14 +35,15 @@ func (UserService *UserServices) DeleteUserByIds(ids []uint) error {
 	return global.GRA_DB.Delete(system.SysUser{}, ids).Error
 }
 
-func (UserService *UserServices) GetUserList(request request.SearchUser) (resultUser []system.SysUserPublic, total int64, err error) {
-	limit, offset := utils.PageQuery(request.PageInfo)
+func (UserService *UserServices) GetUserList(search commonRequest.Search[system.SysUserPublic]) (resultUser []system.SysUserPublic, total int64, err error) {
+	limit, offset := utils.PageQuery(search.PageInfo)
+	user := search.Condition
 	tx := global.GRA_DB.Model(system.SysUser{}).Scopes(
-		utils.SearchWhere("id", request.Id, false),
-		utils.SearchWhere("username", request.Username, true),
-		utils.SearchWhere("nickname", request.Nickname, true),
-		utils.SearchWhere("phone", request.Phone, true),
-		utils.SearchWhere("enable", request.Enable, false),
+		utils.SearchWhere("id", user.Id, false),
+		utils.SearchWhere("username", user.Username, true),
+		utils.SearchWhere("nickname", user.Nickname, true),
+		utils.SearchWhere("phone", user.Phone, true),
+		utils.SearchWhere("enable", user.Enable, false),
 	)
 	err = tx.Count(&total).Error
 	if err != nil {

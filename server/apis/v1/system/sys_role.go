@@ -6,7 +6,6 @@ import (
 	commonRequest "server/models/common/request"
 	"server/models/common/response"
 	"server/models/system"
-	"server/models/system/request"
 	roleResponse "server/models/system/response"
 	"server/utils"
 )
@@ -15,7 +14,7 @@ type RoleApis struct {
 }
 
 func (r *RoleApis) GetRoleList(c *gin.Context) {
-	var role request.SearchRole
+	var role commonRequest.Search[system.SysRole]
 	err := c.ShouldBind(&role)
 	if err != nil {
 		response.ParamError(c)
@@ -115,7 +114,7 @@ func (r *RoleApis) GetRoleAuthority(c *gin.Context) {
 		global.GRA_LOG.Error("获取Api权限失败:", err.Error())
 		return
 	}
-	list, _, err := apiServices.GetApiList(request.SearchApi{
+	list, _, err := apiServices.GetApiList(commonRequest.Search[system.SysApi]{
 		PageInfo: commonRequest.PageInfo{
 			Page:     1,
 			PageSize: -1,

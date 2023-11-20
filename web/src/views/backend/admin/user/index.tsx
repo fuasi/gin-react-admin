@@ -7,7 +7,6 @@ import {
   insertUser ,
   resetUserPassword ,
   updateUserInfo ,
-  uploadAvatar ,
   User
 } from '@/apis/userApis.ts';
 import { useLoading } from '@/hooks/useLoading'
@@ -17,7 +16,6 @@ import { GLOBAL_SYSTEM_TEXT , GLOBAL_TABLE_TEXT , GLOBAL_USER_TEXT } from "@/con
 import { GetList , SearchQuery } from "@/apis/baseApis.ts";
 import { getAllRole } from "@/apis/roleApis.ts";
 
-type AvatarUploadProps = {upload: {file: File, avatarURL: string}}
 const UserComponent = () => {
   const {loading , withLoading} = useLoading()
   const [data , setData] = useState<GetList<User>>({list: [] , total: 0})
@@ -115,17 +113,8 @@ const UserComponent = () => {
       }] ,
     }
   ]
-  const handleAvatarUpload = async (file: File) => {
-    const form = new FormData()
-    form.append("file" , file)
-    const {data} = await uploadAvatar(form)
-    return data
-  }
-  const handleUpdate = async (user: User , params: AvatarUploadProps) => {
-    const {file} = params.upload
-    let fileName = user.avatar
-    if (file) fileName = await handleAvatarUpload(file)
-    await updateUserInfo({...user , avatar: fileName})
+  const handleUpdate = async (user: User) => {
+    await updateUserInfo(user)
   }
   const handleDeleteUser = async (ids: number[] , user?: User) => {
     if (user) {
@@ -140,11 +129,8 @@ const UserComponent = () => {
       messageApi.info(GLOBAL_SYSTEM_TEXT.ACTIVE_RESETPASSWORD_ALERT(data) , 4)
     } , GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT)
   }
-  const handleInsertUser = async (user: User , params: AvatarUploadProps) => {
-    const {file} = params.upload
-    let fileName = user.avatar
-    if (file) fileName = await handleAvatarUpload(file)
-    await insertUser({...user , enable: user.enable ? 1 : -1 , avatar: fileName})
+  const handleInsertUser = async (user: User) => {
+    await insertUser({...user , enable: user.enable ? 1 : -1})
   }
   const getUpdateUserById = (user: User) => {
     return getUserById(user.id)

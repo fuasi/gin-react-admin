@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/common/response"
 	"server/models/system"
-	"server/models/system/request"
 	userRequest "server/models/system/response"
 	"server/utils"
 )
@@ -93,13 +93,13 @@ func (u *UserApis) DeleteUserById(c *gin.Context) {
 // @Tags UserApis
 // @Summary 获取用户列表
 // @Produce json
-// @Param data body request.SearchUser true "页数和页码为必传,传用户信息表示条件查询"
+// @Param data body commonRequest.Search[system.SysUserPublic] true "页数和页码为必传,传用户信息表示条件查询"
 // @Success 20000 {object} response.Response{code=int,data=UserResponse.GetUserListResponse,msg=string} "成功"
 // @Failure 40000 {object} response.Response{code=int,msg=string} "请求错误"
 // @Failure 50000 {object} response.Response{code=int,msg=string} "内部错误"
 // @SysRouter /api/users [POST]
 func (u *UserApis) GetUserList(c *gin.Context) {
-	var page request.SearchUser
+	var page commonRequest.Search[system.SysUserPublic]
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamErrorWithMessage(c, err.Error())

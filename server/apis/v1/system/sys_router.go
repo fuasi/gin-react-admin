@@ -3,16 +3,16 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/common/response"
 	"server/models/system"
-	"server/models/system/request"
 )
 
 type RouterApis struct {
 }
 
 func (api *RouterApis) GetRouterList(c *gin.Context) {
-	var page request.SearchRouter
+	var page commonRequest.Search[system.SysRouter]
 	err := c.ShouldBind(&page)
 	if err != nil {
 		response.ParamError(c)

@@ -2,16 +2,17 @@ package system
 
 import (
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/system"
-	"server/models/system/request"
 	"server/utils"
 )
 
 type RoleServices struct {
 }
 
-func (RoleService *RoleServices) GetRoleList(role request.SearchRole) (roles []system.SysRole, total int64, err error) {
-	limit, offset := utils.PageQuery(role.PageInfo)
+func (RoleService *RoleServices) GetRoleList(search commonRequest.Search[system.SysRole]) (roles []system.SysRole, total int64, err error) {
+	limit, offset := utils.PageQuery(search.PageInfo)
+	role := search.Condition
 	tx := global.GRA_DB.Model(system.SysRole{}).Scopes(
 		utils.SearchWhere("id", role.Id, false),
 		utils.SearchWhere("role_name", role.RoleName, true))

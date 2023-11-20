@@ -4,22 +4,23 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/system"
-	"server/models/system/request"
 	"server/utils"
 )
 
 type ApiServices struct {
 }
 
-func (api ApiServices) GetApiList(request request.SearchApi) (apis []system.SysApi, total int64, err error) {
-	limit, offset := utils.PageQuery(request.PageInfo)
+func (ApiServices) GetApiList(search commonRequest.Search[system.SysApi]) (apis []system.SysApi, total int64, err error) {
+	limit, offset := utils.PageQuery(search.PageInfo)
+	api := search.Condition
 	tx := global.GRA_DB.Model(&apis).Scopes(
-		utils.SearchWhere("id", request.Id, false),
-		utils.SearchWhere("api_path", request.ApiPath, true),
-		utils.SearchWhere("api_group_id", request.ApiGroupId, false),
-		utils.SearchWhere("api_comment", request.ApiComment, true),
-		utils.SearchWhere("api_method", request.ApiMethod, false))
+		utils.SearchWhere("id", api.Id, false),
+		utils.SearchWhere("api_path", api.ApiPath, true),
+		utils.SearchWhere("api_group_id", api.ApiGroupId, false),
+		utils.SearchWhere("api_comment", api.ApiComment, true),
+		utils.SearchWhere("api_method", api.ApiMethod, false))
 	err = tx.Count(&total).Error
 	if err != nil {
 		return nil, 0, errors.New("查询数据数量失败")

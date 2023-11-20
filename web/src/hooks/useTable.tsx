@@ -1,5 +1,5 @@
 import { Badge , Button , Form , Input , InputNumber , Popconfirm , Select , Space , Table , TableProps } from "antd";
-import { PageInfo } from "@/apis/baseApis.ts";
+import { PageInfo , SearchQuery } from "@/apis/baseApis.ts";
 import React , { useEffect , useState } from "react";
 import TableModal from "@/components/TableModal.tsx";
 import { ColumnGroupType , ColumnType } from "antd/es/table";
@@ -19,7 +19,7 @@ import { notificationActiveFail , notificationActiveSuccess } from "@/utils/noti
 
 interface TableHookProps<T> {
   tableProps: Pick<TableProps<T> , keyof TableProps<T>> & {total: number};
-  handleFindData: (page: PageInfo & T) => void;
+  handleFindData: (page: SearchQuery<T>) => void;
   getUpdateData: (record: T) => HTTPResponse<T>;
   handleUpdateData: (record: T , args: any) => Promise<void>;
   handleInsertData: (record: T , args: any) => void;
@@ -100,7 +100,7 @@ export const useTable = <T extends object>(props: TableHookProps<T>): TableHookR
       }
       setSelectedRowKeys([])
       handleFindData({
-        page , pageSize , ...form.getFieldsValue(true)
+        page , pageSize , condition: {...form.getFieldsValue(true)}
       })
       notificationActiveSuccess(GLOBAL_TABLE_TEXT.DELETE_TEXT)
     } catch (e) {
@@ -109,7 +109,7 @@ export const useTable = <T extends object>(props: TableHookProps<T>): TableHookR
   }
 
   useEffect(() => {
-    handleFindData({page , pageSize , ...form.getFieldsValue(true)})
+    handleFindData({page , pageSize , condition: {...form.getFieldsValue(true)}})
   } , [pageInfo])
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -122,12 +122,12 @@ export const useTable = <T extends object>(props: TableHookProps<T>): TableHookR
   };
 
   const handleSearch = () => {
-    handleFindData({page , pageSize , ...form.getFieldsValue(true)})
+    handleFindData({page , pageSize , condition: {...form.getFieldsValue(true)}})
   }
 
   const handleResetSearch = () => {
     form.resetFields()
-    handleFindData({page , pageSize , ...form.getFieldsValue(true)})
+    handleFindData({page , pageSize , condition: {...form.getFieldsValue(true)}})
   }
   return {
     TableComponent: (
@@ -179,7 +179,7 @@ export const useTable = <T extends object>(props: TableHookProps<T>): TableHookR
                          handleUpdateData={handleUpdateData}
                          reloadTable={() => {
                            const {page , pageSize} = pageInfo
-                           handleFindData({page , pageSize , ...form.getFieldsValue(true)})
+                           handleFindData({page , pageSize , condition: {...form.getFieldsValue(true)}})
                          }}/>
           <Table
             pagination={{

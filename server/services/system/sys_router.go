@@ -2,8 +2,8 @@ package system
 
 import (
 	"server/global"
+	commonRequest "server/models/common/request"
 	"server/models/system"
-	"server/models/system/request"
 	response "server/models/system/response"
 	"server/utils"
 )
@@ -11,13 +11,14 @@ import (
 type RouterServices struct {
 }
 
-func (r *RouterServices) GetRouterList(page request.SearchRouter) (routers []system.SysRouter, total int64, err error) {
-	limit, offset := utils.PageQuery(page.PageInfo)
+func (r *RouterServices) GetRouterList(search commonRequest.Search[system.SysRouter]) (routers []system.SysRouter, total int64, err error) {
+	limit, offset := utils.PageQuery(search.PageInfo)
+	router := search.Condition
 	db := global.GRA_DB.Scopes(
-		utils.SearchWhere("id", page.Id, false),
-		utils.SearchWhere("name", page.Name, true),
-		utils.SearchWhere("path", page.Path, true),
-		utils.SearchWhere("is_api_group", page.IsApiGroup, false),
+		utils.SearchWhere("id", router.Id, false),
+		utils.SearchWhere("name", router.Name, true),
+		utils.SearchWhere("path", router.Path, true),
+		utils.SearchWhere("is_api_group", router.IsApiGroup, false),
 	)
 	err = db.Model(&routers).Count(&total).Error
 	if err != nil {
