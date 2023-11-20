@@ -38,13 +38,6 @@ export function getUserById(query : number) {
   })
 }
 
-export function uploadAvatar(form : FormData) {
-  return apiRequest<string>({
-    url : "/file",
-    method : "POST",
-    data : form
-  })
-}
 
 export function deleteUser(id : number[]) {
   return apiRequest<string>({
