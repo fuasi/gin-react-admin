@@ -137,6 +137,45 @@ ALTER SEQUENCE public.gra_casbin_role_id_seq OWNED BY public.gra_casbin_role.id;
 
 
 --
+-- Name: gra_files; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.gra_files (
+    id bigint NOT NULL,
+    file_name character varying NOT NULL,
+    system_file_name character varying NOT NULL,
+    tag character varying NOT NULL,
+    file_url character varying NOT NULL,
+    file_path character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.gra_files OWNER TO postgres;
+
+--
+-- Name: gra_files_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.gra_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.gra_files_id_seq OWNER TO postgres;
+
+--
+-- Name: gra_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.gra_files_id_seq OWNED BY public.gra_files.id;
+
+
+--
 -- Name: gra_routers; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -241,6 +280,13 @@ ALTER TABLE ONLY public.gra_casbin_role ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: gra_files id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gra_files ALTER COLUMN id SET DEFAULT nextval('public.gra_files_id_seq'::regclass);
+
+
+--
 -- Name: gra_routers id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -274,7 +320,6 @@ COPY public.gra_apis (id, api_path, api_comment, api_method, api_group_id, creat
 6	/api/user/:id	根据ID获取用户信息	GET / 查询	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:54.364454	f
 7	/api/user/:id	根据ID重置用户密码	PATCH / 更新	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:02.126575	f
 8	/api/users	获取用户列表	POST / 多条件查询|创建	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:10.036076	f
-9	/api/login	登录	POST / 多条件查询|创建	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:15.050666	t
 50	/api/user	创建用户	PUT / 创建	2	2023-08-15 14:18:51.933493	2023-09-20 15:49:23.173679	f
 51	/api/roles	获取角色列表	POST / 多条件查询|创建	6	2023-08-16 16:26:43.12355	2023-09-20 15:49:36.524479	f
 52	/api/role	根据ID更新角色	PATCH / 更新	6	2023-08-16 16:27:22.317603	2023-09-20 15:49:41.846344	f
@@ -297,9 +342,18 @@ COPY public.gra_apis (id, api_path, api_comment, api_method, api_group_id, creat
 --
 
 COPY public.gra_casbin_role (id, role_name, allow_api_id, allow_router_id, default_router_id) FROM stdin;
-1	超级管理员	{6,8,9,2,1,3,51,52,53,54,55,56,57,59,60,61,58,62,7,50,5,4}	{5,2,6,3,7,1,8}	1
+1	超级管理员	{6,8,9,2,1,3,51,52,53,54,55,56,57,59,60,61,58,62,7,50,5,4}	{5,2,6,3,7,1,8,9}	1
 2	开发者	{5,4,7,6,8,50,9,1,3,2,51,52,53,54,55,56,57,59,60,61,58,62}	{1,5,2,7,3}	1
 7	用户管理员	{5,4,7,6,8,50,9}	{5,7,3}	7
+\.
+
+
+--
+-- Data for Name: gra_files; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.gra_files (id, file_name, system_file_name, tag, file_url, file_path, created_at, updated_at) FROM stdin;
+50	一个头像	1700471419.png	png	/static/images/1700471419.png	D:\\static\\images\\1700471419.png	2023-11-20 17:10:19.901471	2023-11-20 17:12:30.409603
 \.
 
 
@@ -308,13 +362,13 @@ COPY public.gra_casbin_role (id, role_name, allow_api_id, allow_router_id, defau
 --
 
 COPY public.gra_routers (id, name, icon, path, component_path, parent_id, router_order, is_api_group, required, hidden) FROM stdin;
+5	用户信息	FormOutlined	/self	../views/backend/self	-1	2	1	t	t
+3	管理员	SolutionOutlined	/admin	../views/backend/admin	-1	2	-1	f	f
+7	Api管理	ApiOutlined	/admin/api	../views/backend/admin/api	3	3	1	f	f
+2	用户管理	TeamOutlined	/admin/user	../views/backend/admin/user	3	1	1	f	f
+6	角色管理	UserOutlined	/admin/role	../views/backend/admin/role	3	1	1	f	f
 8	菜单管理	MenuOutlined	/admin/router	../views/backend/admin/router	3	2	1	f	f
 1	仪表盘	DashboardOutlined	/dashboard	../views/backend/dashboard	-1	1	1	f	f
-2	用户管理	TeamOutlined	/admin/user	../views/backend/admin/user	3	1	1	f	f
-7	Api管理	ApiOutlined	/admin/api	../views/backend/admin/api	3	3	1	f	f
-5	用户信息	FormOutlined	/self	../views/backend/self	-1	2	1	t	t
-6	角色管理	UserOutlined	/admin/role	../views/backend/admin/role	3	1	1	f	f
-3	管理员	SolutionOutlined	/admin	../views/backend/admin	-1	2	-1	f	f
 \.
 
 
@@ -323,8 +377,8 @@ COPY public.gra_routers (id, name, icon, path, component_path, parent_id, router
 --
 
 COPY public.gra_users (id, username, password, avatar, phone, updated_at, created_at, nickname, enable, role_id) FROM stdin;
-2	admin1	$2a$10$iKxK9wtpv.Aeo0wXD0ET4uWj9uYqkxG5KxyFp.qAc1zYMRhlT.rba	/static/images/avatar-default.jpg	13888888888	2023-08-17 17:34:11.699454	2023-08-07 10:38:56.008269	管理员二号	1	7
-1	admin	$2a$10$jvJP0ZkY1gB5ciDxW9Rhn.dKJGby1jg8EcVpZbCBqElcl80noBUCa	/static/images/1691554868.png	13888888888	2023-09-12 16:29:48.269419	2023-08-07 16:49:26.957432	管理员一号	1	1
+2	admin1	$2a$10$iKxK9wtpv.Aeo0wXD0ET4uWj9uYqkxG5KxyFp.qAc1zYMRhlT.rba	/static/images/avatar-default.jpg	13888888888	2023-11-15 11:22:18.405647	2023-08-07 10:38:56.008269	管理员二号	1	1
+1	admin	$2a$10$jvJP0ZkY1gB5ciDxW9Rhn.dKJGby1jg8EcVpZbCBqElcl80noBUCa	/static/images/1700471419.png	13888888888	2023-11-20 17:12:59.675663	2023-08-07 16:49:26.957432	管理员一号	1	1
 \.
 
 
@@ -350,10 +404,17 @@ SELECT pg_catalog.setval('public.gra_casbin_role_id_seq', 17, true);
 
 
 --
+-- Name: gra_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.gra_files_id_seq', 50, true);
+
+
+--
 -- Name: gra_router_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.gra_router_id_seq', 8, true);
+SELECT pg_catalog.setval('public.gra_router_id_seq', 9, true);
 
 
 --
@@ -385,6 +446,14 @@ ALTER TABLE ONLY public.gra_apis
 
 ALTER TABLE ONLY public.gra_casbin_role
     ADD CONSTRAINT gra_casbin_role_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gra_files gra_files_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gra_files
+    ADD CONSTRAINT gra_files_pkey PRIMARY KEY (id);
 
 
 --
