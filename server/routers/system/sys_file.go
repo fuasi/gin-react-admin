@@ -13,6 +13,8 @@ func (*FileRouter) InitFileRouter(Router *gin.RouterGroup) {
 	fileApis := v1.SystemApisApp.SystemApis.FileApis
 	{
 		fileRouter.POST("/file", fileApis.UploadFile)
-		fileRouter.GET("/file", fileApis.UploadFile)
+		fileRouter.POST("/files", fileApis.GetFileList)
+		fileRouter.PATCH("/file", fileApis.UpdateFile)
+		fileRouter.DELETE("/file", fileApis.DeleteFile)
 	}
 }

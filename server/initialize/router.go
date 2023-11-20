@@ -17,7 +17,6 @@ func InitRouter() *gin.Engine {
 		// swagger文档
 		Router.GET(fmt.Sprintf("%s/swagger/*any", global.GRA_CONFIG.System.ApiPrefix), ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
-	fmt.Println(global.GRA_CONFIG.System.ApiPrefix)
 	PublicRouter := Router.Group(global.GRA_CONFIG.System.ApiPrefix)
 	{
 		systemRouter.InitBaseRouter(PublicRouter)

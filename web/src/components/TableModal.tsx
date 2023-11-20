@@ -6,7 +6,7 @@ import { InputAndColumns } from "@/hooks/useTable.tsx";
 import { useLoading } from "@/hooks/useLoading.ts";
 import Switch from "@/components/Switch.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
-import AvatarUpload from "@/components/AvatarUpload.tsx";
+import FileUpload from "@/components/FileUpload.tsx";
 
 interface ModalComponentProps<T> {
   closeModal: () => void
@@ -115,7 +115,7 @@ const TableModal = <T extends object>(props: ModalComponentProps<T>) => {
               {value.inputType === "Switch" ?
                 <Switch<T> handleSwitchChange={handleSwitchChange} needUpdateData={needUpdateData}
                            isUpdate={isUpdate} dataIndex={value.dataIndex}/> : value.inputType === "Avatar" ?
-                  <AvatarUpload/> : value.inputType === "Select" ?
+                  <FileUpload/> : value.inputType === "Select" ?
                     <Select options={value.searchIsOption}/> : value.inputType === "InputNumber" ? <InputNumber/> :
                       <Input/>}
             </Form.Item>

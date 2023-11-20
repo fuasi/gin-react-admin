@@ -1,12 +1,12 @@
 import { userStorage } from "@/store/userStorage.ts";
 import EditInput from "@/views/backend/self/components/EditInput.tsx";
-import AvatarUpload from "@/components/AvatarUpload.tsx";
+import FileUpload from "@/components/FileUpload.tsx";
 
 const SelfInfo = () => {
 
   return (
     <div className={"flex justify-center items-center flex-col"}>
-      <AvatarUpload src={userStorage.user.avatar}/>
+      <FileUpload src={userStorage.user.avatar}/>
       <div className={"mt-2"}>
         <EditInput>
           <span className={"font-sans text-2xl"}>{userStorage.user.nickname}</span>
