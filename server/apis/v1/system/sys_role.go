@@ -126,7 +126,12 @@ func (r *RoleApis) GetRoleAuthority(c *gin.Context) {
 	})
 }
 func (r *RoleApis) GetAllRole(c *gin.Context) {
-	roles, err := roleServices.GetAllRole()
+	roles, _, err := roleServices.GetRoleList(commonRequest.Search[system.SysRole]{
+		PageInfo: commonRequest.PageInfo{
+			Page:     1,
+			PageSize: -1,
+		},
+	})
 	if err != nil {
 		global.GRA_LOG.Error("获取全部角色失败:", err.Error())
 		response.Error(c)

@@ -1,6 +1,9 @@
 package system
 
-import "server/models/common"
+import (
+	"github.com/gin-gonic/gin"
+	"server/models/common"
+)
 
 type SysApi struct {
 	common.BaseModel
@@ -15,4 +18,11 @@ type SysApi struct {
 
 func (SysApi) TableName() string {
 	return "gra_apis"
+}
+
+type RegisterApiParam struct {
+	ApiMethod  common.HttpType
+	ApiUrl     string
+	ApiComment string
+	Handle     func(ctx *gin.Context)
 }

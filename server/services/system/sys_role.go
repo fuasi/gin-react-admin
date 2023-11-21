@@ -54,8 +54,3 @@ func (RoleService *RoleServices) GetRoleAuthority(id string) (role system.SysRol
 	}
 	return role, err
 }
-
-func (RoleService *RoleServices) GetAllRole() (roles []system.SysRole, err error) {
-	err = global.GRA_DB.Select("id,role_name").Find(&roles).Error
-	return roles, err
-}
