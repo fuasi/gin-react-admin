@@ -1,14 +1,14 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import * as http from "http";
+import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins : [react(), splitVendorChunkPlugin()],
   resolve : {
-    alias : {
-      '@' : fileURLToPath(new URL('./src', import.meta.url))
-    }
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
   server : {
     proxy : {

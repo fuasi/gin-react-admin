@@ -15,5 +15,5 @@ var (
 	GRA_VR     *viper.Viper
 	GRA_CONFIG viper_config.ServerConfig
 	GRA_LOG    *zap.SugaredLogger
-	GRA_CASBIN *casbin.Enforcer
+	GRA_CASBIN *casbin.SyncedCachedEnforcer
 )

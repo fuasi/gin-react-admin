@@ -23,11 +23,13 @@ func InitRouter() *gin.Engine {
 		Router.GET(fmt.Sprintf("%s/swagger/*any", global.GRA_CONFIG.System.ApiPrefix), ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	PublicRouter := Router.Group(global.GRA_CONFIG.System.ApiPrefix)
+	//PublicRouter.Use(middlewares.CasbinMiddleware)
 	{
 		systemRouter.InitBaseRouter(PublicRouter, apiSet)
 	}
 	PrivateRouter := Router.Group(global.GRA_CONFIG.System.ApiPrefix)
 	PrivateRouter.Use(middlewares.AuthMiddleware)
+	//middlewares.CasbinMiddleware)
 	{
 		systemRouter.InitUserRouter(PrivateRouter, apiSet)
 		systemRouter.InitApiRouter(PrivateRouter, apiSet)

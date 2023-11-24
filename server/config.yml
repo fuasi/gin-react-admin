@@ -16,6 +16,6 @@ user:
   createUserPassword: "123456"
   resetPassword: "123456"
 casbin:
-  casbinConfig: "./configs/"
+  casbinConfig: "./configs/enforcer_model.conf"
 system:
   apiPrefix: "/api"

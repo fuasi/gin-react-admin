@@ -1,4 +1,4 @@
-import { Image , message , Switch as AntdSwitch , Tag } from 'antd';
+import { Image , message , Select , Switch as AntdSwitch } from 'antd';
 import { useEffect , useState } from 'react';
 import {
   deleteUser ,
@@ -20,18 +20,15 @@ const UserComponent = () => {
   const {loading , withLoading} = useLoading()
   const [data , setData] = useState<GetList<User>>({list: [] , total: 0})
   const [messageApi , contextHolder] = message.useMessage()
-  const [roleMap , setRoleMap] = useState(new Map<number , string>())
+  const [options , setOptions] = useState([{label: "" , value: 1}])
   const {withNotification} = useSystemActiveNotification()
   const [roles , setRoles] = useState<SearchIsOptionType>([])
   useEffect(() => {
     getAllRole().then(res => {
-      const roles = new Map<number , string>()
       const initRoles: SearchIsOptionType = []
       for (const role of res.data) {
         initRoles.push({label: role.roleName , value: role.id})
-        roles.set(role.id , role.roleName)
       }
-      setRoleMap(roles)
       setRoles(initRoles)
     })
   } , [])
@@ -64,31 +61,41 @@ const UserComponent = () => {
     {
       title: GLOBAL_USER_TEXT.USER_USERNAME ,
       dataIndex: 'username' ,
-      width: 128 ,
+      width: 24 ,
       required: true ,
       isSearch: true
     } ,
     {
       title: GLOBAL_USER_TEXT.USER_NICKNAME ,
       dataIndex: 'nickname' ,
-      width: 128 ,
+      width: 112 ,
       required: true ,
       isSearch: true
     } ,
     {
       title: GLOBAL_USER_TEXT.USER_PHONE ,
       dataIndex: 'phone' ,
-      width: 128 ,
+      width: 64 ,
       isSearch: true
     } ,
     {
       title: "角色" ,
       dataIndex: "roleId" ,
       required: true ,
-      width: 64 ,
+      width: 128 ,
       align: "center" ,
       render: (_ , record) => {
-        return <Tag color={"processing"}>{roleMap.get(record.roleId)}</Tag>
+        return <Select
+          mode="multiple"
+          allowClear
+          maxTagCount={3}
+          style={{width: "100%"}}
+          placeholder="Please select"
+          defaultValue={record.roleId}
+          onChange={() => {
+          }}
+          options={roles}
+        />
       } ,
       inputType: "Select" ,
       searchIsOption: roles

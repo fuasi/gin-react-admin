@@ -4,39 +4,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"server/global"
 	"server/models/common/response"
-	"server/utils"
 )
 
 func CasbinMiddleware(c *gin.Context) {
-	username, _ := c.Get("username")
-	sub := username.(string)
+	username := c.GetString("username")
+	sub := username
 	obj := c.Request.RequestURI
 	act := c.Request.Method
-	request := sub + obj + act
-
-	entry, err := utils.RedisGetCasbinRequest(request)
-	if err != nil {
-		response.ErrorWithMessage(c, err.Error())
+	//request := sub + obj + act
+	enforce, _ := global.GRA_CASBIN.Enforce(sub, obj, act)
+	if !enforce {
+		response.ErrorWithMessage(c, "权限不足：请联系管理员或者稍后重试")
 		c.Abort()
-	}
-	if entry {
-		enforce, err := global.GRA_CASBIN.Enforce(sub, obj, act)
-		if err != nil {
-			response.ErrorWithMessage(c, err.Error())
-			c.Abort()
-			return
-		}
-		if !enforce {
-			err := utils.RedisSetCasbinRequest(request, false)
-			if err != nil {
-				response.ErrorWithMessage(c, err.Error())
-				c.Abort()
-				return
-			}
-			response.AuthorizationErrorWithMessage(c, "没有权限访问该资源!")
-			c.Abort()
-			return
-		}
 	}
 	c.Next()
 }

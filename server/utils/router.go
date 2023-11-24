@@ -44,6 +44,7 @@ func RegisterApi(router gin.IRoutes, apiSet map[string]struct{}, params ...syste
 				"api_path":    fmt.Sprintf("%s%s", global.GRA_CONFIG.System.ApiPrefix, param.ApiUrl),
 				"api_comment": param.ApiComment,
 				"api_method":  param.ApiMethod,
+				"method":      param.ApiMethod.MethodString(),
 			}).Error; err != nil {
 				panic(fmt.Sprintf("Api注册失败,%s", err.Error()))
 			}

@@ -23,7 +23,6 @@ const Authority = ({roleAuthority , checkedKeys , setCheckedKeys}: RoleAuthority
 
   useEffect(() => {
     const authority = new Map<string , Api[]>()
-    console.log(roleAuthority.apis)
     for (const api of roleAuthority.apis) {
       if (authority.get(api.apiGroup)) {
         authority.set(api.apiGroup , [...authority.get(api.apiGroup)! , api])

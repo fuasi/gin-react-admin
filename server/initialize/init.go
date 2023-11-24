@@ -1,6 +1,8 @@
 package initialize
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 func InitEnter() *gin.Engine {
 	initZap()      //初始化Log

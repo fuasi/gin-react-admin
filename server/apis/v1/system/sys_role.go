@@ -49,13 +49,13 @@ func (r *RoleApis) UpdateRole(c *gin.Context) {
 }
 
 func (r *RoleApis) DeleteRole(c *gin.Context) {
-	var id []uint
-	err := c.ShouldBind(&id)
+	var ids []int64
+	err := c.ShouldBind(&ids)
 	if err != nil {
 		response.ParamError(c)
 		return
 	}
-	err = roleServices.DeleteRole(id)
+	err = roleServices.DeleteRole(ids)
 	if err != nil {
 		global.GRA_LOG.Error("删除角色失败:", err.Error())
 		response.Error(c)
@@ -86,7 +86,7 @@ func (r *RoleApis) InsertRole(c *gin.Context) {
 	}
 	err = roleServices.InsertRole(role)
 	if err != nil {
-		response.Error(c)
+		response.ErrorWithMessage(c, "执行失败,请检查是角色名字是否重复")
 		return
 	}
 	response.Success(c)

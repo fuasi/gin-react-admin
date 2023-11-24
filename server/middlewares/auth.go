@@ -40,7 +40,6 @@ func AuthMiddleware(c *gin.Context) {
 		c.Abort()
 		return
 	}
-
 	c.Set("userId", jwtPackaging.SysUserPublic.Id)
 	c.Set("username", jwtPackaging.SysUserPublic.Username)
 	c.Set("nickname", jwtPackaging.SysUserPublic.Nickname)

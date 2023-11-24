@@ -122,7 +122,8 @@ export const useTable = <T extends object>(props: TableHookProps<T>): TableHookR
   };
 
   const handleSearch = () => {
-    handleFindData({page , pageSize , condition: {...form.getFieldsValue(true)}})
+    handleFindData({page: 1 , pageSize , condition: {...form.getFieldsValue(true)}})
+    setPageInfo({page: 1 , pageSize: 20})
   }
 
   const handleResetSearch = () => {

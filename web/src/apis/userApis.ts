@@ -12,7 +12,7 @@ export interface User {
   createdAt? : string
   updatedAt? : string
   path : string
-  roleId : number
+  roleId : number[]
 }
 
 export function getUsers(query : SearchQuery<User>) {

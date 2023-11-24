@@ -20,7 +20,7 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup, apiSet map[string]s
 		utils.NewRegisterApiParam(common.HttpGet, "/role/:id", "根据ID获取角色信息", roleApis.FindRoleById),
 		utils.NewRegisterApiParam(common.HttpGet, "/authority/:id", "获取角色允许访问的Api", roleApis.GetRoleAuthority),
 		utils.NewRegisterApiParam(common.HttpPut, "/role", "创建角色", roleApis.InsertRole),
-		utils.NewRegisterApiParam(common.HttpPut, "/routers/:id", "获取路由菜单树", roleApis.GetRoleMenuTree),
+		utils.NewRegisterApiParam(common.HttpGet, "/routers/:id", "获取路由菜单树", roleApis.GetRoleMenuTree),
 		utils.NewRegisterApiParam(common.HttpGet, "/roles", "获取全部角色", roleApis.GetAllRole),
 	)
 }

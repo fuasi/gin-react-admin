@@ -20,9 +20,21 @@ func (t HttpType) String() string {
 		return "POST / 多条件查询|创建"
 	case HttpPatch:
 		return "PATCH / 更新"
-	case HttpDelete:
-		return "DELETE / 删除"
 	default:
-		return "UNKNOWN"
+		return "DELETE / 删除"
+	}
+}
+func (t HttpType) MethodString() string {
+	switch t {
+	case HttpGet:
+		return "GET"
+	case HttpPut:
+		return "PUT"
+	case HttpPost:
+		return "POST"
+	case HttpPatch:
+		return "PATCH"
+	default:
+		return "DELETE"
 	}
 }

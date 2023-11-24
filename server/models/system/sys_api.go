@@ -13,6 +13,7 @@ type SysApi struct {
 	ApiMethod  string `json:"apiMethod,omitempty"`
 	ApiGroup   string `json:"apiGroup,omitempty"`
 	ApiGroupId uint   `json:"apiGroupId,omitempty"`
+	Method     string `json:"method,omitempty"`
 	Required   bool   `json:"required"`
 }
 
