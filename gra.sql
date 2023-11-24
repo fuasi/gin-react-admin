@@ -71,7 +71,8 @@ CREATE TABLE public.gra_apis (
     api_group_id integer DEFAULT 1 NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    required boolean DEFAULT false NOT NULL
+    required boolean DEFAULT false NOT NULL,
+    method character varying DEFAULT 'GET'::character varying NOT NULL
 );
 
 
@@ -231,7 +232,7 @@ CREATE TABLE public.gra_users (
     created_at timestamp without time zone,
     nickname character varying,
     enable smallint DEFAULT 1 NOT NULL,
-    role_id integer DEFAULT 1 NOT NULL
+    role_id integer[] DEFAULT ARRAY[]::integer[] NOT NULL
 );
 
 
@@ -305,6 +306,50 @@ ALTER TABLE ONLY public.gra_users ALTER COLUMN id SET DEFAULT nextval('public.gr
 --
 
 COPY public.casbin_rule (id, ptype, v0, v1, v2, v3, v4, v5) FROM stdin;
+96	p	管理员	/api/user/:id	GET			
+97	p	管理员	/api/user	GET			
+98	p	管理员	/api/user	DELETE			
+99	p	管理员	/api/user/:id	PATCH			
+100	p	管理员	/api/user	PATCH			
+101	p	管理员	/api/login	POST			
+102	p	管理员	/api/check	POST			
+103	p	管理员	/api/files	POST			
+104	p	管理员	/api/user	PUT			
+105	p	管理员	/api/users	POST			
+106	p	管理员	/api/file	DELETE			
+107	p	管理员	/api/file	PATCH			
+604	p	超级管理员	/api/router	POST			
+605	p	超级管理员	/api/role	PUT			
+606	p	超级管理员	/api/user/:id	GET			
+607	p	超级管理员	/api/role/:id	GET			
+608	p	超级管理员	/api/routers/:id	GET			
+609	p	超级管理员	/api/roles	GET			
+610	p	超级管理员	/api/api/:id	GET			
+611	p	超级管理员	/api/router/:id	GET			
+612	p	超级管理员	/api/authority/:id	GET			
+613	p	超级管理员	/api/user	GET			
+614	p	超级管理员	/api/api	DELETE			
+615	p	超级管理员	/api/router	DELETE			
+616	p	超级管理员	/api/role	DELETE			
+617	p	超级管理员	/api/user	DELETE			
+618	p	超级管理员	/api/router	PATCH			
+619	p	超级管理员	/api/user/:id	PATCH			
+620	p	超级管理员	/api/user	PATCH			
+621	p	超级管理员	/api/api	PATCH			
+622	p	超级管理员	/api/role	PATCH			
+623	p	超级管理员	/api/api	POST			
+624	p	超级管理员	/api/apis	POST			
+625	p	超级管理员	/api/login	POST			
+626	p	超级管理员	/api/check	POST			
+627	p	超级管理员	/api/roles	POST			
+628	p	超级管理员	/api/files	POST			
+629	p	超级管理员	/api/user	PUT			
+630	p	超级管理员	/api/router	PUT			
+631	p	超级管理员	/api/users	POST			
+632	p	超级管理员	/api/file	POST			
+633	p	超级管理员	/api/file	DELETE			
+634	p	超级管理员	/api/file	PATCH			
+635	p	超级管理员	/api/routers	GET			
 \.
 
 
@@ -312,28 +357,39 @@ COPY public.casbin_rule (id, ptype, v0, v1, v2, v3, v4, v5) FROM stdin;
 -- Data for Name: gra_apis; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.gra_apis (id, api_path, api_comment, api_method, api_group_id, created_at, updated_at, required) FROM stdin;
-2	/api/file	文件上传	POST / 多条件查询|创建	5	2023-08-14 08:18:48.671844	2023-09-15 16:35:19.589849	t
-3	/api/user	获取路由树	GET / 查询	6	2023-08-14 08:18:48.671844	2023-09-20 15:48:36.991383	t
-4	/api/user	根据ID删除用户	DELETE / 删除	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:43.947922	f
-5	/api/user	根据ID更新用户信息	PATCH / 更新	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:49.177881	f
-6	/api/user/:id	根据ID获取用户信息	GET / 查询	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:54.364454	f
-7	/api/user/:id	根据ID重置用户密码	PATCH / 更新	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:02.126575	f
-8	/api/users	获取用户列表	POST / 多条件查询|创建	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:10.036076	f
-50	/api/user	创建用户	PUT / 创建	2	2023-08-15 14:18:51.933493	2023-09-20 15:49:23.173679	f
-51	/api/roles	获取角色列表	POST / 多条件查询|创建	6	2023-08-16 16:26:43.12355	2023-09-20 15:49:36.524479	f
-52	/api/role	根据ID更新角色	PATCH / 更新	6	2023-08-16 16:27:22.317603	2023-09-20 15:49:41.846344	f
-53	/api/role	根据ID删除角色	DELETE / 删除	6	2023-08-16 16:28:14.522614	2023-09-20 15:49:46.901623	f
-54	/api/role/:id	根据ID获取角色信息	GET / 查询	6	2023-08-16 16:28:54.086962	2023-09-20 15:49:51.462439	f
-55	/api/role	创建角色	PUT / 创建	6	2023-08-16 16:29:22.735957	2023-09-20 15:49:56.237708	f
-56	/api/routers/:id	获取路由菜单树	GET / 查询	6	2023-08-16 16:29:46.518065	2023-09-20 15:50:02.852808	f
-57	/api/authority/:id	获取全部Api	GET / 查询	7	2023-08-16 16:30:27.702628	2023-09-20 15:50:12.202619	f
-58	/api/apis	获取Api列表	POST / 多条件查询|创建	7	2023-08-16 16:31:12.409164	2023-09-20 15:50:16.177468	f
-59	/api/api	根据ID更新Api信息	PATCH / 更新	7	2023-08-16 16:31:43.50141	2023-09-20 15:50:19.925832	f
-60	/api/api	根据ID删除Api	DELETE / 删除	7	2023-08-16 16:32:07.004275	2023-09-20 15:50:22.89985	f
-61	/api/api/:id	根据ID获取Api信息	GET / 查询	7	2023-08-16 16:32:47.498996	2023-09-20 15:50:29.120376	f
-62	/api/api	创建Api	POST / 多条件查询|创建	7	2023-08-16 16:31:12.409164	2023-09-20 15:50:32.480348	f
-1	/api/check	检查用户是否登录	POST / 多条件查询|创建	2	2023-08-14 08:18:48.671844	2023-09-20 16:39:58.843623	t
+COPY public.gra_apis (id, api_path, api_comment, api_method, api_group_id, created_at, updated_at, required, method) FROM stdin;
+81	/api/router	获取路由列表	POST / 多条件查询|创建	8	2023-11-21 08:10:07.924659	2023-11-21 16:21:01.132408	f	POST
+55	/api/role	创建角色	PUT / 创建	6	2023-08-16 16:29:22.735957	2023-09-20 15:49:56.237708	f	PUT
+6	/api/user/:id	根据ID获取用户信息	GET / 查询	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:54.364454	f	GET
+54	/api/role/:id	根据ID获取角色信息	GET / 查询	6	2023-08-16 16:28:54.086962	2023-09-20 15:49:51.462439	f	GET
+56	/api/routers/:id	获取路由菜单树	GET / 查询	6	2023-08-16 16:29:46.518065	2023-09-20 15:50:02.852808	f	GET
+79	/api/roles	获取全部角色	GET / 查询	6	2023-11-21 08:10:07.921244	2023-11-21 16:20:45.891644	f	GET
+61	/api/api/:id	根据ID获取Api信息	GET / 查询	7	2023-08-16 16:32:47.498996	2023-09-20 15:50:29.120376	f	GET
+80	/api/router/:id	根据ID获取路由信息	GET / 查询	8	2023-11-21 08:10:07.923018	2023-11-21 16:21:05.488027	f	GET
+57	/api/authority/:id	获取角色允许访问的Api	GET / 查询	7	2023-08-16 16:30:27.702628	2023-09-20 15:50:12.202619	f	GET
+78	/api/user	获取用户自身信息	GET / 查询	2	2023-11-21 08:10:07.91855	2023-11-24 09:44:12.703665	t	GET
+60	/api/api	根据ID删除Api	DELETE / 删除	7	2023-08-16 16:32:07.004275	2023-09-20 15:50:22.89985	f	DELETE
+83	/api/router	根据ID删除路由	DELETE / 删除	8	2023-11-21 08:10:07.927946	2023-11-21 16:21:28.723	f	DELETE
+53	/api/role	根据ID删除角色	DELETE / 删除	6	2023-08-16 16:28:14.522614	2023-09-20 15:49:46.901623	f	DELETE
+4	/api/user	根据ID删除用户	DELETE / 删除	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:43.947922	f	DELETE
+84	/api/router	根据ID更新路由信息	PATCH / 更新	8	2023-11-21 08:10:07.929662	2023-11-21 16:21:32.335199	f	PATCH
+7	/api/user/:id	根据ID重置用户密码	PATCH / 更新	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:02.126575	f	PATCH
+5	/api/user	根据ID更新用户信息	PATCH / 更新	2	2023-08-14 08:18:48.671844	2023-09-20 15:48:49.177881	f	PATCH
+59	/api/api	根据ID更新Api信息	PATCH / 更新	7	2023-08-16 16:31:43.50141	2023-09-20 15:50:19.925832	f	PATCH
+52	/api/role	根据ID更新角色	PATCH / 更新	6	2023-08-16 16:27:22.317603	2023-09-20 15:49:41.846344	f	PATCH
+62	/api/api	创建Api	POST / 多条件查询|创建	7	2023-08-16 16:31:12.409164	2023-09-20 15:50:32.480348	f	POST
+58	/api/apis	获取Api列表	POST / 多条件查询|创建	7	2023-08-16 16:31:12.409164	2023-09-20 15:50:16.177468	f	POST
+77	/api/login	用户登录	POST / 多条件查询|创建	2	2023-11-21 08:10:07.914999	2023-11-24 09:44:20.613489	t	POST
+1	/api/check	检查用户是否登录	POST / 多条件查询|创建	2	2023-08-14 08:18:48.671844	2023-09-20 16:39:58.843623	t	POST
+51	/api/roles	获取角色列表	POST / 多条件查询|创建	6	2023-08-16 16:26:43.12355	2023-09-20 15:49:36.524479	f	POST
+85	/api/files	获取上传的文件列表	POST / 多条件查询|创建	2	2023-11-21 08:10:07.931329	2023-11-21 16:21:45.540658	f	POST
+50	/api/user	创建用户	PUT / 创建	2	2023-08-15 14:18:51.933493	2023-09-20 15:49:23.173679	f	PUT
+82	/api/router	创建路由	PUT / 创建	8	2023-11-21 08:10:07.926348	2023-11-21 16:21:25.338712	f	PUT
+8	/api/users	获取用户列表	POST / 多条件查询|创建	2	2023-08-14 08:18:48.671844	2023-09-20 15:49:10.036076	f	POST
+2	/api/file	文件上传	POST / 多条件查询|创建	5	2023-08-14 08:18:48.671844	2023-09-15 16:35:19.589849	t	POST
+87	/api/file	根据ID删除上传的文件	DELETE / 删除	2	2023-11-21 08:10:07.93607	2023-11-21 16:22:04.489954	f	DELETE
+86	/api/file	根据ID更新文件信息	PATCH / 更新	2	2023-11-21 08:10:07.933648	2023-11-21 16:22:01.393069	f	PATCH
+88	/api/routers	获取路由树	GET / 查询	2	2023-11-24 08:22:22.046311	2023-11-24 16:42:21.271765	t	GET
 \.
 
 
@@ -342,9 +398,10 @@ COPY public.gra_apis (id, api_path, api_comment, api_method, api_group_id, creat
 --
 
 COPY public.gra_casbin_role (id, role_name, allow_api_id, allow_router_id, default_router_id) FROM stdin;
-1	超级管理员	{6,8,9,2,1,3,51,52,53,54,55,56,57,59,60,61,58,62,7,50,5,4}	{5,2,6,3,7,1,8,9}	1
+1	超级管理员	{6,8,2,1,51,52,53,54,55,56,57,59,60,61,58,62,7,50,5,4,85,86,87,77,78,80,81,82,83,84,79,88}	{5,2,6,1,8,3,7}	6
 2	开发者	{5,4,7,6,8,50,9,1,3,2,51,52,53,54,55,56,57,59,60,61,58,62}	{1,5,2,7,3}	1
 7	用户管理员	{5,4,7,6,8,50,9}	{5,7,3}	7
+24	管理员	{1,4,5,6,7,8,50,77,78,85,86,87}	{}	1
 \.
 
 
@@ -353,6 +410,7 @@ COPY public.gra_casbin_role (id, role_name, allow_api_id, allow_router_id, defau
 --
 
 COPY public.gra_files (id, file_name, system_file_name, tag, file_url, file_path, created_at, updated_at) FROM stdin;
+51	1691554868	1700789421.png	png	/static/images/1700789421.png	D:\\static\\images\\1700789421.png	2023-11-24 09:30:21.248208	2023-11-24 09:30:21.248208
 50	一个头像	1700471419.png	png	/static/images/1700471419.png	D:\\static\\images\\1700471419.png	2023-11-20 17:10:19.901471	2023-11-20 17:12:30.409603
 \.
 
@@ -377,8 +435,8 @@ COPY public.gra_routers (id, name, icon, path, component_path, parent_id, router
 --
 
 COPY public.gra_users (id, username, password, avatar, phone, updated_at, created_at, nickname, enable, role_id) FROM stdin;
-2	admin1	$2a$10$iKxK9wtpv.Aeo0wXD0ET4uWj9uYqkxG5KxyFp.qAc1zYMRhlT.rba	/static/images/avatar-default.jpg	13888888888	2023-11-15 11:22:18.405647	2023-08-07 10:38:56.008269	管理员二号	1	1
-1	admin	$2a$10$jvJP0ZkY1gB5ciDxW9Rhn.dKJGby1jg8EcVpZbCBqElcl80noBUCa	/static/images/1700471419.png	13888888888	2023-11-20 17:12:59.675663	2023-08-07 16:49:26.957432	管理员一号	1	1
+1	admin	$2a$10$jvJP0ZkY1gB5ciDxW9Rhn.dKJGby1jg8EcVpZbCBqElcl80noBUCa	/static/images/1700789421.png	13888888888	2023-11-24 16:59:22.835194	2023-08-07 16:49:26.957432	管理员一号	1	{1,7}
+2	admin1	$2a$10$iKxK9wtpv.Aeo0wXD0ET4uWj9uYqkxG5KxyFp.qAc1zYMRhlT.rba	/static/images/avatar-default.jpg	13888888888	2023-11-15 11:22:18.405647	2023-08-07 10:38:56.008269	管理员二号	1	{}
 \.
 
 
@@ -386,28 +444,28 @@ COPY public.gra_users (id, username, password, avatar, phone, updated_at, create
 -- Name: casbin_rule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.casbin_rule_id_seq', 1, false);
+SELECT pg_catalog.setval('public.casbin_rule_id_seq', 635, true);
 
 
 --
 -- Name: gra_apis_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.gra_apis_id_seq', 65, true);
+SELECT pg_catalog.setval('public.gra_apis_id_seq', 88, true);
 
 
 --
 -- Name: gra_casbin_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.gra_casbin_role_id_seq', 17, true);
+SELECT pg_catalog.setval('public.gra_casbin_role_id_seq', 28, true);
 
 
 --
 -- Name: gra_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.gra_files_id_seq', 50, true);
+SELECT pg_catalog.setval('public.gra_files_id_seq', 51, true);
 
 
 --
