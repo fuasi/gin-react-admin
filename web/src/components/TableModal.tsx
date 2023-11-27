@@ -117,7 +117,19 @@ const TableModal = <T extends object>(props: ModalComponentProps<T>) => {
                            isUpdate={isUpdate} dataIndex={value.dataIndex}/> : value.inputType === "Avatar" ?
                   <FileUpload/> : value.inputType === "Select" ?
                     <Select options={value.searchIsOption}/> : value.inputType === "InputNumber" ? <InputNumber/> :
-                      <Input/>}
+                      value.inputType === "SelectMultipleMode" ? <Select
+                          mode={"multiple"}
+                          style={{width: "100%"}}
+                          filterOption={(inputValue , option) => {
+                            const optionLabel: string | React.ReactNode | undefined = option?.label
+                            if (typeof optionLabel === "string") {
+                              return optionLabel.includes(inputValue)
+                            }
+                            return false
+                          }}
+                          options={value.searchIsOption}
+                        /> :
+                        <Input/>}
             </Form.Item>
           )
         })}

@@ -72,7 +72,16 @@ go build ./app.go
 # Run (Windows)
 ./app.exe
 ```
+### 1.3 Database import run(PostgreSQL)
+```
+# import database
+psql -U 用户名 -d 数据库名 -f ./gra.sql
 
+# reference below
+psql -U postgres -d gra -f ./gra.sql
+
+enter the database password to import
+```
 ## 2. Features
 
 ### Completed
@@ -80,10 +89,10 @@ go build ./app.go
 - [√] Role management: Create the main object of permission control, you can assign different api permissions and menu permissions to roles.
 - [√] Menu management: Realize dynamic menu configuration for users, and realize different menus for different roles.
 - [√] Api management: Set and adjust user api interface information.
+- [√] Permission control: Set and adjust the user's api interface permissions.
 ### To be completed
 
 - [×] Fragment upload: File fragment upload and large file upload.
-- [×] Permission control: Set and adjust the user's api interface permissions.
 
 ## 3. Licenses
 

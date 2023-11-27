@@ -15,12 +15,12 @@ import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification
 import { GLOBAL_SYSTEM_TEXT , GLOBAL_TABLE_TEXT , GLOBAL_USER_TEXT } from "@/config";
 import { GetList , SearchQuery } from "@/apis/baseApis.ts";
 import { getAllRole } from "@/apis/roleApis.ts";
+import { notificationActiveSuccess } from "@/utils/notification.tsx";
 
 const UserComponent = () => {
   const {loading , withLoading} = useLoading()
   const [data , setData] = useState<GetList<User>>({list: [] , total: 0})
   const [messageApi , contextHolder] = message.useMessage()
-  const [options , setOptions] = useState([{label: "" , value: 1}])
   const {withNotification} = useSystemActiveNotification()
   const [roles , setRoles] = useState<SearchIsOptionType>([])
   useEffect(() => {
@@ -82,22 +82,30 @@ const UserComponent = () => {
       title: "角色" ,
       dataIndex: "roleId" ,
       required: true ,
-      width: 128 ,
+      width: 172 ,
       align: "center" ,
       render: (_ , record) => {
         return <Select
-          mode="multiple"
-          allowClear
           maxTagCount={3}
+          mode={"multiple"}
           style={{width: "100%"}}
           placeholder="Please select"
           defaultValue={record.roleId}
-          onChange={() => {
+          filterOption={(inputValue , option) => {
+            const optionLabel: string | React.ReactNode | undefined = option?.label
+            if (typeof optionLabel === "string") {
+              return optionLabel.includes(inputValue)
+            }
+            return false
+          }}
+          onChange={async (value) => {
+            await handleUpdate({...record , roleId: value})
+            notificationActiveSuccess("角色设置")
           }}
           options={roles}
         />
       } ,
-      inputType: "Select" ,
+      inputType: "SelectMultipleMode" ,
       searchIsOption: roles
     } ,
     {

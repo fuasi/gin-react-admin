@@ -33,7 +33,7 @@ interface TableHookResult {
   TableComponent: JSX.Element
 }
 
-type InputType = 'Switch' | 'Select' | 'Avatar' | 'InputNumber'
+type InputType = 'Switch' | 'Select' | 'Avatar' | 'InputNumber' | "SelectMultipleMode"
 export type SearchIsOptionType = {
   label: React.ReactNode,
   value: string | number | boolean

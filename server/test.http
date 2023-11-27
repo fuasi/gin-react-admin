@@ -1,0 +1,4 @@
+DELETE http://localhost:8888/api/user/4
+Content-Type: application/json
+
+[11,12,13]
