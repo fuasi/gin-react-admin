@@ -20,13 +20,30 @@ func (userService *UserServices) GetUserById(u system.SysUser) (resultUser syste
 	return resultUser, err
 }
 
-func (userService *UserServices) UpdateUserById(u system.SysUser) error {
-	//var roleServices RoleServices
-	//role, err := roleServices.FindRoleById(system.SysRole{Id: u.RoleId})
-	//if err != nil {
-	//	return err
-	//}
-	//global.GRA_CASBIN.UpdateGroupingPolicy([]string{}, []string{})
+func (userService *UserServices) UpdateUserById(u system.SysUser, roles []system.SysRole) error {
+	_, err := global.GRA_CASBIN.RemoveNamedGroupingPolicy("g", u.Username)
+	if err != nil {
+		global.GRA_LOG.Error("根据ID修改用户失败,删除用户角色信息失败:", err.Error())
+		return err
+	}
+	var userRoles = make([][]string, len(roles))
+	for idx, role := range roles {
+		userRoles[idx] = []string{u.Username, role.RoleName}
+	}
+	ok, err := global.GRA_CASBIN.AddNamedGroupingPoliciesEx("g", userRoles)
+	if err != nil {
+		global.GRA_LOG.Error("根据ID修改用户失败,添加用户角色信息失败:", err.Error())
+		return err
+	}
+	if !ok {
+		global.GRA_LOG.Error("根据ID修改用户失败,添加用户角色信息失败")
+		return err
+	}
+	var casbinServices CasbinServices
+	err = casbinServices.ReloadCasbin()
+	if err != nil {
+		return err
+	}
 	return global.GRA_DB.Model(&system.SysUser{}).Select("avatar", "nickname", "phone", "enable", "role_id").
 		Where("id = ?", u.Id).
 		Updates(map[string]interface{}{

@@ -28,8 +28,7 @@ func InitRouter() *gin.Engine {
 		systemRouter.InitBaseRouter(PublicRouter, apiSet)
 	}
 	PrivateRouter := Router.Group(global.GRA_CONFIG.System.ApiPrefix)
-	PrivateRouter.Use(middlewares.AuthMiddleware)
-	//middlewares.CasbinMiddleware)
+	PrivateRouter.Use(middlewares.AuthMiddleware, middlewares.CasbinMiddleware)
 	{
 		systemRouter.InitUserRouter(PrivateRouter, apiSet)
 		systemRouter.InitApiRouter(PrivateRouter, apiSet)

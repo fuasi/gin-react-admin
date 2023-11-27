@@ -39,7 +39,7 @@ func SuccessWithMessage(c *gin.Context, msg string) {
 }
 
 func Error(c *gin.Context) {
-	BaseResponse(c, ErrorCode, "执行失败", nil)
+	BaseResponse(c, ErrorCode, "执行失败,请联系管理员或开发者", nil)
 }
 
 func ErrorWithData(c *gin.Context, data any) {

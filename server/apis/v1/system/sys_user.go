@@ -55,7 +55,13 @@ func (u *UserApis) UpdateUserById(c *gin.Context) {
 		response.ParamErrorWithMessage(c, err.Error())
 		return
 	}
-	err = userServices.UpdateUserById(user)
+	roles, err := roleServices.FindRoleByAnyIds(user.RoleId)
+	if err != nil {
+		global.GRA_LOG.Error("根据ID修改用户失败,角色查询错误:", err.Error())
+		response.Error(c)
+		return
+	}
+	err = userServices.UpdateUserById(user, roles)
 	if err != nil {
 		global.GRA_LOG.Error(" 根据ID修改用户失败:", err.Error())
 		response.ErrorWithMessage(c, err.Error())

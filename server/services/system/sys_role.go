@@ -1,6 +1,7 @@
 package system
 
 import (
+	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"server/global"
@@ -84,6 +85,17 @@ func (roleService *RoleServices) FindRoleById(role system.SysRole) (system.SysRo
 	err := global.GRA_DB.Where("id = ?", role.Id).Select("id,role_name").Find(&role).Error
 	return role, err
 }
+
+func (roleService *RoleServices) FindRoleByAnyIds(ids pq.Int64Array) (roles []system.SysRole, err error) {
+	err = global.GRA_DB.Where("id = any(?)", ids).Select("id,role_name").Find(&roles).Error
+	return roles, err
+}
+
+func (roleService *RoleServices) FindRoleByInIds(ids []uint) (roles []system.SysRole, err error) {
+	err = global.GRA_DB.Where("id in ?", ids).Select("id,role_name").Find(&roles).Error
+	return roles, err
+}
+
 func (roleService *RoleServices) InsertRole(role system.SysRole) error {
 	err := global.GRA_DB.Model(&role).Where("role_name = ?", role.RoleName).First(&role).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
