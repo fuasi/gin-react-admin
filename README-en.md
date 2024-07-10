@@ -27,7 +27,7 @@ English | [简体中文](./README.md)
 ## 1. Getting started
 
 ### 1.1 PrevView
-<a href="http://117.72.33.35:7888/">Demo</a> (Periodic data reset has not been set. Do not modify it)
+<a href="http://117.72.33.35:7888/">Demo</a>
 
 > Gin-react-admin is a full-stack back-end separation development base platform based on [React](https://react.dev/) and [Gin](https://gin-gonic.com), integrating jwt authentication, dynamic routing, dynamic menu, casbin authentication, which can quickly develop react and Golang background management systems.
 
