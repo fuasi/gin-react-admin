@@ -11,7 +11,6 @@ type SysRouter struct {
 	Children      []SysRouter `json:"children,omitempty" gorm:"-"` //子路由
 	Hidden        *bool       `json:"hidden"`                      //是否显示在菜单
 	Required      *bool       `json:"required"`                    //权限中是否为必须
-	IsApiGroup    int         `json:"isApiGroup,omitempty"`        //是否为Api管理中的分组参数
 }
 
 func (SysRouter) TableName() string {

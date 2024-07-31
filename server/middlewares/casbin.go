@@ -26,8 +26,9 @@ func CasbinMiddleware(c *gin.Context) {
 		}
 		obj += "/:id"
 	}
-	fmt.Println(obj)
+	//fmt.Println(obj)
 	enforce, _ := global.GRA_CASBIN.Enforce(sub, obj, act)
+	fmt.Println(sub, obj, act)
 	if !enforce {
 		response.AuthorizationErrorWithMessage(c, "权限不足：请联系管理员或者稍后重试")
 		c.Abort()

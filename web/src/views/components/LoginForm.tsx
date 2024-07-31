@@ -58,7 +58,7 @@ const LoginForm = () => {
         <Form.Item
           name="username"
           rules={ [{ required : true, message : 'Please enter the correct user name' }] }
-          initialValue={ "admin" }
+          initialValue={ "super_admin" }
         >
           <Input className={ 'h-10' } placeholder={ '请输入账号' } prefix={ <UserOutlined/> }/>
         </Form.Item>

@@ -6,7 +6,7 @@ const userStorage = observable<{ user : User }>({
     id : -1,
     avatar : '',
     path : '',
-    roleId : 0
+    roleId : []
   }
 })
 
