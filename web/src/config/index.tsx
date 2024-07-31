@@ -76,7 +76,6 @@ const systemText = {
     API_PATH : "API路径",
     API_COMMENT : "API简介",
     API_METHOD : "API请求方法",
-    API_GROUP : "API分组",
     REQUIRED : "权限",
   }
 }

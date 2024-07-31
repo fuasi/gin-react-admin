@@ -17,13 +17,6 @@ const RouterView = () => {
     setIconList(RouterIcons)
   }, [])
   const columns : InputAndColumns<RouterResponse>[] = [{
-    title : "ID",
-    dataIndex : 'id',
-    isShow : true,
-    required : true,
-    isSearch : true,
-    isNumber : true
-  }, {
     title : "菜单名称",
     dataIndex : 'name',
     width : 240,
@@ -50,13 +43,7 @@ const RouterView = () => {
     dataIndex : 'componentPath',
     width : 420,
     required : true,
-  }, {
-    title : "父节点",
-    dataIndex : 'parentId',
-    width : 120,
-    inputType : "InputNumber",
-    required : true,
-  }, {
+  },  {
     title : "排序",
     dataIndex : 'routerOrder',
     inputType : "InputNumber",
@@ -92,21 +79,6 @@ const RouterView = () => {
     required : true,
     render : (_, record) =>
         record.required ? <Tag color={"error"}>必选</Tag>:<Tag color={"blue"}>非必选</Tag>
-  }, {
-    title : " Api组别",
-    dataIndex : 'isApiGroup',
-    width : 240,
-    inputType : "Select",
-    searchIsOption : [{
-      label : "组别",
-      value : 1
-    }, {
-      label : "非组别",
-      value : -1
-    }],
-    required : true,
-    render : (_, record) => record.isApiGroup !== -1 ? <Tag color={"error"}>组别</Tag>:
-        <Tag color={"blue"}>非组别</Tag>
   }]
   const handleFindData = async (query : SearchQuery<RouterResponse>) => {
     await withLoading(async () => {
@@ -132,7 +104,7 @@ const RouterView = () => {
     await deleteRouter([...ids])
   }
   const { TableComponent } = useTable({
-    notPage : true,
+    isPage : true,
     columns,
     handleFindData,
     getUpdateData,
