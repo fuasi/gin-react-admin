@@ -28,7 +28,7 @@ interface TableHookProps<T> {
   columns : InputAndColumns<T>[];
   handleUserResetPassword? : ( record : T ) => void;
   handleRoleAuthority? : ( record : T ) => void
-  isPage? : boolean;
+  isPage : boolean;
 }
 
 interface TableHookResult {
@@ -66,6 +66,7 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
     handleUserResetPassword ,
     columns
   } = props
+  const [tableHeight , setTableHeight] = useState("")
   const [pageInfo , setPageInfo] = useState<PageInfo>({ page : 1 , pageSize : 20 })
   const [modalIsOpen , setModalIsOpen] = useState(false)
   const [modalTitle , setModalTitle] = useState(GLOBAL_TABLE_TEXT.INSERT_TEXT)
@@ -73,6 +74,8 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
   const [selectedRowKeys , setSelectedRowKeys] = useState<React.Key[]>([]);
   const [form] = Form.useForm()
   const { page , pageSize } = pageInfo
+  const tableRef : Parameters<typeof Table>[0]['ref'] = React.useRef(null);
+
   const handleChangePage = ( page : number , pageSize : number ) => {
     setPageInfo({ page , pageSize })
   }
@@ -110,11 +113,15 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
       notificationActiveFail(GLOBAL_TABLE_TEXT.DELETE_TEXT , e?.toString() as string)
     }
   }
-
+  const handleTableHeight = () => {
+    setTableHeight(`calc(100vh - ${tableRef.current?.getBoundingClientRect().bottom}px)`)
+  }
   useEffect(() => {
     handleFindData({ page , pageSize , condition : { ...form.getFieldsValue(true) } })
   } , [pageInfo])
-
+  useEffect(() => {
+    handleTableHeight()
+  } , [])
   const onSelectChange = ( newSelectedRowKeys : React.Key[] ) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
@@ -123,7 +130,6 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
     selectedRowKeys ,
     onChange : onSelectChange ,
   };
-
   const handleSearch = () => {
     handleFindData({ page : 1 , pageSize , condition : { ...form.getFieldsValue(true) } })
     setPageInfo({ page : 1 , pageSize : 20 })
@@ -162,8 +168,8 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
               </Form>
             </div>
           </div>
-          <div className={`layout-container min-h-[200px]`}>
-            <div className={'min-w-[240px] mb-8'}>
+          <div className={`layout-container min-h-[200px] overflow-auto`}>
+            <div className={'min-w-[240px] mb-4'}>
               <Button className={"h-9 w-19"} onClick={handleInsert} icon={<PlusOutlined/>} type="primary">
                 {GLOBAL_TABLE_TEXT.INSERT_TEXT}
               </Button>
@@ -187,7 +193,13 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
                              handleFindData({ page , pageSize , condition : { ...form.getFieldsValue(true) } })
                            }}/>
             {/*表格信息*/}
+
             <Table
+                ref={tableRef}
+                scroll={{
+                  scrollToFirstRowOnChange : true ,
+                  y : tableHeight
+                }}
                 pagination={isPage ? {
                   position : ['bottomCenter'] ,
                   current : pageInfo.page ,

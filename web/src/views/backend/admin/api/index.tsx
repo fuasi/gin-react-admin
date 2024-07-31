@@ -11,15 +11,6 @@ const ApiView = () => {
   const { withLoading , loading } = useLoading()
   const columns : InputAndColumns<Api>[] = [
     {
-      title : GLOBAL_API_TEXT.API_ID ,
-      dataIndex : 'id' ,
-      width : 24 ,
-      required : true ,
-      isShow : true ,
-      isSearch : true ,
-      isNumber : true
-    } ,
-    {
       title : GLOBAL_API_TEXT.API_PATH ,
       dataIndex : 'apiPath' ,
       width : 128 ,
@@ -90,6 +81,7 @@ const ApiView = () => {
     await insertApi(api)
   }
   const { TableComponent } = useTable<Api>({
+    isPage : true ,
     columns : columns ,
     handleFindData ,
     getUpdateData ,
