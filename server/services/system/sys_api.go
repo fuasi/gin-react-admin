@@ -18,24 +18,22 @@ func (ApiServices) GetApiList(search commonRequest.Search[system.SysApi]) (apis 
 	tx := global.GRA_DB.Model(&apis).Scopes(
 		utils.SearchWhere("id", api.Id, false),
 		utils.SearchWhere("api_path", api.ApiPath, true),
-		utils.SearchWhere("api_group_id", api.ApiGroupId, false),
 		utils.SearchWhere("api_comment", api.ApiComment, true),
 		utils.SearchWhere("api_method", api.ApiMethod, false))
 	err = tx.Count(&total).Error
 	if err != nil {
 		return nil, 0, errors.New("查询数据数量失败")
 	}
-	err = tx.Model(&apis).Order("id").Joins("right join gra_routers on gra_routers.id = gra_apis.api_group_id").Where("gra_routers.id = gra_apis.api_group_id").Select("gra_apis.*,gra_routers.name as api_group").Offset(offset).Limit(limit).Find(&apis).Error
+	err = tx.Model(&apis).Order("id").Offset(offset).Limit(limit).Find(&apis).Error
 	return apis, total, err
 }
 
 func (api ApiServices) UpdateApi(a system.SysApi) error {
 	return global.GRA_DB.Model(&a).Where("id = ?", a.Id).Updates(map[string]any{
-		"api_group_id": a.ApiGroupId,
-		"api_path":     a.ApiPath,
-		"api_comment":  a.ApiComment,
-		"required":     a.Required,
-		"api_method":   a.ApiMethod,
+		"api_path":    a.ApiPath,
+		"api_comment": a.ApiComment,
+		"required":    a.Required,
+		"api_method":  a.ApiMethod,
 	}).Error
 }
 
@@ -50,10 +48,9 @@ func (api ApiServices) FindApiById(a system.SysApi) (resultApi system.SysApi, er
 }
 func (api ApiServices) InsertApi(sysApi system.SysApi) error {
 	return global.GRA_DB.Model(&sysApi).Create(map[string]any{
-		"api_group_id": sysApi.ApiGroupId,
-		"api_path":     sysApi.ApiPath,
-		"api_comment":  sysApi.ApiComment,
-		"required":     sysApi.Required,
-		"api_method":   sysApi.ApiMethod,
+		"api_path":    sysApi.ApiPath,
+		"api_comment": sysApi.ApiComment,
+		"required":    sysApi.Required,
+		"api_method":  sysApi.ApiMethod,
 	}).Error
 }

@@ -4,7 +4,6 @@ import (
 	"server/global"
 	commonRequest "server/models/common/request"
 	"server/models/system"
-	response "server/models/system/response"
 	"server/utils"
 )
 
@@ -18,7 +17,6 @@ func (r *RouterServices) GetRouterList(search commonRequest.Search[system.SysRou
 		utils.SearchWhere("id", router.Id, false),
 		utils.SearchWhere("name", router.Name, true),
 		utils.SearchWhere("path", router.Path, true),
-		utils.SearchWhere("is_api_group", router.IsApiGroup, false),
 	)
 	err = db.Model(&routers).Count(&total).Error
 	if err != nil {
@@ -40,10 +38,5 @@ func (r *RouterServices) DeleteRouter(id []int) error {
 }
 func (r *RouterServices) FindRouterById(params system.SysRouter) (router system.SysRouter, err error) {
 	err = global.GRA_DB.Where("id = ?", params.Id).First(&router).Error
-	return router, err
-}
-
-func (r *RouterServices) FindRouterGroup() (router []response.SysRouterGroup, err error) {
-	err = global.GRA_DB.Select("id,name").Where("is_api_group = ?", 1).Group("id,name").Find(&router).Error
 	return router, err
 }
