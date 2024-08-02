@@ -14,7 +14,7 @@ import {
 } from "@/apis/roleApis.ts";
 import { GetList , SearchQuery } from "@/apis/baseApis.ts";
 import { Key , useState } from "react";
-import { Button , Drawer , Space , Tabs , TabsProps } from "antd";
+import { Button , Drawer , Input , Space , Tabs , TabsProps } from "antd";
 import Menu from "@/views/backend/admin/role/components/Menu.tsx";
 import Authority from "@/views/backend/admin/role/components/Authority.tsx";
 import { notificationActiveSuccess } from "@/utils/notification.tsx";
@@ -50,16 +50,18 @@ const RoleView = () => {
     title : "ID" ,
     dataIndex : 'id' ,
     width : 24 ,
-    isShow : true ,
+    hidden : true ,
     required : true ,
     isSearch : true ,
-    isNumber : true
+    isNumber : true ,
+    dataInput : <Input disabled={true}/>
   } , {
     title : "角色名称" ,
     dataIndex : 'roleName' ,
     width : 420 ,
     required : true ,
     isSearch : true ,
+    dataInput : <Input placeholder={"请输入角色名称"}/>
   }]
   const handleFindData = async ( query : SearchQuery<Role> ) => {
     await withLoading(async () => {

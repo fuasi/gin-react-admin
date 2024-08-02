@@ -1,8 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { tokenStore } from '@/store/localstrageStore'
+import { ReactNode } from "react";
 
 
-const PrivateRoute = ({ children } : { children : React.ReactNode }) => {
+const PrivateRoute = ({ children } : { children : ReactNode }) => {
   const location = useLocation()
   if (!tokenStore.token) {
     return <Navigate replace to={ '/login' }/>

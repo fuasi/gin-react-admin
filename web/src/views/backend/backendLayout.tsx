@@ -134,7 +134,7 @@ const BackendLayout = () => {
           <SideMenu breadcrumbCache={breadcrumbCache} addTabs={handleAddTabItem}
                     setBreadcrumb={setBreadcrumb}/>
         </Sider>
-        <Layout >
+        <Layout>
           <Header addTab={handleAddTabItem} handleFunc={incr}
                   setCollapsed={setCollapsed}
                   breadcrumb={breadcrumb}
@@ -146,7 +146,7 @@ const BackendLayout = () => {
                     onEdit={handleTabEdit}
                     tabBarStyle={{ marginLeft : "24px" , marginRight : "24px" }}
                     className={"bg-white"} size={"large"}
-                    items={tabItem}> </Tabs>
+                    items={tabItem}/>
             </div>
             <div key={key}>
               <AnimatePresence mode={"wait"}>

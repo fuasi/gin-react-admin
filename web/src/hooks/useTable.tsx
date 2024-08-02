@@ -1,6 +1,6 @@
 import { Badge , Button , Form , Input , InputNumber , Popconfirm , Select , Space , Table , TableProps } from "antd";
 import { PageInfo , SearchQuery } from "@/apis/baseApis.ts";
-import React , { useEffect , useState } from "react";
+import React , { ReactNode , useEffect , useState } from "react";
 import TableModal from "@/components/TableModal.tsx";
 import { ColumnGroupType , ColumnType } from "antd/es/table";
 import {
@@ -35,20 +35,19 @@ interface TableHookResult {
   TableComponent : JSX.Element
 }
 
-type InputType = 'Switch' | 'Select' | 'Avatar' | 'InputNumber' | "SelectMultipleMode"
-export type SearchIsOptionType = {
-  label : React.ReactNode,
+export type SelectOptionType = {
+  label : ReactNode,
   value : string | number | boolean
 }[]
 export type InputAndColumns<T> =
     Pick<(ColumnGroupType<T> | ColumnType<T>) , keyof (ColumnType<T> | ColumnGroupType<T>)>
     & {
   dataIndex : string,
-  inputType? : InputType,
+  dataInput : ReactNode,
   required? : boolean,
-  isShow? : boolean,
+  hidden? : boolean,
   isSearch? : boolean,
-  searchIsOption? : SearchIsOptionType,
+  selectOrSwitchOption? : SelectOptionType,
   isNumber? : boolean
 }
 
@@ -114,7 +113,7 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
     }
   }
   const handleTableHeight = () => {
-    setTableHeight(`calc(100vh - ${tableRef.current?.getBoundingClientRect().bottom}px)`)
+    setTableHeight(`calc(100vh - ${tableRef.current?.nativeElement.getBoundingClientRect().bottom}px)`)
   }
   useEffect(() => {
     handleFindData({ page , pageSize , condition : { ...form.getFieldsValue(true) } })
@@ -149,7 +148,7 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
                   return item.isSearch
                 }).map(item => <Form.Item name={item.dataIndex} className={"ml-4 w-64"} key={item.dataIndex}
                                           label={item.title as string}>
-                  {item.searchIsOption ? <Select placeholder={item.title as string} options={item.searchIsOption}/>:
+                  {item.selectOrSwitchOption ? <Select placeholder={item.title as string} options={item.selectOrSwitchOption}/>:
                       item.isNumber ?
                           <InputNumber min={1} controls={false} className={"w-full"}
                                        placeholder={item.title as string}></InputNumber>:
@@ -213,45 +212,47 @@ export const useTable = <T extends object>( props : TableHookProps<T> ) : TableH
                 bordered
                 rowSelection={rowSelection}
                 rowKey={'id'}
-                columns={columns ? [...columns , {
-                  title : GLOBAL_SYSTEM_TEXT.ACTIVE ,
-                  key : 'action' ,
-                  width : 256 ,
-                  render : ( _ , record ) => (<Space size="middle">
-                    {/*判断是否有关于权限的方法*/}
-                    {handleRoleAuthority ? <a onClick={() => handleRoleAuthority(record)}><SettingOutlined
-                        className={'mr-2'}/>权限</a>:<></>}
-                    <a onClick={() => handleOpenUpdate(record)}><EditOutlined
-                        className={'mr-2'}/>{GLOBAL_TABLE_TEXT.UPDATE_TEXT}</a>
-                    <Popconfirm
-                        title={GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE}
-                        description={GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.DELETE_TEXT)}
-                        onConfirm={() => handleDelete(record)}
-                        okText={GLOBAL_SYSTEM_TEXT.ACTIVE_SURE}
-                        cancelText={GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL}
-                    >
-                      <a className={"text-red-400"}><DeleteOutlined
-                          className={'mr-2'}/>
-                        {GLOBAL_TABLE_TEXT.DELETE_TEXT}</a>
-                    </Popconfirm>
-                    {
-                      // 判断是否有重置用户密码的方法
-                      handleUserResetPassword ?
-                          <Popconfirm
-                              title={GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE}
-                              description={GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT)}
-                              onConfirm={() => handleUserResetPassword(record)}
-                              okText={GLOBAL_SYSTEM_TEXT.ACTIVE_SURE}
-                              cancelText={GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL}
-                          >
-                            <a><KeyOutlined
-                                className={'mr-2'}/>{GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT}
-                            </a>
-                          </Popconfirm>
-                          :<></>
-                    }
-                  </Space>)
-                }]:[]}
+                columns={
+                  // 增加操作的字段
+                  columns ? [...columns , {
+                    title : GLOBAL_SYSTEM_TEXT.ACTIVE ,
+                    key : 'action' ,
+                    width : 256 ,
+                    render : ( _ , record ) => (<Space size="middle">
+                      {/*判断是否有关于权限的方法*/}
+                      {handleRoleAuthority ? <a onClick={() => handleRoleAuthority(record)}><SettingOutlined
+                          className={'mr-2'}/>权限</a>:<></>}
+                      <a onClick={() => handleOpenUpdate(record)}><EditOutlined
+                          className={'mr-2'}/>{GLOBAL_TABLE_TEXT.UPDATE_TEXT}</a>
+                      <Popconfirm
+                          title={GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE}
+                          description={GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.DELETE_TEXT)}
+                          onConfirm={() => handleDelete(record)}
+                          okText={GLOBAL_SYSTEM_TEXT.ACTIVE_SURE}
+                          cancelText={GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL}
+                      >
+                        <a className={"text-red-400"}><DeleteOutlined
+                            className={'mr-2'}/>
+                          {GLOBAL_TABLE_TEXT.DELETE_TEXT}</a>
+                      </Popconfirm>
+                      {
+                        // 判断是否有重置用户密码的方法
+                        handleUserResetPassword ?
+                            <Popconfirm
+                                title={GLOBAL_SYSTEM_TEXT.ACTIVE_DANGER_TITLE}
+                                description={GLOBAL_SYSTEM_TEXT.ACTIVE_RECONFIRM_DESC(GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT)}
+                                onConfirm={() => handleUserResetPassword(record)}
+                                okText={GLOBAL_SYSTEM_TEXT.ACTIVE_SURE}
+                                cancelText={GLOBAL_SYSTEM_TEXT.ACTIVE_CANCEL}
+                            >
+                              <a><KeyOutlined
+                                  className={'mr-2'}/>{GLOBAL_TABLE_TEXT.RESET_PASSWORD_TEXT}
+                              </a>
+                            </Popconfirm>
+                            :<></>
+                      }
+                    </Space>)
+                  }]:[]}
                 dataSource={dataSource}>
             </Table>
           </div>

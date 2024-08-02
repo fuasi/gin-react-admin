@@ -1,5 +1,5 @@
-import { Image , message , Select , Switch as AntdSwitch } from 'antd';
-import { useEffect , useState } from 'react';
+import { Image , Input , message , Select , Switch , Switch as AntdSwitch } from 'antd';
+import { ReactNode , useEffect , useState } from 'react';
 import {
   deleteUser ,
   getUserById ,
@@ -10,7 +10,7 @@ import {
   User
 } from '@/apis/userApis.ts';
 import { useLoading } from '@/hooks/useLoading'
-import { InputAndColumns , SearchIsOptionType , useTable } from "@/hooks/useTable.tsx";
+import { InputAndColumns , SelectOptionType , useTable } from "@/hooks/useTable.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
 import { GLOBAL_SYSTEM_TEXT , GLOBAL_TABLE_TEXT , GLOBAL_USER_TEXT } from "@/config";
 import { GetList , SearchQuery } from "@/apis/baseApis.ts";
@@ -22,10 +22,10 @@ const UserComponent = () => {
   const [data , setData] = useState<GetList<User>>({ list : [] , total : 0 })
   const [messageApi , contextHolder] = message.useMessage()
   const { withNotification } = useSystemActiveNotification()
-  const [roles , setRoles] = useState<SearchIsOptionType>([])
+  const [roles , setRoles] = useState<SelectOptionType>([])
   useEffect(() => {
     getAllRole().then(res => {
-      const initRoles : SearchIsOptionType = []
+      const initRoles : SelectOptionType = []
       for (const role of res.data) {
         initRoles.push({ label : role.roleName , value : role.id })
       }
@@ -47,27 +47,30 @@ const UserComponent = () => {
                       className={"rounded-2xl"}/>
       } ,
       width : 64 ,
-      inputType : "Avatar"
+      dataInput : "Avatar"
     } ,
     {
       title : GLOBAL_USER_TEXT.USER_USERNAME ,
       dataIndex : 'username' ,
       width : 124 ,
       required : true ,
-      isSearch : true
+      isSearch : true ,
+      dataInput : <Input placeholder={"请输入用户名"}/>
     } ,
     {
       title : GLOBAL_USER_TEXT.USER_NICKNAME ,
       dataIndex : 'nickname' ,
       width : 112 ,
       required : true ,
-      isSearch : true
+      isSearch : true ,
+      dataInput : <Input placeholder={"请输入昵称"}/>
     } ,
     {
       title : GLOBAL_USER_TEXT.USER_PHONE ,
       dataIndex : 'phone' ,
       width : 64 ,
-      isSearch : true
+      isSearch : true ,
+      dataInput : <Input placeholder={"请输入手机号"}/>
     } ,
     {
       title : "角色" ,
@@ -96,8 +99,18 @@ const UserComponent = () => {
             options={roles}
         />
       } ,
-      inputType : "SelectMultipleMode" ,
-      searchIsOption : roles
+      dataInput : <Select placeholder={"请选择用户角色"} mode={"multiple"}
+                          style={{ width : "100%" }}
+                          filterOption={( inputValue , option ) => {
+                            const optionLabel : string | ReactNode | undefined = option?.label
+                            if (typeof optionLabel === "string") {
+                              return optionLabel.includes(inputValue)
+                            }
+                            return false
+                          }}
+                          options={roles}
+      /> ,
+      selectOrSwitchOption : roles
     } ,
     {
       title : GLOBAL_USER_TEXT.USER_ENABLE ,
@@ -107,10 +120,10 @@ const UserComponent = () => {
         return (<AntdSwitch onChange={( checked ) => handleIsUserEnable(checked , index , record)}
                             checked={record.enable === 1}/>)
       } ,
-      inputType : "Switch" ,
+      dataInput : <Switch defaultValue={true}/> ,
       required : true ,
       isSearch : true ,
-      searchIsOption : [{
+      selectOrSwitchOption : [{
         label : "启用" ,
         value : 1
       } , {
