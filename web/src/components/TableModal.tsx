@@ -1,12 +1,10 @@
-import { Form , Input , InputNumber , Modal , Select } from "antd";
-import { ReactNode , useEffect , useState } from "react";
+import { Form , Modal } from "antd";
+import { useEffect , useState } from "react";
 import { HTTPResponse } from "@/apis";
 import { GLOBAL_TABLE_TEXT } from "@/config";
 import { InputAndColumns } from "@/hooks/useTable.tsx";
 import { useLoading } from "@/hooks/useLoading.ts";
-import Switch from "@/components/Switch.tsx";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
-import FileUpload from "@/components/FileUpload.tsx";
 
 interface ModalComponentProps<T> {
   closeModal : () => void
@@ -34,6 +32,7 @@ const TableModal = <T extends object>( props : ModalComponentProps<T> ) => {
     handleInsertData ,
     isModalOpen
   } = props
+
   const [needUpdateData , setNeedUpdateData] = useState<T>()
   const isUpdate = modalTitle === GLOBAL_TABLE_TEXT.UPDATE_TEXT
   const [form] = Form.useForm()
@@ -69,14 +68,14 @@ const TableModal = <T extends object>( props : ModalComponentProps<T> ) => {
     } , GLOBAL_TABLE_TEXT.INSERT_TEXT , () => handleCancel())
   }
   // 选择器组件更改
-  const handleSwitchChange = ( change : boolean , dataIndex : string ) => {
-    setNeedUpdateData(( item ) => {
-      if (item) {
-        return { ...item , [ dataIndex ] : change ? 1:-1 }
-      }
-      return undefined
-    })
-  }
+  // const handleSwitchChange = ( change : boolean , dataIndex : string ) => {
+  //   setNeedUpdateData(( item ) => {
+  //     if (item) {
+  //       return { ...item , [ dataIndex ] : change ? 1:-1 }
+  //     }
+  //     return undefined
+  //   })
+  // }
 
   useEffect(() => {
     // 判断目前弹出框是否为修改弹出框
@@ -102,36 +101,37 @@ const TableModal = <T extends object>( props : ModalComponentProps<T> ) => {
           onOk={isUpdate ? () => withLoading(handleUpdate):() => withLoading(handleInsert)}
           onCancel={() => handleCancel()} title={modalTitle}
           open={isModalOpen}>
-        <Form preserve={false} name={"form"} form={form}>
-          {ModalInputs.map(( value ) => {
+        <Form preserve={false} initialValues={needUpdateData} name={"form"} form={form}>
+          {ModalInputs.map(( input ) => {
             return (
-                <Form.Item hidden={value.isShow} name={value.dataIndex}
-                           key={value.dataIndex}
+                <Form.Item hidden={input.hidden} name={input.dataIndex}
+                           key={input.dataIndex}
                            rules={[
-                             { required : value.required , message : "该选项不能为空" }
+                             { required : input.required , message : "该选项不能为空" }
                            ]}
-                           required={value.required}
-                           valuePropName={value.inputType === "Avatar" ? "src":undefined}
-                           label={value.title as (string | JSX.Element)}>
-                  {value.inputType === "Switch" ?
-                      <Switch<T> handleSwitchChange={handleSwitchChange} needUpdateData={needUpdateData}
-                                 isUpdate={isUpdate} dataIndex={value.dataIndex}/>
-                      :value.inputType === "Avatar" ? <FileUpload/>:value.inputType === "Select" ?
-                          <Select options={value.searchIsOption}/>:value.inputType === "InputNumber" ?
-                              <InputNumber/>:
-                              value.inputType === "SelectMultipleMode" ? <Select
-                                      mode={"multiple"}
-                                      style={{ width : "100%" }}
-                                      filterOption={( inputValue , option ) => {
-                                        const optionLabel : string | ReactNode | undefined = option?.label
-                                        if (typeof optionLabel === "string") {
-                                          return optionLabel.includes(inputValue)
-                                        }
-                                        return false
-                                      }}
-                                      options={value.searchIsOption}
-                                  />:
-                                  <Input/>}
+                           required={input.required}
+                           label={input.title as (string | JSX.Element)}>
+
+                  {input.dataInput}
+                  {/*{value.input === "Switch" ?*/}
+                  {/*    <Switch<T> handleSwitchChange={handleSwitchChange} needUpdateData={needUpdateData}*/}
+                  {/*               isUpdate={isUpdate} dataIndex={value.dataIndex}/>*/}
+                  {/*    :value.input === "Avatar" ? <FileUpload/>:value.input === "Select" ?*/}
+                  {/*        <Select options={value.searchIsOption}/>:value.input === "InputNumber" ?*/}
+                  {/*            <InputNumber/>:*/}
+                  {/*            value.input === "SelectMultipleMode" ? <Select*/}
+                  {/*                    mode={"multiple"}*/}
+                  {/*                    style={{ width : "100%" }}*/}
+                  {/*                    filterOption={( inputValue , option ) => {*/}
+                  {/*                      const optionLabel : string | ReactNode | undefined = option?.label*/}
+                  {/*                      if (typeof optionLabel === "string") {*/}
+                  {/*                        return optionLabel.includes(inputValue)*/}
+                  {/*                      }*/}
+                  {/*                      return false*/}
+                  {/*                    }}*/}
+                  {/*                    options={value.searchIsOption}*/}
+                  {/*                />:*/}
+                  {/*                <Input/>}*/}
                 </Form.Item>
             )
           })}

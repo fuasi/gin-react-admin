@@ -1,18 +1,18 @@
-import { InputAndColumns , SearchIsOptionType , useTable } from "@/hooks/useTable.tsx";
+import { InputAndColumns , SelectOptionType , useTable } from "@/hooks/useTable.tsx";
 import { GetList , RouterResponse , SearchQuery } from "@/apis/baseApis.ts";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { useEffect , useState } from "react";
 import { deleteRouter , findRouterById , getRouterList , insertRouter , updateRouter } from "@/apis/routerApis.ts";
 import { IconComponent , RouterTree } from "@/utils/router.tsx";
-import { Tag } from "antd";
+import { Input , InputNumber , Select , Tag } from "antd";
 import * as icons from '@ant-design/icons'
 
 const RouterView = () => {
   const { withLoading , loading } = useLoading()
   const [data , setData] = useState<GetList<RouterResponse>>({ list : [] , total : 0 })
-  const [iconList , setIconList] = useState<SearchIsOptionType>([])
+  const [iconList , setIconList] = useState<SelectOptionType>([])
   useEffect(() => {
-    const RouterIcons : SearchIsOptionType = []
+    const RouterIcons : SelectOptionType = []
     for (const key in icons) RouterIcons.push({ label : <><IconComponent icon={key}/> {key}</> , value : key })
     setIconList(RouterIcons)
   } , [])
@@ -22,13 +22,14 @@ const RouterView = () => {
     width : 240 ,
     required : true ,
     isSearch : true ,
+    dataInput : <Input placeholder={"请输入菜单名称"}/>
   } , {
     title : "菜单图标" ,
     dataIndex : 'icon' ,
     width : 144 ,
     required : true ,
-    inputType : "Select" ,
-    searchIsOption : iconList ,
+    dataInput : <Select options={iconList} placeholder={"请选择菜单图标"}/> ,
+    selectOrSwitchOption : iconList ,
     render : ( _ , record ) => {
       return <IconComponent icon={record.icon}/>
     }
@@ -37,25 +38,33 @@ const RouterView = () => {
     dataIndex : 'path' ,
     width : 360 ,
     required : true ,
-    isSearch : true
+    isSearch : true ,
+    dataInput : <Input placeholder={"请输入菜单路径"}/>
   } , {
     title : "组件路径" ,
     dataIndex : 'componentPath' ,
     width : 420 ,
     required : true ,
+    dataInput : <Input placeholder={"请输入组件路径"}/>
   } , {
     title : "排序" ,
     dataIndex : 'routerOrder' ,
-    inputType : "InputNumber" ,
-    width : 120 ,
+    dataInput : <InputNumber style={{ width : "240px" }} placeholder={"请输入排序"}/> ,
+    width : 240 ,
     required : true ,
   } , {
     title : "选项隐藏" ,
     dataIndex : 'hidden' ,
     width : 120 ,
     required : true ,
-    inputType : "Select" ,
-    searchIsOption : [{
+    dataInput : <Select options={[{
+      label : "显示" ,
+      value : false
+    } , {
+      label : "隐藏" ,
+      value : true
+    }]} placeholder={"请选择是否隐藏选项"}/> ,
+    selectOrSwitchOption : [{
       label : "显示" ,
       value : false
     } , {
@@ -68,8 +77,14 @@ const RouterView = () => {
     title : "权限" ,
     dataIndex : 'required' ,
     width : 120 ,
-    inputType : "Select" ,
-    searchIsOption : [{
+    dataInput : <Select placeholder={"该权限是否必选"} options={[{
+      label : "必选" ,
+      value : true
+    } , {
+      label : "非必选" ,
+      value : false
+    }]}/> ,
+    selectOrSwitchOption : [{
       label : "必选" ,
       value : true
     } , {

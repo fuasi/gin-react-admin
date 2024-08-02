@@ -4,7 +4,7 @@ import { GLOBAL_API_TEXT } from "@/config";
 import { useState } from "react";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { GetApiGroupList , SearchQuery } from "@/apis/baseApis.ts";
-import { Tag } from "antd";
+import { Input , Select , Tag } from "antd";
 
 const ApiView = () => {
   const [data , setData] = useState<GetApiGroupList<Api>>({ list : [] , total : 0 , apiGroupOptions : [] })
@@ -15,22 +15,34 @@ const ApiView = () => {
       dataIndex : 'apiPath' ,
       width : 128 ,
       required : true ,
-      isSearch : true
+      isSearch : true ,
+      dataInput : <Input placeholder={"请输入API路径"}/>
     } , {
       title : GLOBAL_API_TEXT.API_COMMENT ,
       dataIndex : 'apiComment' ,
       width : 128 ,
       required : true ,
-      isSearch : true
+      isSearch : true ,
+      dataInput : <Input placeholder={"请输入API简介"}/>
     } ,
     {
       title : GLOBAL_API_TEXT.API_METHOD ,
       dataIndex : 'apiMethod' ,
       width : 128 ,
-      inputType : "Select" ,
+      dataInput : <Select placeholder={"请选择API方法"} options={[{
+        label : "GET / 查询" , value : "GET / 查询"
+      } , {
+        label : "POST / 多条件查询|创建" , value : "POST / 多条件查询|创建"
+      } , {
+        label : "PUT / 创建" , value : "PUT / 创建"
+      } , {
+        label : "DELETE / 删除" , value : "DELETE / 删除"
+      } , {
+        label : "PATCH / 更新" , value : "PATCH / 更新"
+      }]}/> ,
       required : true ,
       isSearch : true ,
-      searchIsOption : [{
+      selectOrSwitchOption : [{
         label : "GET / 查询" , value : "GET / 查询"
       } , {
         label : "POST / 多条件查询|创建" , value : "POST / 多条件查询|创建"
@@ -47,9 +59,10 @@ const ApiView = () => {
       dataIndex : 'required' ,
       width : 72 ,
       align : "center" ,
-      inputType : "Select" ,
+      dataInput : <Select options={[{ label : "必选" , value : true } , { label : "非必选" , value : false }]}
+                          placeholder={"API是否必选"}/> ,
       required : true ,
-      searchIsOption : [{ label : "必选" , value : true } , { label : "非必选" , value : false }] ,
+      selectOrSwitchOption : [{ label : "必选" , value : true } , { label : "非必选" , value : false }] ,
       render : ( record ) => {
         return <>{record ? <Tag color={"error"}>必选</Tag>:<Tag color={"processing"}>非必选</Tag>}</>
       }
