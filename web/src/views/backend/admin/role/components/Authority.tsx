@@ -1,7 +1,7 @@
 import { Key , useEffect , useState } from "react";
 import { Tree } from "antd";
-import { RoleApis } from "@/apis/roleApis.ts";
-import { Api } from "@/apis/apiApis.ts";
+import { RoleApis } from "@/apis/system/role.ts";
+import { Api } from "@/apis/system/api.ts";
 
 interface RoleAuthorityProps {
   roleAuthority: RoleApis;

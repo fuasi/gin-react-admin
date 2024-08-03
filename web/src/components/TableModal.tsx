@@ -1,71 +1,78 @@
-import { Form , Modal } from "antd";
-import { useEffect , useState } from "react";
+import { Form, Modal } from "antd";
+import { useEffect, useState } from "react";
 import { HTTPResponse } from "@/apis";
 import { GLOBAL_TABLE_TEXT } from "@/config";
 import { InputAndColumns } from "@/hooks/useTable.tsx";
 import { useLoading } from "@/hooks/useLoading.ts";
 import { useSystemActiveNotification } from "@/hooks/useSystemActiveNotification.ts";
+import { notificationActiveInfo } from "@/utils/notification.tsx";
 
 interface ModalComponentProps<T> {
-  closeModal : () => void
-  isModalOpen : boolean
-  reloadTable : () => void
-  modalTitle : string
-  handleUpdateData : ( recode : T , args : any ) => Promise<void>;
-  handleGetUpdateData : () => HTTPResponse<T>;
-  handleInsertData : ( recode : T , args : any ) => void;
-  ModalInputs : InputAndColumns<T>[];
+  closeModal: () => void
+  isModalOpen: boolean
+  reloadTable: () => void
+  modalTitle: string
+  handleUpdateData?: ( recode: T, args: any ) => Promise<void>;
+  handleGetUpdateData: () => HTTPResponse<T>;
+  handleInsertData?: ( recode: T, args: any ) => Promise<void>;
+  ModalInputs: InputAndColumns<T>[];
 }
 
 export type UploadComponentProp = {
-  file? : File,
-  previewAvatar : string
+  file?: File,
+  previewAvatar: string
 }
-const TableModal = <T extends object>( props : ModalComponentProps<T> ) => {
+const TableModal = <T extends object>( props: ModalComponentProps<T> ) => {
   const {
-    handleUpdateData ,
-    modalTitle ,
-    ModalInputs ,
-    reloadTable ,
-    handleGetUpdateData ,
-    closeModal ,
-    handleInsertData ,
+    handleUpdateData,
+    modalTitle,
+    ModalInputs,
+    reloadTable,
+    handleGetUpdateData,
+    closeModal,
+    handleInsertData,
     isModalOpen
   } = props
 
-  const [needUpdateData , setNeedUpdateData] = useState<T>()
+  const [needUpdateData, setNeedUpdateData] = useState<T>()
   const isUpdate = modalTitle === GLOBAL_TABLE_TEXT.UPDATE_TEXT
   const [form] = Form.useForm()
-  const { loading , withLoading } = useLoading()
-  const [upload , setUpload] = useState<UploadComponentProp>({ previewAvatar : "" })
+  const { loading, withLoading } = useLoading()
+  const [upload, setUpload] = useState<UploadComponentProp>({ previewAvatar: "" })
   const { withNotification } = useSystemActiveNotification()
   const handleCancel = () => {
     if (upload.previewAvatar.includes("blob:")) {
       URL.revokeObjectURL(upload.previewAvatar)
     }
     setUpload(( val ) => {
-      return { ...val , previewAvatar : "" }
+      return { ...val, previewAvatar: "" }
     })
     setNeedUpdateData(undefined)
     closeModal()
   }
   // 获取表单全部数据
-  const getFieldsValue = () : T => {
+  const getFieldsValue = (): T => {
     return form.getFieldsValue(true)
   }
   // 修改
   const handleUpdate = async () => {
-    await withNotification(async () => {
-      await handleUpdateData(getFieldsValue() , { upload })
-      reloadTable()
-    } , GLOBAL_TABLE_TEXT.UPDATE_TEXT , () => handleCancel())
+    if (handleUpdateData) {
+      await withNotification(async () => {
+        await handleUpdateData(getFieldsValue(), { upload })
+        reloadTable()
+      }, GLOBAL_TABLE_TEXT.UPDATE_TEXT, () => handleCancel())
+    } else {
+      notificationActiveInfo("更新方法为空,请检查代码后重试")
+    }
   }
   // 添加
   const handleInsert = async () => {
-    await withNotification(async () => {
-      handleInsertData(getFieldsValue() , { upload })
-      reloadTable()
-    } , GLOBAL_TABLE_TEXT.INSERT_TEXT , () => handleCancel())
+    if (handleInsertData) {
+      await withNotification(async () => {
+        await handleInsertData(getFieldsValue(), { upload })
+        reloadTable()
+      }, GLOBAL_TABLE_TEXT.INSERT_TEXT, () => handleCancel())
+    }
   }
   // 选择器组件更改
   // const handleSwitchChange = ( change : boolean , dataIndex : string ) => {
@@ -87,7 +94,7 @@ const TableModal = <T extends object>( props : ModalComponentProps<T> ) => {
       })
     }
 
-  } , [handleGetUpdateData , isModalOpen , isUpdate])
+  }, [handleGetUpdateData, isModalOpen, isUpdate])
 
   // const beforeUpload = (file: File) => {
   //   const url = URL.createObjectURL(new Blob([file as BlobPart] , {type: file.type}))
@@ -107,7 +114,7 @@ const TableModal = <T extends object>( props : ModalComponentProps<T> ) => {
                 <Form.Item hidden={input.hidden} name={input.dataIndex}
                            key={input.dataIndex}
                            rules={[
-                             { required : input.required , message : "该选项不能为空" }
+                             { required: input.required, message: "该选项不能为空" }
                            ]}
                            required={input.required}
                            label={input.title as (string | JSX.Element)}>

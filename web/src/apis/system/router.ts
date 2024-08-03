@@ -1,5 +1,5 @@
-import { apiRequest } from "@/apis/index.ts";
-import { GetList , RouterResponse , SearchQuery } from "@/apis/baseApis.ts";
+import { apiRequest } from "@/apis";
+import { GetList , RouterResponse , SearchQuery } from "@/apis/common/base.ts";
 
 export function getRouterList(query: SearchQuery<RouterResponse>) {
   return apiRequest<GetList<RouterResponse>>({

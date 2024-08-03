@@ -1,5 +1,5 @@
-import { apiRequest } from "@/apis/index.ts";
-import { GetList , SearchQuery } from "@/apis/baseApis.ts";
+import { apiRequest } from "@/apis";
+import { GetList , SearchQuery } from "@/apis/common/base.ts";
 
 export interface FileModel {
   id: number

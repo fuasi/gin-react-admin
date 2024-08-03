@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { checkLogin, getRouter, login, LoginQuery } from '@/apis/baseApis.ts';
+import { checkLogin, getRouter, login, LoginQuery } from '@/apis/common/base.ts';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { HandleRouterInfo, HandleRouters } from '@/utils/router.tsx';
@@ -9,7 +9,7 @@ import { tokenStore } from '@/store/localstrageStore'
 import { notificationLoginFail, notificationLoginSuccess } from "@/utils/notification.tsx";
 import { GLOBAL_LOGIN_TEXT } from "@/config";
 import { userStorage } from "@/store/userStorage.ts";
-import { getSelfInfo } from "@/apis/userApis.ts";
+import { getSelfInfo } from "@/apis/system/user.ts";
 
 const LoginForm = () => {
   const [buttonLoading, setButtonLoading] = useState(false)

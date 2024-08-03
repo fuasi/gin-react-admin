@@ -1,7 +1,7 @@
 import { Menu } from "antd";
 import { MenuItem } from "@/App.tsx";
 import { Key, useEffect, useState } from "react";
-import { RouterResponse } from "@/apis/baseApis.ts";
+import { RouterResponse } from "@/apis/common/base.ts";
 
 interface PreviewMenuProps {
   routers : MenuItem[];

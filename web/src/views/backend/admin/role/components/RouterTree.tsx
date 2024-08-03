@@ -1,5 +1,5 @@
 import { Tree } from "antd";
-import { RouterResponse } from "@/apis/baseApis.ts";
+import { RouterResponse } from "@/apis/common/base.ts";
 
 interface RouterTreeProps {
   routers : RouterResponse[]

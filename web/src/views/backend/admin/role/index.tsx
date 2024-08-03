@@ -11,8 +11,8 @@ import {
   RoleApis ,
   RoleRouterTree ,
   updateRole
-} from "@/apis/roleApis.ts";
-import { GetList , SearchQuery } from "@/apis/baseApis.ts";
+} from "@/apis/system/role.ts";
+import { GetList , SearchQuery } from "@/apis/common/base.ts";
 import { Key , useState } from "react";
 import { Button , Drawer , Input , Space , Tabs , TabsProps } from "antd";
 import Menu from "@/views/backend/admin/role/components/Menu.tsx";

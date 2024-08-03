@@ -1,5 +1,5 @@
-import { apiRequest } from "@/apis/index.ts";
-import { GetApiGroupList , SearchQuery } from "@/apis/baseApis.ts";
+import { apiRequest } from "@/apis";
+import { GetApiGroupList , SearchQuery } from "@/apis/common/base.ts";
 
 export interface Api {
   id: number,

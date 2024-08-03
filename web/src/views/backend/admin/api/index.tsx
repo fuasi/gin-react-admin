@@ -1,9 +1,9 @@
 import { InputAndColumns , useTable } from "@/hooks/useTable.tsx";
-import { Api , deleteApi , getApiById , getApis , insertApi , updateApi } from "@/apis/apiApis.ts";
+import { Api , deleteApi , getApiById , getApis , insertApi , updateApi } from "@/apis/system/api.ts";
 import { GLOBAL_API_TEXT } from "@/config";
 import { useState } from "react";
 import { useLoading } from "@/hooks/useLoading.ts";
-import { GetApiGroupList , SearchQuery } from "@/apis/baseApis.ts";
+import { GetApiGroupList , SearchQuery } from "@/apis/common/base.ts";
 import { Input , Select , Tag } from "antd";
 
 const ApiView = () => {

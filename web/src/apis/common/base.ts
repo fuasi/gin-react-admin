@@ -1,7 +1,7 @@
-import { apiRequest } from './index.ts';
+import { apiRequest } from '../index.ts';
 import { SelectOptionType } from "@/hooks/useTable.tsx";
 
-export type SearchQuery<T> = {condition: T} & PageInfo
+export type SearchQuery<T> = { condition?: T } & PageInfo
 
 export interface GetList<T> {
   list: T[]
@@ -27,35 +27,34 @@ export interface LoginQuery {
 export interface RouterResponse {
   id: number
   name: string
-  icon: string
+  icon?: string
   path: string
   componentPath: string
   parentId: number
   routerOrder: number
-  children?: RouterResponse[]
   hidden: boolean
   required: boolean
-  isApiGroup: number
+  children?: RouterResponse[]
 }
 
-export function login(query: LoginQuery) {
-  return apiRequest<{token: string}>({
-    url: '/login' ,
-    method: 'POST' ,
+export function login( query: LoginQuery ) {
+  return apiRequest<{ token: string }>({
+    url: '/login',
+    method: 'POST',
     data: query
   })
 }
 
 export function checkLogin() {
   return apiRequest<string>({
-    url: '/check' ,
-    method: 'POST' ,
+    url: '/check',
+    method: 'POST',
   })
 }
 
 export function getRouter() {
   return apiRequest<RouterResponse[]>({
-    url: '/routers' ,
+    url: '/routers',
     method: 'GET'
   })
 }

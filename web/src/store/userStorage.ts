@@ -1,5 +1,5 @@
 import { observable } from 'mobx'
-import { User } from "@/apis/userApis.ts";
+import { User } from "@/apis/system/user.ts";
 
 const userStorage = observable<{ user : User }>({
   user : {

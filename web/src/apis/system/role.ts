@@ -1,6 +1,6 @@
-import { apiRequest } from "@/apis/index.ts";
-import { GetList, RouterResponse, SearchQuery } from "@/apis/baseApis.ts";
-import { Api } from "@/apis/apiApis.ts";
+import { apiRequest } from "@/apis";
+import { GetList, RouterResponse, SearchQuery } from "@/apis/common/base.ts";
+import { Api } from "@/apis/system/api.ts";
 
 export interface Role {
   id : number;

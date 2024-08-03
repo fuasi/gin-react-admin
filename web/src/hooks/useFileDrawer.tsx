@@ -9,8 +9,8 @@ import {
   getFileList ,
   updateFile ,
   uploadFile
-} from "@/apis/fileApis.ts";
-import { GetList , SearchQuery } from "@/apis/baseApis.ts";
+} from "@/apis/common/file.ts";
+import { GetList , SearchQuery } from "@/apis/common/base.ts";
 import { notificationActiveSuccess } from "@/utils/notification.tsx";
 import { getErrorMessage , reportError } from "@/utils/error.ts";
 
